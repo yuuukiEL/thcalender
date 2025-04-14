@@ -128,9 +128,9 @@ hal-student-management/
 
 ## 連絡先
 
-開発者: [小林 和真]
+開発者: [kazuma kobayashi]
 メール: [arkeuce69@gmail.com]
-ポートフォリオ: [https://github.com/arkeuce]
+ポートフォリオ: [https://github.com/yuuukiEL]
 
 ## ログイン方法
 
