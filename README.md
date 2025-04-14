@@ -69,26 +69,25 @@
    - 学生アカウント: 学生IDとパスワードでログイン
 
 ## ディレクトリ構造
+```
 hal-student-management/
-├── apps/ # アプリケーションコード
-│ ├── admin/ # 管理者機能
-│ ├── student/ # 学生機能
-│ ├── teacher/ # 教師機能
-│ ├── static/ # 静的ファイル
-│ └── templates/ # HTMLテンプレート
-├── uploads/ # アップロードされたファイル
-├── logs/ # ログファイル
-├── requirements.txt # 依存パッケージリスト
-├── calender2 (5).sql # データベーススキーマ
-└── run.py # 
+├── apps/                  # アプリケーションコード
+│   ├── admin/             # 管理者機能
+│   ├── student/           # 学生機能
+│   ├── teacher/           # 教師機能
+│   ├── static/            # 静的ファイル
+│   └── templates/         # HTMLテンプレート
+├── uploads/               # アップロードされたファイル
+├── logs/                  # ログファイル
+├── requirements.txt       # 依存パッケージリスト
+├── calender2 (5).sql      # データベーススキーマ
+└── run.py                 # アプリケーション起動スクリプト
+```
+
 ## 必要なリソース
 
 このプロジェクトを実行するには、以下のリソースを別途入手して配置する必要があります：
 
-
-### フォント(現在は有料)
-- 必要なフォントファイル（.ttf/.otf）を `fonts/` ディレクトリに配置してください
-- 入手先: [https://yutaone.booth.pm/items/2890872]
 
 ### Featherアイコン(zipファイル)
 - Featherアイコンを `assets/feather/` ディレクトリに配置してください
