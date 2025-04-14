@@ -1,0 +1,284 @@
+{% extends "student/components/base.html" %}
+
+{% block title %}カレンダー{% endblock %}
+
+{% block extra_css %}
+{{ super() }}
+<link href="{{ url_for('static', filename='student/css/calendar_form.css') }}" rel="stylesheet">
+<style>
+
+#calendar {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.fc-toolbar-title {
+    font-size: 1.25rem !important;
+}
+
+.fc-header-toolbar {
+    margin-bottom: 1rem !important;
+    padding: 0 1rem;
+}
+
+.fc-view {
+    background: white;
+    border-radius: 0.5rem;
+}
+
+.fc-event {
+    cursor: pointer;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+}
+
+.fc-event-title {
+    font-size: 0.875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* モーダルのスタイル */
+.event-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.event-modal.show {
+    display: block;
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* フォームスタイル */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+}
+
+.datetime-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.datetime-group .form-group {
+    flex: 1;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.modal-buttons button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.modal-buttons .cancel {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.modal-buttons .submit {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.modal-buttons button:hover {
+    opacity: 0.9;
+}
+
+/* 通知スタイル */
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-20px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-20px); }
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 4px;
+    z-index: 1000;
+    animation: fadeInOut 3s forwards;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.notification.success {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.notification.error {
+    background-color: #f44336;
+    color: white;
+}
+
+/* モーダルヘッダーのスタイル */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.modal-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6B7280;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s;
+}
+
+.modal-actions button:hover {
+    background-color: #F3F4F6;
+}
+
+.delete-event {
+    color: #EF4444 !important;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="calendar-container">
+    <div id="calendar"></div>
+</div>
+
+<!-- イベントモーダル -->
+<div id="eventModal" class="event-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>予定の編集</h2>
+            <div class="modal-actions">
+                <button type="button" class="repeat-event" style="display: none;">
+                    <i class="fas fa-redo"></i> 繰り返し
+                </button>
+                <button type="button" class="delete-event" style="display: none;">
+                    <i class="fas fa-trash"></i> 削除
+                </button>
+            </div>
+        </div>
+        <form id="eventForm">
+            <div class="form-group">
+                <label for="title">タイトル</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="location">場所</label>
+                <input type="text" id="location" name="location">
+            </div>
+            
+            <div class="form-group">
+                <label for="description">説明</label>
+                <textarea id="description" name="description"></textarea>
+            </div>
+            
+            <div class="datetime-group">
+                <div class="form-group">
+                    <label for="startDate">開始日</label>
+                    <input type="date" id="startDate" name="startDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="startTime">開始時刻</label>
+                    <input type="time" id="startTime" name="startTime" required>
+                </div>
+            </div>
+            
+            <div class="datetime-group">
+                <div class="form-group">
+                    <label for="endDate">終了日</label>
+                    <input type="date" id="endDate" name="endDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="endTime">終了時刻</label>
+                    <input type="time" id="endTime" name="endTime" required>
+                </div>
+            </div>
+            
+            <!-- 繰り返し設定フィールドを追加 -->
+            <div class="repeat-settings" style="display: none;">
+                <div class="form-group">
+                    <label for="repeatType">繰り返し</label>
+                    <select id="repeatType" name="repeatType">
+                        <option value="none">繰り返しなし</option>
+                        <option value="daily">毎日</option>
+                        <option value="weekly">毎週</option>
+                        <option value="monthly">毎月</option>
+                    </select>
+                </div>
+                
+                <div class="form-group repeat-end-group" style="display: none;">
+                    <label for="repeatUntil">繰り返し終了日</label>
+                    <input type="date" id="repeatUntil" name="repeatUntil">
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button type="button" class="cancel">キャンセル</button>
+                <button type="submit" class="submit">保存</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='common/js/fullcalendar-6.1.15/dist/index.global.min.js') }}"></script>
+<script src="{{ url_for('static', filename='common/js/fullcalendar-6.1.15/dist/locales/ja.js') }}"></script>
+<script src="{{ url_for('static', filename='student/js/calendar.js') }}"></script>
+{% endblock %}

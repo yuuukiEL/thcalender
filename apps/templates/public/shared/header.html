@@ -1,0 +1,46 @@
+<header class="header-container">
+    <div class="header-title">
+        <!-- デバッグ情報 -->
+        <!-- 
+        endpoint: {{ request.endpoint }}
+        path: {{ request.path }}
+        -->
+        {% block header_title %}
+            {% if request.endpoint %}
+                {% if request.path == '/calendar' %}
+                    カレンダー
+                {% elif request.path == '/' %}
+                    ホーム
+                {% elif request.endpoint == 'classroom.empty_classroom' %}
+                    空き教室一覧
+                {% elif request.endpoint == 'classroom.view_empty_classroom' %}
+                    空き教室一覧
+                {% elif request.path == '/diary' %}
+                    新規日記作成
+                {% elif request.path == '/diary/list' or 'diary.index' in request.endpoint %}
+                    日記一覧
+                {% elif 'diary.edit' in request.endpoint %}
+                    日記編集
+                {% elif 'diary.detail' in request.endpoint %}
+                    日記詳細
+                {% else %}
+                    ようこそ、{{ student.name }}さん
+                {% endif %}
+            {% else %}
+                ようこそ、{{ student.name }}さん
+            {% endif %}
+        {% endblock %}
+    </div>
+
+    <div class="flex items-center space-x-4">
+        <div class="search-container">
+            <input type="text" placeholder="Search" class="search-input">
+            <img src="{{ url_for('static', filename='img/feather/search.svg') }}" alt="Search" class="search-icon">
+        </div>
+        <div class="user-icon">
+            JD
+        </div>
+    </div>
+</header>
+
+<script src="{{ url_for('static', filename='js/header.js') }}"></script>

@@ -1,0 +1,23 @@
+<div class="modal fade" id="specializationModal" tabindex="-1" role="dialog" 
+     aria-labelledby="specializationModalLabel" aria-modal="true" data-bs-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="specializationModalLabel">専攻選択（1年次）</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+      </div>
+      <div class="modal-body">
+        <div id="selectedDepartmentInfo" class="mb-3" aria-live="polite">
+          <!-- 選択された課程・学科の情報を表示 -->
+        </div>
+        <div class="list-group" id="specializationList" role="listbox" aria-labelledby="specializationModalLabel">
+          <!-- JavaScriptで動的に生成 -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="backToDepartment">戻る</button>
+        <button type="button" class="btn btn-primary" id="selectSpecialization">選択</button>
+      </div>
+    </div>
+  </div>
+</div> 

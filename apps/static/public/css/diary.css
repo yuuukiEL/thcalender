@@ -1,0 +1,1134 @@
+/* 全体のスタイル */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+}
+
+/* メインコンテナ */
+.container {
+    min-height: 100%;
+    max-width: 1600px;
+    margin: -5px auto;
+    margin-bottom: -10%;
+    padding: 0px;
+    background-color: white;
+    border-radius: 7px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #ffffff;
+}
+
+.date {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.nav-btn img {
+    width: 24px;
+    height: 24px;
+}
+
+.location-container {
+    display: flex;
+    align-items: center;
+    background-color: #e0ffe0;
+    border-radius: 8px;
+    padding: 10px;
+    margin-left: 10px;
+}
+
+.location-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.location-btn img {
+    margin-right: 5px;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.header-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.header-btn img {
+    width: 24px;
+    height: 24px;
+}
+
+/* コンテンツ */
+.content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+
+}
+
+.left-column,
+.right-column {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* 日記セクション */
+.diary-section {
+    background-color: white;
+    padding: 15px;
+    padding-top: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+.diary-title {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.2rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    margin-bottom: 0.75rem;
+}
+
+.diary-toolbar {
+    display: flex;
+    gap: 5px;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+}
+
+.toolbar-separator {
+    width: 1px;
+    background-color: #ccc;
+    margin: 0 5px;
+}
+
+.toolbar-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.toolbar-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.toolbar-btn img {
+    width: 20px;
+    height: 20px;
+}
+
+.hashtag-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0.75rem 0;
+}
+
+.add-hashtag-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.add-hashtag-btn:hover {
+    opacity: 0.7;
+}
+
+.add-hashtag-btn img {
+    width: 16px;
+    height: 16px;
+}
+
+.hashtag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 5px;
+    min-height: 30px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.hashtag {
+    display: inline-block;
+    color: #0C07FF;
+    padding: 2px 6px;
+    font-size: 0.9em;
+    margin-right: 4px;
+    margin-bottom: 4px;
+}
+
+/* リスト関連のスタイル */
+.diary [data-list-type="ordered"],
+.diary [data-list-type="unordered"] {
+    margin-left: 20px;
+    position: relative;
+}
+
+.diary [data-list-type="ordered"]::before {
+    content: counter(list-item) ".";
+    position: absolute;
+    left: -20px;
+    color: #666;
+}
+
+.diary [data-list-type="unordered"]::before {
+    content: "○";
+    position: absolute;
+    left: -20px;
+    color: #666;
+}
+
+.diary {
+    width: 100%;
+    height: 300px !important;  /* 400pxから300pxに縮小 */
+    min-height: 300px !important;  /* 最小高さも300pxに */
+    max-height: 300px !important;  /* 最大高さも300pxに */
+    overflow-x: auto;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    resize: none !important;
+    box-sizing: border-box !important;
+    border: 1px solid #d1d5db;
+    padding: 10px;
+    font-size: 1rem;
+    line-height: 1.5;
+    background-color: #f9f9f9;
+    position: relative;
+    flex: none !important;
+    display: block !important;
+}
+
+/* スクロールバーのスタイリング（オプション） */
+.diary::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.diary::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.diary::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.diary::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* 画像アップロード */
+.image-upload-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 1rem 0;
+    position: relative;
+}
+
+.image-upload {
+    background-color: white;
+    padding: 15px;
+    padding-top: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 2px solid #d1d5db;
+    width: 450px;
+    height: 250px;
+    position: relative;
+}
+
+.image-upload img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.image-controls {
+    position: absolute;
+    top: 50%; /* 上下中央に配置 */
+    left: 50%; /* 左右中央に配置 */
+    transform: translate(-50%, -50%); /* 中央揃えの調整 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.image-button {
+    padding: 8px 15px;
+    background-color: white; /* 背景を白に */
+    border: 2px solid #0C07FF;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    color: #0C07FF; /* 文字を青に */
+}
+
+.image-button:hover {
+    background-color: #f8f8ff; /* ホバー時は少し明るい青みがかった白に */
+    transform: scale(1.02); /* わずかに拡大 */
+}
+
+.refresh-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: transform 0.3s ease;
+    z-index: 20;
+}
+
+.refresh-button:hover {
+    transform: rotate(180deg);
+}
+
+.refresh-button img {
+    width: 20px;
+    height: 20px;
+}
+
+#imagePreview {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#imagePreview.has-image + .image-controls .image-button {
+    display: none;
+}
+
+#imagePreview:not(.has-image) ~ .refresh-button {
+    display: none;
+}
+
+#imagePreview img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* 正方形ボタン */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.vertical-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    margin-left: 15px;
+}
+
+.square-btn {
+    width: 40px;
+    height: 40px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.square-btn:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.05);
+}
+
+.square-btn.active {
+    background-color: #FFA500; /* オレンジ色 */
+    color: white;
+    border-color: #FF8C00;
+}
+
+/* タスクリスト */
+.tomorrow-tasks {
+    background-color: white;
+    height: 200px; /* タスクリストの縦幅を設定 */
+    padding: 0px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 2px solid #d1d5db;
+    overflow: hidden; /* 枠外に飛び出さないようにする */
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+
+.tomorrow-tasks-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.task-list-wrapper {
+    flex-grow: 1;
+    overflow-y: auto; /* 縦方向にスクロール可能にする */
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 10px;
+    box-sizing: border-box; /* パディングを含めたサイズ計算 */
+}
+
+.task-list-container {
+    max-height: 180px;
+    overflow-y: auto;
+    border-radius: 4px;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-left: 0px;
+    margin-bottom: 0; /* 下余白を0に設定 */
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+/* 最後のタスクアイテムの下余白を0に設定 */
+.task-item:last-child {
+    margin-bottom: 0;
+}
+
+.checkbox-wrapper {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e5e7eb;
+    flex-shrink: 0;
+}
+
+.task-content {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    width: calc(100% - 40px);
+}
+
+.task-text {
+    flex-grow: 1;
+}
+
+/* タスク追加フォーム */
+.add-task {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+#newTaskInput {
+    flex-grow: 1;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#taskDeadline {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#addTaskBtn {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-task-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.add-task-icon {
+    width: 20px;  /* サイズを大きく */
+    height: 20px; /* サイズを大きく */
+    margin-left: 10px; /* 左の余白を増やす */
+    vertical-align: middle;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.task-checkbox {
+    margin-right: 10px;
+}
+
+.task-input {
+    flex-grow: 1;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.task-delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 10px;
+}
+
+.task-delete-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.task-mood-location-container {
+    display: flex;
+    flex-direction: column;
+    height: 90%; /* 親要素の高さいっぱいに広げる */
+    margin-bottom: 0px; /* コンテナ自体の下余白も0に設定 */
+    padding: 0px;
+}
+
+.sticky-notes {
+    display: flex;
+    margin-bottom: 0; /* 付箋の下余白も0に設定 */
+}
+
+.sticky-note {
+    width: 33.33%;
+    padding: 10px;
+    background-color: #ffd700;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.sticky-note.active {
+    background-color: #fffbe6;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+}
+
+.sticky-note-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.add-task-icon {
+    width: 24px;  /* アイコンサイズを大きく */
+    height: 24px; /* アイコンサイズを大きく */
+    margin-left: 15px; /* 左の余白を増やす */
+    vertical-align: middle;
+}
+
+.task-mood-content {
+    display: none;
+    min-height: 200px;  /* 最小の高さを設定 */
+    max-height: 400px;  /* 最大の高さを設定 */
+    overflow-y: auto;   /* コンテンツが多い場合はスクロール可能に */
+    padding: 10px;
+    background-color: #fffbe6;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.task-mood-content.active {
+    display: block;
+}
+
+.mood-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* 間隔を追加 */
+}
+
+.mood-section {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+    width: 150px; /* 正方形にするための幅 */
+    height: 200px; /* 高さを調整 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.selected-image-container {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+.selected-image {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.image-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.selectable-image {
+    max-width: 100px;
+    max-height: 100px;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.selectable-image:hover {
+    transform: scale(1.1);
+}
+
+.icon-selection-area {
+    display: none; /* デフォルトでは非表示 */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.icon-selection-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.close-icon-selection {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-icon-selection:hover,
+.close-icon-selection:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.icon-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px; /* アイコン間の間隔 */
+    margin-top: 10px; /* 上部の間隔 */
+}
+
+.icon-preview {
+    max-width: 100px;
+    max-height: 100px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.icon-preview:hover {
+    transform: scale(1.1);
+}
+
+.delete-task {
+    background: none;
+    border: none;
+    color: #ff0000;
+    cursor: pointer;
+}
+
+/* 必要に応じて、左カラムのスタイルも調整 */
+.left-column {
+    display: flex;
+    flex-direction: column;
+    height: 100%; 
+    margin-bottom: 0.5rem;
+}
+
+.diary-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.diary-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.diary-card:hover {
+    transform: translateY(-5px);
+}
+
+.diary-card h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.diary-card p {
+    color: #666;
+    margin: 0 0 15px 0;
+    line-height: 1.5;
+}
+
+.diary-card small {
+    color: #999;
+    display: block;
+}
+
+#contextMenu {
+    display: none;
+    position: fixed;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000;
+    padding: 8px 0;
+    min-width: 200px;
+}
+
+#contextMenu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#contextMenu li {
+    padding: 8px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+#contextMenu li:hover {
+    background-color: #f5f5f5;
+}
+
+#contextMenu li img {
+    width: 16px;
+    height: 16px;
+}
+
+.menu-separator {
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 4px 0;
+    padding: 0 !important;
+    cursor: default !important;
+}
+
+.menu-separator:hover {
+    background-color: #e0e0e0 !important;
+}
+
+.color-picker {
+    position: absolute;
+    right: 16px;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.color-picker::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-picker::-webkit-color-swatch {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* リストアイテムのスタイル */
+.list-item {
+    position: relative;
+    padding-left: 25px;
+    margin: 5px 0;
+    min-height: 24px;
+}
+
+.list-item[data-list-type="ordered"]::before {
+    content: counter(list-counter) ".";
+    counter-increment: list-counter;
+    position: absolute;
+    left: 5px;
+    color: #666;
+}
+
+.list-item[data-list-type="unordered"]::before {
+    content: "•";
+    position: absolute;
+    left: 8px;
+    color: #666;
+}
+
+/* 日記コンテンツ内のリストカウンター初期化 */
+#diaryContent {
+    counter-reset: list-counter;
+}
+
+.image-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 0 10px;
+}
+
+.center-button {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.hashtag-input {
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    width: 120px;
+}
+
+.hashtag-input:focus {
+    outline: none;
+    border-color: #0C07FF;
+    box-shadow: 0 0 0 2px rgba(12, 7, 255, 0.1);
+}
+
+/* ハッシュタグモーダル */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+}
+
+.close-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: black;
+}
+
+.hashtag-input-container {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+}
+
+#modalHashtagInput {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#addModalHashtagBtn {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.hashtag {
+    display: inline-block;
+    color: #0C07FF;
+    margin-right: 5px;
+    font-weight: 500;
+}
+
+.save-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    margin-left: 10px;
+}
+
+.save-button:hover {
+    background-color: #45a049;
+}
+
+.save-icon {
+    font-size: 20px;
+}
+
+.calendar-modal {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+    padding: 10px;
+    z-index: 1000;
+}
+
+.flatpickr-calendar {
+    background: #ffffff !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 100% !important;
+    margin-top: 5px !important;
+    z-index: 1000 !important;
+}
+
+.flatpickr-day {
+    background: #ffffff !important;
+}
+
+.flatpickr-day.selected {
+    background: #0C07FF !important;
+    border-color: #0C07FF !important;
+    color: #ffffff !important;
+}
+
+.flatpickr-day:hover {
+    background: #f0f0f0 !important;
+}
+
+.flatpickr-months {
+    background: #ffffff !important;
+}
+
+.flatpickr-current-month {
+    color: #333;
+    font-size: 1.2em;
+}
+
+.flatpickr-weekday {
+    color: #666;
+}
+
+/* カレンダー関連のスタイルを更新 */
+.date-navigation input[type="date"] {
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.date-navigation input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    padding: 5px;
+    margin-left: 5px;
+}
+
+.js-datepicker2 {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    font-size: 14px;
+    width: 100px;
+}
+
+/* カレンダーUIのスタイル */
+.ui-datepicker {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.ui-datepicker-header {
+    background: #f8f8f8;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.ui-datepicker-calendar {
+    margin-top: 5px;
+}
+
+#contextMenu {
+    display: none;
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+#contextMenu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#contextMenu li {
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#contextMenu li:hover {
+    background-color: #f0f0f0;
+}
+
+#contextMenu .menu-separator {
+    border-bottom: 1px solid #ccc;
+    padding: 0;
+    margin: 4px 0;
+}
+
+#contextMenu img {
+    width: 16px;
+    height: 16px;
+}
+
+.color-picker {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+/* 日記入力エリアの高さを調整 */
+.diary-content {
+    height: 120px;  /* 200pxから120pxに縮小 */
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* タグ入力エリアの余白を調整 */
+.tag-container {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* 入力フォームのマージンを調整 */
+.form-group {
+    margin-bottom: 0.75rem;  /* マージンを縮小 */
+}

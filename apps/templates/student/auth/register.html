@@ -1,0 +1,171 @@
+{% extends "common/auth/base.html" %}
+
+{% block title %}学生情報登録{% endblock %}
+
+{% block auth_title %}学生アカウント登録{% endblock %}
+{% block auth_description %}学生情報を入力して登録してください{% endblock %}
+
+{% block auth_content %}
+<form id="studentRegistrationForm" method="POST" enctype="multipart/form-data">
+    {{ form.csrf_token }}
+    
+    <div class="mb-4">
+        <h4>基本情報</h4>
+        <div class="mb-3">
+            <label for="student_id" class="form-label">学籍番号</label>
+            {{ form.student_id(class="form-control") }}
+            <div class="form-text">学籍番号を入力してください（例：10001）</div>
+            {% if form.student_id.errors %}
+                <div class="invalid-feedback">{{ form.student_id.errors[0] }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="name" class="form-label">氏名</label>
+            {{ form.name(class="form-control") }}
+            {% if form.name.errors %}
+                <div class="invalid-feedback">{{ form.name.errors[0] }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">メールアドレス</label>
+            {{ form.email(class="form-control", placeholder="example@hal.ac.jp", required=True) }}
+            <div class="form-text">学校から提供されたメールアドレスを入力してください。</div>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">パスワード</label>
+            {{ form.password(class="form-control", required=True) }}
+            <div class="form-text">8文字以上の英数字を入力してください。</div>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        {{ form.enrollment_year.label(class="form-label") }}
+        {{ form.enrollment_year(class="form-select") }}
+        <div class="form-text">留年を含む過去5年分から選択可能です</div>
+    </div>
+
+    <div class="mb-4">
+        {{ form.enrollment_term.label(class="form-label") }}
+        {{ form.enrollment_term(class="form-select") }}
+    </div>
+
+    <div class="mb-4">
+        <label class="form-label">学科・専攻</label>
+        <div class="department-select" id="departmentDisplay" data-bs-toggle="modal" data-bs-target="#courseModal">
+            学科を選択してください
+        </div>
+        <input type="hidden" id="department_code_hidden" name="department_code">
+        <input type="hidden" id="specialization_id" name="specialization_id">
+        <input type="hidden" id="current_grade" name="current_grade">
+    </div>
+
+    <div class="mb-4">
+        {{ form.profile_image.label(class="form-label") }}
+        {{ form.profile_image(class="form-control", accept="image/*") }}
+        <div id="imagePreview" class="mt-2"></div>
+    </div>
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button type="button" class="btn btn-primary" onclick="showConfirmation()">登録</button>
+        <a href="{{ url_for('common.home') }}" class="btn btn-secondary">メニューに戻る</a>
+    </div>
+</form>
+
+<!-- 課程・学科選択モーダル -->
+<div class="modal fade" id="courseModal" tabindex="-1" role="dialog" 
+     aria-labelledby="courseModalLabel" aria-modal="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="courseModalLabel">課程・学科選択</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="mb-3" id="courseTypeLabel">課程区分</h6>
+                        <div class="list-group" id="courseTypeList" role="listbox" aria-labelledby="courseTypeLabel">
+                            <!-- JavaScriptで動的に生成 -->
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="mb-3" id="departmentLabel">学科選択</h6>
+                        <div class="list-group" id="departmentList" role="listbox" aria-labelledby="departmentLabel">
+                            <!-- JavaScriptで動的に生成 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                <button type="button" class="btn btn-primary" id="selectDepartment">次へ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 確認モーダル -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">登録内容の確認</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>氏名: <span id="confirm-name"></span></p>
+                <p>学籍番号: <span id="confirm-student-id"></span></p>
+                <p>メールアドレス: <span id="confirm-email"></span></p>
+                <p>学科・専攻: <span id="confirm-department"></span></p>
+                <p>入学年度: <span id="confirm-year"></span></p>
+                <p>入学期: <span id="confirm-term"></span></p>
+                <p>プロフィール画像: <span id="confirm-image"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">戻る</button>
+                <button type="submit" class="btn btn-primary" form="studentRegistrationForm">登録</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 専攻選択モーダル -->
+<div class="modal fade" id="specializationModal" tabindex="-1" aria-labelledby="specializationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="specializationModalLabel">専攻を選択</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="specializationList" class="list-group">
+                    <!-- 専攻リストがJSで動的に生成される -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                <button type="button" class="btn btn-primary" id="confirmSpecialization">確定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .list-group-header {
+        color: #666;
+        font-weight: bold;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block auth_additional_links %}
+<div class="mt-3 text-center">
+    <a href="{{ url_for('student.auth.login') }}" class="text-decoration-none">ログインページに戻る</a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='student/js/register_student.js') }}"></script>
+{% endblock %} 

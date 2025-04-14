@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>クラス教員登録</title>
+</head>
+<body>
+    <h1>クラス教員登録</h1>
+    <form method="post">
+        <label for="class_id">クラス:</label>
+        <select id="class_id" name="class_id" required>
+            <option value="">クラスを選択してください</option>
+            {% for class_id, class_name in classes %}
+            <option value="{{ class_id }}">{{ class_name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="teacher_id">教員:</label>
+        <select id="teacher_id" name="teacher_id" required>
+            <option value="">担任を選択してください</option>
+            {% if teachers %}
+                {% for teacher in teachers %}
+                <option value="{{ teacher.id }}">{{ teacher.name }}</option>
+                {% endfor %}
+            {% else %}
+                <option value="1">山田太郎</option>
+                <option value="2">鈴木一郎</option>
+                <option value="3">佐藤花子</option>
+                <option value="4">田中次郎</option>
+                <option value="5">伊藤三郎</option>
+            {% endif %}
+        </select>
+        <br>
+        <label for="subject_id">教科:</label>
+        <select id="subject_id" name="subject_id" required>
+            <option value="">教科を選択してください</option>
+            {% for subject_id, subject_name in subjects %}
+            <option value="{{ subject_id }}">{{ subject_name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">登録</button>
+    </form>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+</body>
+</html> 

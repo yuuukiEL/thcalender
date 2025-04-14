@@ -1,0 +1,312 @@
+{% extends "student/components/base.html" %}
+
+{% block title %}学生ホーム{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='student/css/timetable.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='student/css/comment-modal.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='student/css/elevator.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='student/css/schedule-modal.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='student/css/responsive.css') }}" rel="stylesheet">
+<!-- ビューポートの設定 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ユーザーIDをメタタグとして追加 -->
+<meta name="student-id" content="{{ current_user.get_id() }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="current-schedule">
+        <div class="timetable-controls">
+            <!-- PDF読み込みボタンを追加 -->
+            <div class="pdf-load-button">
+                <button id="loadPdfBtn" class="btn btn-primary" style="display: none;">
+                    <img src="{{ url_for('static', filename='common/img/feather/file-text.svg') }}" alt="PDF" width="16" height="16">
+                    PDF読み込み
+                </button>
+            </div>
+            <!-- 既存のトグルスイッチ -->
+            <div class="toggle-switch">
+                <input type="checkbox" id="edit-mode-toggle" class="toggle-switch-checkbox">
+                <label for="edit-mode-toggle" class="toggle-switch-label">
+                    <span class="toggle-switch-inner" data-on="編集モード" data-off="閲覧モード"></span>
+                    <span class="toggle-switch-switch"></span>
+                </label>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="timetable current-timetable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        {% for day in ['月', '火', '水', '木', '金', '土'] %}
+                        <th>{{ day }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(1, 8) %}
+                    <tr>
+                        <th>{{ "夜間" if i == 7 else i|string + "限" }}</th>
+                        {% for day in ['月', '火', '水', '木', '金', '土'] %}
+                        <td class="schedule-cell" data-day="{{ day }}" data-period="{{ i }}">
+                            {% for schedule in schedules if schedule.day == day and schedule.period == i %}
+                            <div class="cell-content">
+                                <div class="subject-name">{{ schedule.subject_name }}</div>
+                                <div class="teacher-name">{{ schedule.teacher.name if schedule.teacher else '' }}</div>
+                                <div class="classroom-number">{{ schedule.classroom.classroom_id if schedule.classroom else
+                                    '' }}</div>
+                            </div>
+                            {% endfor %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- モバイル用のタスク表示トグルボタン -->
+    <button class="task-toggle-btn d-md-none">
+        <img src="{{ url_for('static', filename='common/img/feather/list.svg') }}" alt="Tasks" width="20" height="20">
+    </button>
+
+    <div class="task-mood-location-container">
+        <button class="task-close-btn d-md-none">×</button>
+        <div class="sticky-notes">
+            <div class="sticky-note active" data-target="task-list">
+                <h3 class="sticky-note-title">
+                    タスク一覧
+                    <button id="createTaskBtn" class="add-task-btn">
+                        <img src="{{ url_for('static', filename='common/img/feather/plus.svg') }}" alt="Add Task"
+                            class="add-task-icon">
+                    </button>
+                </h3>
+            </div>
+            <div class="sticky-note" data-target="stairs-list">
+                <h3 class="sticky-note-title">
+                    階段
+                    <button class="add-stairs-btn">
+                        <img src="{{ url_for('static', filename='common/img/feather/map.svg') }}" alt="Add Stairs"
+                            class="add-task-icon">
+                    </button>
+                </h3>
+            </div>
+            <div class="sticky-note" data-target="classroom-list">
+                <h3 class="sticky-note-title">
+                    教室
+                    <button class="add-classroom-btn">
+                        <img src="{{ url_for('static', filename='common/img/feather/home.svg') }}" alt="Add Classroom"
+                            class="add-task-icon">
+                    </button>
+                </h3>
+            </div>
+        </div>
+
+        <div class="sticky-content-wrapper">
+            <div id="task-list" class="task-mood-content active">
+                <div class="task-list-container">
+                    {% if tasks %}
+                    {% for task in tasks %}
+                    <div class="task-item" data-task-id="{{ task.task_id }}">
+                        <div class="task-header">
+                            <input type="checkbox" class="task-checkbox" {% if task.is_completed %}checked{% endif %}
+                                onchange="updateTaskStatus(this)">
+                            <input type="text" class="task-content" value="{{ task.content }}" placeholder="タスクを入力"
+                                onchange="updateTaskContent(this)">
+                            <div class="task-actions">
+                                <button type="button" class="task-delete-btn" onclick="deleteTask(this)">
+                                    <img src="{{ url_for('static', filename='common/img/feather/trash-2.svg') }}"
+                                        alt="Delete">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="text-gray-500 text-center py-4">
+                        現在のタスクはありません
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div id="stairs-list" class="task-mood-content">
+                <div class="building-container">
+                    <div class="building-section">
+                        <div class="elevator-card">
+                            <div class="card-header">
+                                <h4 class="card-title">エレベーター停止階</h4>
+                            </div>
+                            <div class="card-content">
+                                <div class="elevator-table-container">
+                                    <div class="table-responsive">
+                                        <table class="elevator-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>階</th>
+                                                    <th>赤</th>
+                                                    <th>青</th>
+                                                    <th>緑</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for floor in [48, 45, 42, 39, 36, 33, 30, 27, 24, 21, 18, 15, 12, 9, 4,
+                                                2] %}
+                                                <tr class="hover:bg-gray-50">
+                                                    <td>{{ floor }}F</td>
+                                                    <td>{% if floor in [48, 45, 42, 39, 36, 33, 30, 21, 15, 9, 4, 2] %}
+                                                        <div class="elevator-circle red"></div>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{% if floor in [39, 36, 33, 30, 27, 24, 4, 2] %}
+                                                        <div class="elevator-circle blue"></div>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{% if floor in [39, 30, 27, 24, 21, 18, 15, 12, 9, 4, 2] %}
+                                                        <div class="elevator-circle green"></div>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="elevator-card">
+                            <div class="card-header">
+                                <h4 class="card-title">フロア選択・マップ</h4>
+                            </div>
+                            <div class="card-content">
+                                <select id="floorSelector" class="floor-select">
+                                    {% for floor in range(39, 6, -1) %} {# 39階から7階まで #}
+                                    <option value="{{ floor }}">{{ floor }}階</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="floor-map-container">
+                                    <img id="floorMap"
+                                        src="{{ url_for('static', filename='common/img/floor_classroom/floor_39.png') }}"
+                                        alt="フロアマップ" class="floor-map-image">
+                                    <div id="floorMapError" class="floor-map-error" style="display: none;">
+                                        画像を読み込めませんでした
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="classroom-list" class="task-mood-content">
+                <div class="schedule-file-viewer-container">
+                    <div class="file-viewer-header">
+                        <h4 id="fileViewerTitle">スケジュールファイル</h4>
+                        <button id="closeFileViewer" class="close-btn">×</button>
+                    </div>
+                    <div class="file-viewer-content">
+                        <embed id="scheduleFileViewer" src="" type="application/pdf" width="100%" height="500px">
+                        <img id="scheduleImageViewer" src="" alt="スケジュール画像" style="display: none; max-width: 100%; max-height: 500px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+
+
+<!-- 授業情報モーダル -->
+<div id="scheduleInfoModal" class="schedule-modal hidden">
+    <div class="schedule-modal-overlay"></div>
+    <div class="schedule-modal-container">
+        <div class="schedule-modal-header">
+            <h3 class="text-lg font-bold">授業情報</h3>
+            <button class="schedule-modal-close">×</button>
+        </div>
+        <div id="scheduleInfoContainer" class="schedule-info-container">
+            <!-- スケジュール情報がここに表示されます -->
+            <div class="schedule-file">
+                <h4>授業資料:</h4>
+                <div class="file-actions">
+                    ${isPdf ? `
+                        <button class="preview-btn" onclick="showScheduleInfoModal.showFilePreview('${scheduleFileUrl}', 'pdf')">
+                            <i class="fas fa-file-pdf"></i>
+                            <span>PDFをプレビュー</span>
+                        </button>
+                    ` : isImage ? `
+                        <button class="preview-btn" onclick="showScheduleInfoModal.showFilePreview('${scheduleFileUrl}', 'image')">
+                            <i class="fas fa-file-image"></i>
+                            <span>画像をプレビュー</span>
+                        </button>
+                    ` : `
+                        <button class="preview-btn" onclick="window.open('${scheduleFileUrl}', '_blank')">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>新しいタブで開く</span>
+                        </button>
+                    `}
+                    <a href="${scheduleFileUrl}" download class="download-btn">
+                        <i class="fas fa-download"></i>
+                        <span>ダウンロード</span>
+                    </a>
+                    <button class="share-btn" onclick="navigator.clipboard.writeText('${scheduleFileUrl}')">
+                        <i class="fas fa-share-alt"></i>
+                        <span>共有</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ファイルプレビュー用のコンテナ（右側に配置） -->
+    <div class="file-preview-container">
+        <div class="preview-header">
+            <h3 class="text-lg font-bold">ファイルプレビュー</h3>
+            <button class="preview-close">×</button>
+        </div>
+        <div class="preview-content">
+            <embed id="fileViewer" src="" type="application/pdf" width="100%" height="500px">
+            <img id="imageViewer" src="" alt="授業資料" style="display: none; max-width: 100%; max-height: 500px;">
+            <div id="fileDownloadInfo" class="file-download-info" style="display: none;">
+                <p>このファイル形式はプレビューできません</p>
+                <a id="fileDownloadLink" href="#" download class="file-download-link">
+                    <i class="fas fa-download"></i> ファイルをダウンロード
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block extra_js %}
+<!-- 既存のtimetable2.jsの参照を削除 -->
+<!--<script src="{{ url_for('static', filename='student/js/timetable2.js') }}"></script> -->
+
+<script src="{{ url_for('static', filename='student/js/timetable.js') }}" type="module"></script>
+<script src="{{ url_for('static', filename='student/js/tasks.js' ) }}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+<script>
+    // PDF.jsのワーカーを設定
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const floorSelector = document.getElementById('floorSelector');
+        const floorMap = document.getElementById('floorMap');
+
+        floorSelector.value = '39'; // デフォルトで39階を選択
+
+        floorSelector.addEventListener('change', function (e) {
+            const selectedFloor = e.target.value;
+            floorMap.src = "{{ url_for('static', filename='common/img/floor_classroom/') }}" + `floor_${selectedFloor}.png`;
+        });
+    });
+</script>
+{% endblock %}

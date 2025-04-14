@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}クラス生成{% endblock %}
+
+{% block header %}クラス生成{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">クラス情報入力</h5>
+                    
+                    <!-- フラッシュメッセージの表示 -->
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-info">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    
+                    <form method="POST" action="{{ url_for('class_creation.create_class') }}">
+                        <!-- 専攻選択 -->
+                        <div class="mb-3">
+                            <label for="specialization" class="form-label">専攻選択</label>
+                            <select class="form-select" id="specialization" name="specialization_id" required>
+                                <option value="">専攻を選択してください</option>
+                                {% for spec in specializations %}
+                                    <option value="{{ spec.specialization_id }}">
+                                        {{ spec.specialization_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- 担任選択 -->
+                        <div class="mb-3">
+                            <label for="teacher" class="form-label">担任選択</label>
+                            <select class="form-select" id="teacher" name="teacher_id" required>
+                                <option value="">担任を選択してください</option>
+                                {% for teacher in teachers %}
+                                    <option value="{{ teacher.teacher_id }}">
+                                        {{ teacher.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- クラス記号 -->
+                        <div class="mb-3">
+                            <label for="class_letter" class="form-label">クラス記号</label>
+                            <input type="text" class="form-control" id="class_letter" 
+                                   name="class_letter" maxlength="1" required>
+                            <div class="form-text">1文字のアルファベットを入力してください</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">クラスを作成</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

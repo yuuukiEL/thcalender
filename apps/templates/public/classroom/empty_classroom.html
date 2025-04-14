@@ -1,0 +1,95 @@
+{% extends "components/base.html" %}
+
+{% block title %}空き教室一覧{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/empty_classroom.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="month-navigation">
+    <div class="nav-group">
+        <a href="{{ url_for('classroom.view_empty_classroom', month=prev_month.strftime('%Y-%m')) }}" class="nav-btn">
+            <i class="fas fa-chevron-left"></i> 前の月
+        </a>
+        {% if dates %}
+        <span class="current-month">{{ dates[0][:7] }}のスケジュール</span>
+        {% else %}
+        <span class="current-month">スケジュール</span>
+        {% endif %}
+        <a href="{{ url_for('classroom.view_empty_classroom', month=next_month.strftime('%Y-%m')) }}" class="nav-btn">
+            次の月 <i class="fas fa-chevron-right"></i>
+        </a>
+    </div>
+</div>
+
+<div class="table-container">
+    <table id="schedule-table">
+        <thead>
+            <tr class="date-header">
+                <th class="room-number" rowspan="2">教室</th>
+                {% for date in dates %}
+                <th colspan="7">{{ date }}</th>
+                {% endfor %}
+            </tr>
+            <tr class="period-header">
+                {% for _ in dates %}
+                <th class="period-cell">1限</th>
+                <th class="period-cell">2限</th>
+                <th class="period-cell">3限</th>
+                <th class="period-cell">4限</th>
+                <th class="period-cell">5限</th>
+                <th class="period-cell">6限</th>
+                <th class="period-cell">夜間</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for classroom in ["241", "242", "243", "244", "245", "246", "247", "248", "249", 
+                               "201", "202", "203", "204", "205", "206", "191", "192", "197"] %}
+            <tr>
+                <td class="room-number">{{ classroom }}</td>
+                {% for date in dates %}
+                {% for period in ["1限", "2限", "3限", "4限", "5限", "6限", "夜間"] %}
+                <td class="{% if {'classroom_id': classroom, 'formatted_date': date, 'period': period} in common_schedules %}common-schedule-cell{% endif %} {% if {'classroom_id': classroom, 'formatted_date': date, 'period': period} in empty_rooms %}empty-room{% endif %} schedule-cell">
+                </td>
+                {% endfor %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 現在の日付を取得
+    const today = new Date();
+    const formattedToday = today.getFullYear() + '年' + 
+        String(today.getMonth() + 1).padStart(2, '0') + '月' + 
+        String(today.getDate()).padStart(2, '0') + '日';
+
+    // テーブル内の該当する日付を探す
+    const dateHeaders = document.querySelectorAll('.date-header th');
+    let todayColumn = null;
+    
+    dateHeaders.forEach((header, index) => {
+        if (header.textContent.includes(formattedToday)) {
+            todayColumn = index;
+        }
+    });
+
+    if (todayColumn !== null) {
+        // 該当する列までスクロール
+        const table = document.querySelector('.table-container');
+        const columnWidth = 80; // セルの最小幅
+        const scrollPosition = (todayColumn - 1) * columnWidth * 7; // 7は1日あたりの時限数
+        const containerWidth = table.offsetWidth;
+        const centerPosition = scrollPosition - (containerWidth / 2) + (columnWidth * 7 / 2);
+        
+        table.scrollLeft = Math.max(0, centerPosition);
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "student/components/base.html" %}
+
+
+{% block title %}空き教室一覧{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='student/css/empty_classroom.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="month-navigation">
+    <div class="nav-group">
+        <a href="{{ url_for('student.classroom.view_empty_classroom', year=prev_month.year, month=prev_month.month) }}"
+            class="nav-btn">
+            <i class="fas fa-chevron-left"></i> 前の月
+        </a>
+        <span class="current-month">{{ dates.year }}年{{ dates.month }}月のスケジュール</span>
+        <a href="{{ url_for('student.classroom.view_empty_classroom', year=next_month.year, month=next_month.month) }}"
+            class="nav-btn">
+            次の月 <i class="fas fa-chevron-right"></i>
+        </a>
+    </div>
+</div>
+
+<div class="table-container">
+    <table id="schedule-table">
+        <thead>
+            <tr class="date-header">
+                <th class="room-number" rowspan="2">教室</th>
+                {% for week in dates.weeks %}
+                    {% if week[0] %}
+                        {% for day in week %}
+                            {% if day %}
+                            <th colspan="7">{{ day.date[5:7] }}/{{ day.date[8:] }}</th>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr class="period-header">
+                {% for week in dates.weeks %}
+                    {% if week[0] %}
+                        {% for day in week %}
+                            {% if day %}
+                            <th class="period-cell">1</th>
+                            <th class="period-cell">2</th>
+                            <th class="period-cell">3</th>
+                            <th class="period-cell">4</th>
+                            <th class="period-cell">5</th>
+                            <th class="period-cell">6</th>
+                            <th class="period-cell">夜間</th>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for classroom in ["241", "242", "243", "244", "245", "246", "247", "248", "249",
+            "201", "202", "203", "204", "205", "206", "191", "192", "197"] %}
+            <tr>
+                <td class="room-number">{{ classroom }}</td>
+                {% for week in dates.weeks %}
+                    {% if week[0] %}
+                        {% for day in week %}
+                            {% if day %}
+                                {% for period in ["1", "2", "3", "4", "5", "6", "夜間"] %}
+                                <td class="schedule-cell 
+                                    {% if day.is_today %}today{% endif %} 
+                                    {% if day.is_past %}past{% endif %} 
+                                    {% if {'classroom_id': classroom, 'date_info': day.date, 'period': period} in empty_rooms %}empty-room{% endif %}">
+                                </td>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+var emptyRooms = JSON.parse('{{ empty_rooms|default([])|tojson|safe }}');
+</script>
+<script src="{{ url_for('static', filename='student/js/empty_classroom.js') }}"></script>
+{% endblock %}

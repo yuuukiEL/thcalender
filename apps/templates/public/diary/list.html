@@ -1,0 +1,102 @@
+{% extends "components/base.html" %}
+
+{% block title %}日記一覧{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/diary_list.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="diary-list-container">
+    <!-- 検索とフィルターセクション -->
+    <div class="search-filter-section">
+        <div class="search-container">
+            <div class="relative flex-grow">
+                <input type="text" id="searchInput" placeholder="日記を検索" class="search-input">
+                <img src="{{ url_for('static', filename='img/feather/search.svg') }}" alt="Search" class="search-icon">
+            </div>
+        </div>
+        <div class="filter-sort-container">
+            <div class="hashtag-filter">
+                <button class="filter-btn" id="hashtagFilterBtn">
+                    <img src="{{ url_for('static', filename='img/feather/hash.svg') }}" alt="Hashtag">
+                    ハッシュタグ
+                </button>
+                <div class="hashtag-dropdown" id="hashtagDropdown" style="display: none;">
+                    {% for tag in all_hashtags %}
+                    <label class="hashtag-item">
+                        <input type="checkbox" value="{{ tag.name }}">
+                        #{{ tag.name }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="sort-options">
+                <button class="sort-btn" id="sortBtn">
+                    <img src="{{ url_for('static', filename='img/feather/filter.svg') }}" alt="Sort">
+                    並び替え
+                </button>
+                <div class="sort-dropdown" id="sortDropdown" style="display: none;">
+                    <div class="sort-category">
+                        <h4>並び替え</h4>
+                        <label><input type="radio" name="sort" value="date_desc" checked> 新しい順</label>
+                        <label><input type="radio" name="sort" value="date_asc"> 古い順</label>
+                        <label><input type="radio" name="sort" value="title"> タイトル順</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 日記一覧ヘッダー -->
+    <div class="diary-list-header">
+        <h1>日記一覧</h1>
+        <a href="{{ url_for('diary.diary_view') }}" class="create-diary-btn">
+            <img src="{{ url_for('static', filename='img/feather/plus.svg') }}" alt="新規作成">
+            新規作成
+        </a>
+    </div>
+    
+    <!-- 日記カードグリッド -->
+    <div class="diary-list">
+        {% for diary in diaries %}
+        <div class="diary-card" data-tags="{{ diary.hashtags|map(attribute='name')|join(' ') }}">
+            <div class="diary-card-header">
+                <h2>{{ diary.title }}</h2>
+                <div class="diary-card-actions">
+                    <span class="diary-date">{{ diary.created_at.strftime('%Y年%m月%d日') }}</span>
+                    <button class="delete-btn" data-diary-id="{{ diary.diary_id }}">
+                        <img src="{{ url_for('static', filename='img/feather/x.svg') }}" alt="削除">
+                    </button>
+                </div>
+            </div>
+            <div class="diary-card-content">
+                <p>{{ (diary.content|striptags)[:50] }}{% if diary.content|length > 50 %}...{% endif %}</p>
+            </div>
+            <div class="diary-card-footer">
+                {% if diary.hashtags %}
+                <div class="diary-tags">
+                    {% for tag in diary.hashtags %}
+                    <span class="tag" data-tag="{{ tag.name }}">#{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <a href="{{ url_for('diary_detail.detail', diary_id=diary.diary_id) }}" class="read-more">続きを読む</a>
+            </div>
+        </div>
+        {% else %}
+        <div class="no-diaries">
+            <p>まだ日記がありません。新しい日記を作成してみましょう！</p>
+            <a href="{{ url_for('diary.diary_view') }}" class="create-diary-btn">
+                <img src="{{ url_for('static', filename='img/feather/plus.svg') }}" alt="新規作成">
+                新規作成
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/diary_list.js') }}"></script>
+{% endblock %} 

@@ -1,0 +1,303 @@
+{% extends "student/components/base.html" %}
+
+{% block title %}プロフィール{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-3xl mx-auto">
+        <!-- プロフィールヘッダー -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                <div class="flex flex-col md:flex-row md:items-center md:space-x-6 mb-4 md:mb-0">
+                    {% if student.profile_image_path %}
+                        <img src="{{ url_for('static', filename='uploads/' + student.profile_image_path) }}" 
+                             alt="{{ student.name }}" 
+                             class="w-24 h-24 rounded-full object-cover mb-4 md:mb-0">
+                    {% else %}
+                        <div class="w-24 h-24 bg-blue-500 text-white rounded-full flex items-center justify-center text-2xl mb-4 md:mb-0">
+                            {{ student.name[:2] }}
+                        </div>
+                    {% endif %}
+                    <div>
+                        <h1 class="text-2xl font-bold">{{ student.name }}</h1>
+                        <p class="text-gray-600">学籍番号: {{ student.student_id }}</p>
+                        <p class="text-gray-600">{{ student.course.course_name }} {{ student.current_grade }}年</p>
+                    </div>
+                </div>
+                <a href="{{ url_for('student_api.edit_profile') }}" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition duration-200 text-center">
+                    <i class="fas fa-edit mr-2"></i>編集
+                </a>
+            </div>
+        </div>
+
+        <!-- 情報カード -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 学籍情報 -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <i class="fas fa-graduation-cap mr-2 text-blue-500"></i>学籍情報
+                    </h2>
+                </div>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <p class="text-gray-500 text-sm">入学年度</p>
+                            <p class="font-medium">{{ student.enrollment_year }}年</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">入学学期</p>
+                            <p class="font-medium">{{ student.enrollment_term }}学期</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <p class="text-gray-500 text-sm">現在の学年</p>
+                            <p class="font-medium">{{ student.current_grade }}年</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">コース</p>
+                            <p class="font-medium">{{ student.course.course_name }}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 text-sm">専攻</p>
+                        {% if student.specialization_id %}
+                            {% set specialization = get_specialization(student.specialization_id) %}
+                            <p class="font-medium">{{ specialization.specialization_name if specialization else '情報なし' }}</p>
+                        {% else %}
+                            <p class="font-medium text-gray-400">未設定</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- 連絡先情報 -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <i class="fas fa-address-card mr-2 text-blue-500"></i>連絡先情報
+                    </h2>
+                    <a href="{{ url_for('student_api.edit_contact_info') }}" class="text-blue-500 hover:text-blue-600 transition duration-200">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-gray-500 text-sm">メールアドレス</p>
+                        <p class="font-medium">{{ student.email }}</p>
+                    </div>
+                    {% if contact %}
+                        {% if contact.phone %}
+                        <div>
+                            <p class="text-gray-500 text-sm">電話番号</p>
+                            <p class="font-medium">{{ contact.phone }}</p>
+                        </div>
+                        {% endif %}
+                        {% if contact.postal_code %}
+                        <div>
+                            <p class="text-gray-500 text-sm">郵便番号</p>
+                            <p class="font-medium">{{ contact.postal_code }}</p>
+                        </div>
+                        {% endif %}
+                        {% if contact.address %}
+                        <div>
+                            <p class="text-gray-500 text-sm">住所</p>
+                            <p class="font-medium">{{ contact.address }}</p>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="py-2">
+                            <p class="text-gray-500 italic">詳細な連絡先情報が登録されていません</p>
+                            <a href="{{ url_for('student_api.edit_contact_info') }}" class="text-blue-500 hover:text-blue-600 text-sm mt-2 inline-block">
+                                <i class="fas fa-plus-circle mr-1"></i>連絡先情報を追加
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 緊急連絡先 -->
+            {% if contact and contact.emergency_contact %}
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <i class="fas fa-phone-alt mr-2 text-red-500"></i>緊急連絡先
+                    </h2>
+                    <a href="{{ url_for('student_api.edit_contact_info') }}" class="text-blue-500 hover:text-blue-600 transition duration-200">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-gray-500 text-sm">氏名</p>
+                        <p class="font-medium">{{ contact.emergency_contact }}</p>
+                    </div>
+                    {% if contact.emergency_phone %}
+                    <div>
+                        <p class="text-gray-500 text-sm">電話番号</p>
+                        <p class="font-medium">{{ contact.emergency_phone }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- セキュリティ設定 -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <i class="fas fa-shield-alt mr-2 text-blue-500"></i>セキュリティ設定
+                    </h2>
+                    <a href="{{ url_for('student_api.security_settings') }}" class="text-blue-500 hover:text-blue-600 transition duration-200">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-gray-500 text-sm">パスワード</p>
+                            <p class="font-medium">••••••••</p>
+                            <p class="text-gray-400 text-xs">最終更新: {{ student.password_updated_at|default('未設定', true) }}</p>
+                        </div>
+                        <a href="{{ url_for('student_api.edit_profile') }}#password" class="text-blue-500 hover:text-blue-600">
+                            変更
+                        </a>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-gray-500 text-sm">秘密の質問</p>
+                            <p class="font-medium">
+                                {% if security_question %}
+                                    設定済み
+                                {% else %}
+                                    未設定
+                                {% endif %}
+                            </p>
+                        </div>
+                        <a href="{{ url_for('student_api.security_settings') }}#security-question" class="text-blue-500 hover:text-blue-600">
+                            {% if security_question %}変更{% else %}設定{% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 外部サービス連携 -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <i class="fas fa-link mr-2 text-blue-500"></i>外部サービス連携
+                    </h2>
+                    <a href="{{ url_for('student_api_connections.api_settings') }}" class="text-blue-500 hover:text-blue-600 transition duration-200">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </div>
+                <div class="space-y-4">
+                    <!-- Google連携 -->
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <i class="fab fa-google text-xl text-red-500 mr-3"></i>
+                            <div>
+                                <p class="font-medium">Google Calendar</p>
+                                <p class="text-gray-500 text-sm">
+                                    {% if google_connection and google_connection.is_active %}
+                                        連携済み ({{ google_connection.account_email }})
+                                    {% else %}
+                                        未連携
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('student_api_connections.api_settings') }}#google" class="text-blue-500 hover:text-blue-600">
+                            {% if google_connection and google_connection.is_active %}変更{% else %}連携{% endif %}
+                        </a>
+                    </div>
+                    
+                    <!-- Notion連携 -->
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <i class="fas fa-book text-xl text-gray-800 mr-3"></i>
+                            <div>
+                                <p class="font-medium">Notion</p>
+                                <p class="text-gray-500 text-sm">
+                                    {% if notion_connection and notion_connection.is_active %}
+                                        連携済み
+                                    {% else %}
+                                        未連携
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('student_api_connections.api_settings') }}#notion" class="text-blue-500 hover:text-blue-600">
+                            {% if notion_connection and notion_connection.is_active %}変更{% else %}連携{% endif %}
+                        </a>
+                    </div>
+                    
+                    <!-- Outlook連携 -->
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <i class="fab fa-microsoft text-xl text-blue-600 mr-3"></i>
+                            <div>
+                                <p class="font-medium">Outlook Calendar</p>
+                                <p class="text-gray-500 text-sm">
+                                    {% if outlook_connection and outlook_connection.is_active %}
+                                        連携済み ({{ outlook_connection.account_email }})
+                                    {% else %}
+                                        未連携
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('student_api_connections.api_settings') }}#outlook" class="text-blue-500 hover:text-blue-600">
+                            {% if outlook_connection and outlook_connection.is_active %}変更{% else %}連携{% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- サイトレビュー -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <i class="fas fa-star mr-2 text-yellow-500"></i>サイトレビュー
+                    </h2>
+                    <a href="{{ url_for('student_api_review.review') }}" class="text-blue-500 hover:text-blue-600 text-sm">
+                        不具合報告はこちら
+                    </a>
+                </div>
+                <div class="space-y-4">
+                    {% if student_review %}
+                        <div>
+                            <div class="flex items-center mb-2">
+                                <div class="flex text-yellow-400">
+                                    {% for i in range(5) %}
+                                        {% if i < student_review.rating %}
+                                            <i class="fas fa-star"></i>
+                                        {% else %}
+                                            <i class="far fa-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <span class="ml-2 text-gray-600">{{ student_review.rating }}/5</span>
+                            </div>
+                            <p class="text-gray-700">{{ student_review.comment }}</p>
+                            <p class="text-gray-400 text-xs mt-1">{{ student_review.created_at.strftime('%Y年%m月%d日') }}</p>
+                        </div>
+                    {% else %}
+                        <div class="py-2">
+                            <p class="text-gray-500">システムの改善にご協力ください。不具合やご意見はレビューページからお知らせください。</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-6 flex justify-end">
+            <a href="{{ url_for('student.home.index') }}" class="text-blue-500 hover:text-blue-600 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>ホームに戻る
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

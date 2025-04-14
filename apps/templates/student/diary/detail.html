@@ -1,0 +1,357 @@
+{% extends "student/components/base.html" %}
+
+{% block title %}{{ diary.title }}{% endblock %}
+
+{% block header_title %}
+    {% if student %}
+        ようこそ、{{ student.name }}さん
+    {% else %}
+        日記の詳細
+    {% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='student/css/diary_detail.css') }}" rel="stylesheet">
+<style>
+    /* 全体のコンテナ */
+    .diary-detail-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* ヘッダー部分 */
+    .diary-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .diary-title-section h1 {
+        margin: 0 0 10px 0;
+        font-size: 1.8rem;
+        color: #333;
+    }
+    
+    .diary-date {
+        color: #888;
+        font-size: 0.9rem;
+    }
+    
+    /* アクションボタン */
+    .diary-actions {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .edit-btn, .delete-btn {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 15px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .edit-btn {
+        background-color: #e9f5ff;
+        color: #0066cc;
+        border: none;
+        text-decoration: none;
+    }
+    
+    .delete-btn {
+        background-color: #ffebee;
+        color: #d32f2f;
+        border: none;
+    }
+    
+    .edit-btn:hover {
+        background-color: #d0e8ff;
+    }
+    
+    .delete-btn:hover {
+        background-color: #ffd7d7;
+    }
+    
+    .edit-btn img, .delete-btn img {
+        width: 16px;
+        height: 16px;
+    }
+    
+    /* タグ */
+    .diary-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .tag {
+        background-color: #e9f5ff;
+        color: #0066cc;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.9em;
+    }
+    
+    /* 日記の内容 */
+    .diary-content {
+        line-height: 1.6;
+        color: #333;
+        background-color: #fff; /* 背景色を白に変更 */
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 30px;
+    }
+    
+    /* 画像セクション */
+    .diary-images {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+    
+    .image-container {
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        cursor: pointer;
+    }
+    
+    .image-container img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s;
+    }
+    
+    .image-container img:hover {
+        transform: scale(1.05);
+    }
+    
+    /* フッター */
+    .diary-footer {
+        margin-top: 30px;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+    }
+    
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 15px;
+        background-color: #f5f5f5;
+        color: #555;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+    
+    .back-btn:hover {
+        background-color: #eee;
+    }
+    
+    .back-btn img {
+        width: 16px;
+        height: 16px;
+    }
+    
+    /* モーダル */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.9);
+    }
+    
+    .modal-content {
+        margin: auto;
+        display: block;
+        max-width: 90%;
+        max-height: 90%;
+    }
+    
+    .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="diary-detail-container">
+    <div class="diary-header">
+        <div class="diary-title-section">
+            <h1>{{ diary.title }}</h1>
+            <span class="diary-date">{{ diary.created_at.strftime('%Y年%m月%d日') }}</span>
+        </div>
+        <div class="diary-actions">
+            <a href="{{ url_for('student.diary.edit', diary_id=diary.diary_id) }}" class="edit-btn">
+                <img src="{{ url_for('static', filename='common/img/feather/edit.svg') }}" alt="編集">
+                編集
+            </a>
+            <button class="delete-btn" data-diary-id="{{ diary.diary_id }}">
+                <img src="{{ url_for('static', filename='common/img/feather/trash-2.svg') }}" alt="削除">
+                削除
+            </button>
+        </div>
+    </div>
+
+    {% if diary.hashtags %}
+    <div class="diary-tags">
+        {% for tag in diary.hashtags %}
+        <span class="tag">#{{ tag.tag_name }}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="diary-content">
+        {{ diary.content|safe }}
+    </div>
+
+    {% if diary.images %}
+    <div class="diary-images">
+        {% for image in diary.images %}
+        <div class="image-container">
+            <img src="{{ url_for('student.diary.get_diary_image', image_id=image.image_id) }}" 
+                 alt="日記の画像" 
+                 onclick="openImageModal(this.src)">
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="diary-footer">
+        <a href="{{ url_for('student.diary.index') }}" class="back-btn">
+            <img src="{{ url_for('static', filename='common/img/feather/arrow-left.svg') }}" alt="戻る">
+            一覧に戻る
+        </a>
+    </div>
+</div>
+
+<!-- 画像モーダル -->
+<div id="imageModal" class="modal">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // CSRFトークンの取得
+    const csrfToken = "{{ csrf_token }}";
+
+    // 削除ボタンの処理
+    const deleteBtn = document.querySelector('.delete-btn');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', async function() {
+            if (confirm('この日記を削除してもよろしいですか？')) {
+                const diaryId = this.dataset.diaryId;
+                try {
+                    const response = await fetch(`/student/diary/${diaryId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRFToken': csrfToken
+                        },
+                        credentials: 'same-origin'
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        window.location.href = "{{ url_for('student.diary.index') }}";
+                    } else {
+                        throw new Error(data.error || '日記の削除に失敗しました。');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert(error.message);
+                }
+            }
+        });
+    }
+
+    // 画像モーダルの処理
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    const closeModal = document.querySelector('.close-modal');
+
+    window.openImageModal = function(src) {
+        modal.style.display = "block";
+        modalImg.src = src;
+    }
+
+    closeModal.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // 画像削除の処理
+    document.querySelectorAll('.delete-image').forEach(button => {
+        button.addEventListener('click', function() {
+            const imageId = this.dataset.imageId;
+            if (confirm('この画像を削除してもよろしいですか？')) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'delete_images';
+                input.value = imageId;
+                this.closest('form').appendChild(input);
+                this.closest('.image-item').remove();
+            }
+        });
+    });
+
+    // 画像プレビューの処理
+    document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+        const files = e.target.files;
+        const container = document.querySelector('.current-images');
+        
+        for (let file of files) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const div = document.createElement('div');
+                div.className = 'image-item';
+                div.innerHTML = `
+                    <img src="${e.target.result}" alt="プレビュー">
+                    <div class="image-actions">
+                        <button type="button" class="delete-image">
+                            <img src="/static/img/feather/x.svg" alt="削除">
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+});
+</script>
+{% endblock %} 

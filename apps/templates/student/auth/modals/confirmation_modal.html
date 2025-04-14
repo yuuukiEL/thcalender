@@ -1,0 +1,27 @@
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmationModalLabel">登録内容確認</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>以下の内容で登録します。よろしいですか？</p>
+        <ul>
+          <li>氏名: <span id="confirm-name"></span></li>
+          <li>学科・クラス: <span id="confirm-department"></span></li>
+          <li>入学年度: <span id="confirm-year"></span></li>
+          <li>入学期: <span id="confirm-term"></span></li>
+          <li>プロフィール画像: <span id="confirm-image"></span></li>
+        </ul>
+        <div class="mt-3">
+          <p>学生番号: <strong id="studentNumberDisplay"></strong></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+        <button type="button" class="btn btn-primary" onclick="submitForm()">登録</button>
+      </div>
+    </div>
+  </div>
+</div> 

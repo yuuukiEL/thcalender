@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}学生情報更新{% endblock %}
+
+{% block header %}学生情報更新{% endblock %}
+
+{% block content %}
+<style>
+    .form-group {
+        margin-bottom: 15px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+    }
+    select, input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    button {
+        background-color: #0066cc;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #0052a3;
+    }
+    .student-list {
+        margin-top: 30px;
+    }
+    .student-list table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .student-list th, .student-list td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+    .student-list th {
+        background-color: #f5f5f5;
+    }
+</style>
+
+<form method="post">
+    <div class="form-group">
+        <label for="student_id">学生:</label>
+        <select id="student_id" name="student_id" required>
+            <option value="">学生を選択してください</option>
+            {% for student in students %}
+            <option value="{{ student.student_base_number }}">
+                {{ student.student_base_number }} - {{ student.name }}
+                ({{ student.current_grade }}年 {{ student.course_name }} {{ student.specialization_name }})
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="new_grade">新しい学年:</label>
+        <select id="new_grade" name="new_grade" required>
+            <option value="">学年を選択してください</option>
+            {% for grade in range(1, 5) %}
+            <option value="{{ grade }}">{{ grade }}年</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="new_specialization_id">新しい専攻:</label>
+        <select id="new_specialization_id" name="new_specialization_id" required>
+            <option value="">専攻を選択してください</option>
+            {% for spec in specializations %}
+            <option value="{{ spec.id }}" data-course-code="{{ spec.course_code }}">
+                {{ spec.course_name }} - {{ spec.specialization_name }}
+            </option>
+            {% endfor %}
+        </select>
+        <input type="hidden" id="new_course_code" name="new_course_code">
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">更新</button>
+        <a href="{{ url_for('views.index') }}" class="btn btn-secondary">登録メニューに戻る</a>
+    </div>
+</form>
+
+<script>
+    // 専攻選択時に学科コードを自動設定
+    document.getElementById('new_specialization_id').addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        document.getElementById('new_course_code').value = selectedOption.dataset.courseCode;
+    });
+</script>
+{% endblock %} 

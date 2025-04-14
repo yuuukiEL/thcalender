@@ -1,0 +1,60 @@
+/* スター評価のスタイル */
+.rating {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.rating .star-input {
+    display: none;
+}
+
+.rating .star-label {
+    cursor: pointer;
+    color: #d1d5db; /* text-gray-300 */
+    font-size: 2.5rem; /* サイズを大きく */
+    padding: 0 0.25rem;
+    line-height: 1;
+    display: inline-block;
+}
+
+/* チェックされた星とホバー時の星のスタイル - 左から右に変更 */
+.rating .star-input:checked ~ .star-label {
+    color: #d1d5db; /* チェック済みの右側は灰色に */
+}
+
+.rating .star-label:hover,
+.rating .star-label:hover ~ .star-label {
+    color: #d1d5db; /* ホバー時の右側は灰色に */
+}
+
+.rating .star-input:checked + .star-label,
+.rating .star-label:hover + .star-label {
+    color: #f59e0b; /* チェックまたはホバーした星とその左側は黄色に */
+}
+
+/* Font Awesomeが読み込めない場合のフォールバック */
+.rating .star-label i.fas.fa-star::before {
+    content: "★"; /* Unicode星文字 */
+    display: inline-block;
+    transform: rotate(0deg); /* 回転をリセット */
+}
+
+.flex.text-yellow-400 i.fas.fa-star::before {
+    content: "★"; /* Unicode星文字 */
+    display: inline-block;
+    transform: rotate(0deg); /* 回転をリセット */
+}
+
+.flex.text-yellow-400 i.far.fa-star::before {
+    content: "☆"; /* Unicode空星文字 */
+    display: inline-block;
+    transform: rotate(0deg); /* 回転をリセット */
+}
+
+/* 現在のレビュー表示用のスタイル */
+.flex.text-yellow-400 i.fas.fa-star,
+.flex.text-yellow-400 i.far.fa-star {
+    font-size: 1.5rem;
+    margin-right: 0.125rem;
+}

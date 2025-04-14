@@ -1,0 +1,283 @@
+{% extends "components/base.html" %}
+
+{% block title %}My Diary{% endblock %}
+
+{% block header_title %}Welcome, {{ student.name }}!{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/diary.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <form id="diaryForm" method="POST" action="{{ url_for('diary.create') }}" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="header-container">
+            <div class="date-navigation">
+                <button type="button" id="prevDay" class="nav-btn">
+                    <img src="{{ url_for('static', filename='img/feather/chevron-left.svg') }}" alt="Previous Day">
+                </button>
+                <span id="currentDate" class="date">{{ current_date|default(today_date.strftime('%Y/%m/%d')) }}</span>
+                <button type="button" id="nextDay" class="nav-btn">
+                    <img src="{{ url_for('static', filename='img/feather/chevron-right.svg') }}" alt="Next Day">
+                </button>
+                <button type="button" id="calendarBtn" class="nav-btn">
+                    <img src="{{ url_for('static', filename='img/feather/calendar.svg') }}" alt="Calendar">
+                </button>
+            </div>
+            <div class="header-buttons">
+                <button type="button" class="header-btn" id="settingsBtn">
+                    <img src="{{ url_for('static', filename='img/feather/settings.svg') }}" alt="Settings">
+                </button>
+                <button type="button" class="header-btn" id="saveBtn">
+                    <img src="{{ url_for('static', filename='img/feather/save.svg') }}" alt="Save">
+                </button>
+                <button type="button" class="save-button" id="newSaveBtn">
+                    <span class="save-icon">💾</span>
+                    日記を保存
+                </button>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="content">
+            <div class="left-column">
+                <div class="image-upload-container">
+                    <div class="image-upload">
+                        <div class="image-controls">
+                            <input type="file" id="imageInput" name="images[]" multiple accept="image/*" style="display: none;">
+                            <button type="button" id="imageUploadBtn" class="image-button" style="color: #0C07FF;">
+                                {% if diary and diary.images %}
+                                    画像を変更
+                                {% else %}
+                                    画像を参照
+                                {% endif %}
+                            </button>
+                        </div>
+                        <div id="imagePreview" class="{% if diary and diary.images %}has-image{% endif %}">
+                            {% if diary and diary.images %}
+                                {% for image in diary.images %}
+                                    <img src="{{ image.url }}" alt="日記の画像">
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="vertical-buttons">
+                        <button type="button" class="square-btn">1</button>
+                        <button type="button" class="square-btn">2</button>
+                        <button type="button" class="square-btn">3</button>
+                    </div>
+                </div>
+                <br>
+                <br>
+                
+                <!-- ハッシュタグ入力モーダル -->
+                <div id="hashtagModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal">&times;</span>
+                        <h3>ハッシュタグの追加</h3>
+                        <div class="hashtag-input-container">
+                            <input type="text" id="modalHashtagInput" placeholder="ハッシュタグを入力（#なし）">
+                            <button type="button" id="addModalHashtagBtn" class="btn btn-primary">追加</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="task-mood-location-container">
+                    <div class="sticky-notes">
+                        <div class="sticky-note active" data-target="tomorrow-tasks">
+                            <h3 class="sticky-note-title">
+                                明日のタスク
+                                <button type="button" class="add-task-btn">
+                                    <img src="{{ url_for('static', filename='img/feather/plus.svg') }}" alt="Add Task" class="add-task-icon">
+                                </button>
+                            </h3>
+                        </div>
+                        <div class="sticky-note" data-target="hashtag-list">
+                            <h3 class="sticky-note-title">
+                                ハッシュタグ
+                                <button type="button" class="add-hashtag-btn">
+                                    <img src="{{ url_for('static', filename='img/feather/hash.svg') }}" alt="Add Hashtag" class="add-task-icon">
+                                </button>
+                            </h3>
+                        </div>
+                    </div>
+                    <div id="tomorrow-tasks" class="task-mood-content active">
+                        <div id="taskList" class="task-list-container">
+                            {% if tasks %}
+                                {% for task in tasks %}
+                                <div class="task-item" data-task-id="{{ task.task_id }}">
+                                    <div class="task-header">
+                                        <input type="checkbox" class="task-checkbox" {% if task.is_completed %}checked{% endif %}>
+                                        <input type="text" class="task-content" value="{{ task.content|e }}" placeholder="タスクを入力">
+                                        <div class="task-actions">
+                                            <button type="button" class="task-delete-btn">
+                                                <img src="{{ url_for('static', filename='img/feather/trash-2.svg') }}" alt="Delete">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div id="hashtag-list" class="task-mood-content">
+                        <div id="hashtagContainer" class="hashtag-container">
+                            <!-- 既存のハッシュタグがある場合は表示 -->
+                            {% if diary and diary.hashtags %}
+                                {% for hashtag in diary.hashtags %}
+                                    <span class="hashtag">#{{ hashtag.name }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div class="diary-section">
+                    <input type="text" id="title" name="title" class="diary-title" placeholder="日記のタイトル" value="{{ diary.title|e if diary else '' }}">
+                    <div id="diaryContent" class="diary" contenteditable="true" placeholder="日記を入力してください">{{ diary.content|safe if diary else '' }}</div>
+                    <input type="hidden" name="content" id="hiddenContent">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- アイコン選択モーダル -->
+<div id="iconSelectionArea" class="icon-selection-area" style="display:none;">
+    <div class="icon-selection-content">
+        <span class="close-icon-selection">&times;</span>
+        <div id="iconGrid" class="icon-grid"></div>
+    </div>
+</div>
+
+<!-- タスク優先度選択モーダル -->
+<div id="priorityModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <h3>優先度の設定</h3>
+        <div class="priority-options">
+            <button type="button" data-priority="high" class="priority-btn high">高</button>
+            <button type="button" data-priority="medium" class="priority-btn medium">中</button>
+            <button type="button" data-priority="low" class="priority-btn low">低</button>
+        </div>
+    </div>
+</div>
+
+<!-- コンテキストメニュー -->
+<div id="contextMenu">
+    <ul>
+        <li data-command="increaseFontSize">
+            <img src="{{ url_for('static', filename='img/feather/plus.svg') }}" alt="文字を大きく">
+            文字を大きく
+        </li>
+        <li data-command="decreaseFontSize">
+            <img src="{{ url_for('static', filename='img/feather/minus.svg') }}" alt="文字を小さく">
+            文字を小さく
+        </li>
+        <li class="menu-separator"></li>
+        <li data-command="bold">
+            <img src="{{ url_for('static', filename='img/feather/bold.svg') }}" alt="太字">
+            太字
+        </li>
+        <li data-command="italic">
+            <img src="{{ url_for('static', filename='img/feather/italic.svg') }}" alt="斜体">
+            斜体
+        </li>
+        <li data-command="underline">
+            <img src="{{ url_for('static', filename='img/feather/underline.svg') }}" alt="下線">
+            下線
+        </li>
+        <li data-command="strikeThrough">
+            <img src="{{ url_for('static', filename='img/feather/delete.svg') }}" alt="取り消し線">
+            取り消し線
+        </li>
+        <li class="menu-separator"></li>
+        <li class="menu-separator"></li>
+        <li data-command="foreColor">
+            <img src="{{ url_for('static', filename='img/feather/droplet.svg') }}" alt="文字色">
+            文字色
+            <input type="color" class="color-picker" id="textColorPicker">
+        </li>
+        <li data-command="hiliteColor">
+            <img src="{{ url_for('static', filename='img/feather/edit-3.svg') }}" alt="背景色">
+            背景色
+            <input type="color" class="color-picker" id="bgColorPicker">
+        </li>
+    </ul>
+</div>
+
+<!-- デバッグ情報 -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Elements check:', {
+        saveBtn: !!document.getElementById('saveBtn'),
+        newSaveBtn: !!document.getElementById('newSaveBtn'),
+        diaryForm: !!document.getElementById('diaryForm'),
+        hiddenContent: !!document.getElementById('hiddenContent'),
+        diaryContent: !!document.getElementById('diaryContent'),
+        title: !!document.getElementById('title')
+    });
+});
+</script>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
+<script>
+    // グローバル変数の定義
+    window.titleInput = document.getElementById('title');
+    window.diaryContent = document.getElementById('diaryContent');
+    window.newSaveBtn = document.getElementById('newSaveBtn');
+    
+    console.log('Global variables initialized:', {
+        titleInput: !!window.titleInput,
+        diaryContent: !!window.diaryContent,
+        newSaveBtn: !!window.newSaveBtn
+    });
+
+    // Google Maps初期化関数をグローバルスコープで定義
+    window.initMap = function() {
+        console.log('Google Maps initialized');
+        // Google Mapsの初期化コードをここに追加
+        try {
+            // Google Mapsの初期化処理
+            // 必要な場合はここにマップの設定を追加
+        } catch (error) {
+            console.error('Google Maps initialization error:', error);
+        }
+    };
+</script>
+<!-- Google Maps APIを一度だけ読み込む -->
+<script>
+    // Google Maps APIを動的に読み込む関数
+    function loadGoogleMapsAPI() {
+        if (window.google && window.google.maps) {
+            console.log('Google Maps API already loaded');
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAQcTEThF41W4-I5pqM_WZGGaBJ9TzZBPc&callback=initMap&loading=async`;
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+    }
+
+    // APIの読み込みを開始
+    loadGoogleMapsAPI();
+</script>
+<script src="{{ url_for('static', filename='js/diary.js') }}"></script>
+{% endblock %}

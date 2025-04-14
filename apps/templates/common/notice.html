@@ -1,0 +1,44 @@
+{% extends "common/base.html" %}
+
+{% block title %}お知らせ - HAL東京カレンダー{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8">
+        <h1 class="text-3xl font-bold mb-8 text-center text-gray-900">お知らせ</h1>
+        
+        <div class="space-y-6">
+            <!-- お知らせアイテム -->
+            <div class="notice-item">
+                <div class="flex items-center mb-2">
+                    <span class="badge badge-new">NEW</span>
+                    <time class="text-gray-500 text-sm ml-2">2024.03.15</time>
+                </div>
+                <h2 class="text-xl font-semibold mb-2">システムメンテナンスのお知らせ</h2>
+                <p class="text-gray-600">3月20日(水) 2:00-5:00にシステムメンテナンスを実施します。</p>
+            </div>
+
+            <div class="notice-item">
+                <div class="flex items-center mb-2">
+                    <time class="text-gray-500 text-sm">2024.03.10</time>
+                </div>
+                <h2 class="text-xl font-semibold mb-2">新機能追加のお知らせ</h2>
+                <p class="text-gray-600">課題の提出期限通知機能を追加しました。</p>
+            </div>
+
+            <!-- ページネーション -->
+            <div class="flex justify-center mt-8">
+                <nav class="pagination" aria-label="ページネーション">
+                    <ul class="flex space-x-2">
+                        <li><a href="#" class="pagination-link">前へ</a></li>
+                        <li><a href="#" class="pagination-link active">1</a></li>
+                        <li><a href="#" class="pagination-link">2</a></li>
+                        <li><a href="#" class="pagination-link">3</a></li>
+                        <li><a href="#" class="pagination-link">次へ</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

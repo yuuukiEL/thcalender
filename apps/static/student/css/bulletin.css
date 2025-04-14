@@ -1,0 +1,72 @@
+/* 掲示板関連のCSS */
+
+.bulletin-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.bulletin-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.reaction-button {
+    transition: all 0.2s ease;
+}
+
+.reaction-button:hover {
+    transform: scale(1.1);
+}
+
+.reaction-menu {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform-origin: bottom center;
+}
+
+.reaction-menu.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.reaction-menu.hide {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+    pointer-events: none;
+}
+
+/* 画像アップロード関連 */
+#image-upload-area {
+    transition: all 0.3s ease;
+}
+
+#image-upload-area:hover {
+    border-color: #4299e1;
+    background-color: rgba(237, 242, 247, 0.8);
+}
+
+#remove-image-btn {
+    transition: all 0.2s ease;
+}
+
+#remove-image-btn:hover {
+    background-color: #f56565;
+    transform: scale(1.1);
+}
+
+/* モーダル関連 */
+#postModal {
+    transition: opacity 0.3s ease;
+}
+
+.modal-container {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+#postModal.flex .modal-container {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+#postModal.hidden .modal-container {
+    transform: translateY(-20px);
+    opacity: 0;
+} 

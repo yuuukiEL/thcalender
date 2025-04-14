@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>縦配置版：ルーローの三角形建築平面図</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            font-family: sans-serif;
+        }
+        .floor-plan {
+            position: relative;
+            width: 800px;
+            height: 800px;
+        }
+    </style>
+</head>
+<body>
+    <div class="floor-plan">
+        <svg viewBox="0 0 800 800">
+            <g transform="translate(400, 400) rotate(90)">
+                <!-- ルーローの三角形の外周 -->
+                <path d="M0 -300 
+                         A300 300 0 0 1 259.8 150
+                         A300 300 0 0 1 -259.8 150
+                         A300 300 0 0 1 0 -300"
+                      fill="none" 
+                      stroke="#333" 
+                      stroke-width="2"/>
+                
+                <!-- 内側の三角形 -->
+                <path d="M0 -280
+                         L250 140
+                         L-250 140 Z"
+                      fill="none"
+                      stroke="#666"
+                      stroke-dasharray="5,5"/>
+
+                <!-- スモールアトリウム -->
+                <circle cx="0" cy="0" r="120"
+                        fill="#FFFFD0"
+                        stroke="#666"/>
+                <text x="0" y="0" 
+                      text-anchor="middle"
+                      dominant-baseline="middle">
+                    スモールアトリウム
+                </text>
+
+                <!-- 右側の教室群 -->
+                <g transform="rotate(120)">
+                    <rect x="-290" y="-100" width="60" height="70" 
+                          fill="#E6F3FF" stroke="#666"/>
+                    <rect x="-290" y="0" width="60" height="70" 
+                          fill="#E6F3FF" stroke="#666"/>
+                    <rect x="-290" y="100" width="60" height="70" 
+                          fill="#E6F3FF" stroke="#666"/>
+                    <text x="-260" y="-120" text-anchor="middle">教室</text>
+                </g>
+
+                <!-- 左側の教室群 -->
+                <g transform="rotate(-120)">
+                    <rect x="-290" y="-100" width="60" height="70" 
+                          fill="#E6F3FF" stroke="#666"/>
+                    <rect x="-290" y="0" width="60" height="70" 
+                          fill="#E6F3FF" stroke="#666"/>
+                    <rect x="-290" y="100" width="60" height="70" 
+                          fill="#E6F3FF" stroke="#666"/>
+                    <text x="-260" y="-120" text-anchor="middle">教室</text>
+                </g>
+
+                <!-- 下側の教室群 -->
+                <g>
+                    <rect x="-290" y="-100" width="60" height="70" 
+                          fill="#E6F3FF" stroke="#666"/>
+                    <rect x="-290" y="0" width="60" height="70" 
+                          fill="#E6F3FF" stroke="#666"/>
+                    <rect x="-290" y="100" width="60" height="70" 
+                          fill="#E6F3FF" stroke="#666"/>
+                    <text x="-260" y="-120" text-anchor="middle">教室</text>
+                </g>
+
+            </g>
+
+            <!-- 方位記号 -->
+            <g transform="translate(100, 100)">
+                <circle r="20" fill="none" stroke="#333"/>
+                <text x="0" y="5" 
+                      text-anchor="middle"
+                      dominant-baseline="middle">N</text>
+            </g>
+        </svg>
+    </div>
+</body>
+</html>

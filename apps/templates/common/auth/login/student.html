@@ -1,0 +1,26 @@
+{% extends "common/auth/base.html" %}
+
+{% block title %}学生ログイン{% endblock %}
+
+{% block auth_title %}学生ログイン{% endblock %}
+{% block auth_description %}学生専用のログインページです{% endblock %}
+
+{% block auth_content %}
+<form method="POST" action="{{ url_for('student.auth.login') }}" class="auth-form">
+    {{ form.csrf_token if form }}
+    <div class="form-group">
+        <label for="student_id">学籍番号</label>
+        <input type="text" id="student_id" name="student_id" required>
+    </div>
+    <div class="form-group">
+        <label for="password">パスワード</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <button type="submit" class="auth-button">ログイン</button>
+</form>
+{% endblock %}
+
+{% block auth_additional_links %}
+<a href="{{ url_for('student.auth.register') }}" class="register-link">学生アカウント登録はこちら</a>
+<a href="{{ url_for('student.auth.forgot_password') }}" class="forgot-password-link">パスワードをお忘れの方</a>
+{% endblock %} 

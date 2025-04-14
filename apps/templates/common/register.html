@@ -1,0 +1,91 @@
+{% extends "common/base.html" %}
+
+{% block title %}新規登録{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link {% if user_type == 'public' %}active{% endif %}" 
+                               href="{{ url_for('public.auth.register') }}">一般ユーザー</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if user_type == 'student' %}active{% endif %}" 
+                               href="{{ url_for('student.auth.register') }}">学生</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if user_type == 'teacher' %}active{% endif %}" 
+                               href="{{ url_for('teacher.auth.register') }}">教員</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ action_url }}">
+                        {{ form.csrf_token }}
+                        
+                        {% if user_type == 'student' %}
+                        <!-- 学生用フィールド -->
+                        <div class="mb-3">
+                            {{ form.student_id.label(class="form-label") }}
+                            {{ form.student_id(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.enrollment_year.label(class="form-label") }}
+                            {{ form.enrollment_year(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.course.label(class="form-label") }}
+                            {{ form.course(class="form-control") }}
+                        </div>
+                        {% endif %}
+
+                        {% if user_type == 'teacher' %}
+                        <!-- 教員用フィールド -->
+                        <div class="mb-3">
+                            {{ form.teacher_id.label(class="form-label") }}
+                            {{ form.teacher_id(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.department.label(class="form-label") }}
+                            {{ form.department(class="form-control") }}
+                        </div>
+                        {% endif %}
+
+                        <!-- 共通フィールド -->
+                        <div class="mb-3">
+                            {{ form.username.label(class="form-label") }}
+                            {{ form.username(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.password.label(class="form-label") }}
+                            {{ form.password(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.confirm_password.label(class="form-label") }}
+                            {{ form.confirm_password(class="form-control") }}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">登録</button>
+                            <a href="{{ url_for('common.login') }}" class="btn btn-outline-secondary">ログインに戻る</a>
+                        </div>
+                    </form>
+                    {% if error %}
+                    <div class="alert alert-danger mt-3">
+                        {{ error }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

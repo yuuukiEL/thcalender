@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教員登録完了</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .result {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+            margin-top: 0;
+        }
+        img {
+            max-width: 200px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="result">
+        <h2>登録完了!</h2>
+        <p>教員名: {{ teacher_name }}</p>
+        <p>教員ID: {{ teacher_id }}</p>
+        <h3>登録された教員の画像:</h3>
+        <img src="{{ profile_image }}" alt="教員の画像">
+    </div>
+</body>
+</html>

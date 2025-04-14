@@ -1,0 +1,79 @@
+{% extends "components/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>空き教室スケジュール</h1>
+
+    <div class="month-navigation">
+        <div class="nav-group">
+            <a href="{{ url_for('classroom.register_empty_classroom', month=prev_month.strftime('%Y-%m')) }}" class="nav-btn">
+                <i class="fas fa-chevron-left"></i> 前の月
+            </a>
+            <span class="current-month">{{ dates[0][:7] }}のスケジュール</span>
+            <a href="{{ url_for('classroom.register_empty_classroom', month=next_month.strftime('%Y-%m')) }}" class="nav-btn">
+                次の月 <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+        <div class="action-buttons">
+            <button id="addEmptyRooms" class="action-btn add-btn">
+                <i class="fas fa-plus-circle"></i> 空き教室追加
+            </button>
+            <button id="removeEmptyRooms" class="action-btn remove-btn">
+                <i class="fas fa-minus-circle"></i> 空き教室削除
+            </button>
+        </div>
+    </div>
+    
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr class="date-header">
+                    <th class="room-number" rowspan="2">ルーム</th>
+                    {% for date in dates %}
+                    <th colspan="7">{{ date }}</th>
+                    {% endfor %}
+                </tr>
+                <tr class="period-header">
+                    {% for _ in dates %}
+                    <th>1限</th>
+                    <th>2限</th>
+                    <th>3限</th>
+                    <th>4限</th>
+                    <th>5限</th>
+                    <th>6限</th>
+                    <th>夜間</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for classroom in ["241", "242", "243", "244", "245", "246", "247", "248", "249", 
+                                   "201", "202", "203", "204", "205", "206", "191", "192", "197"] %}
+                <tr>
+                    <td class="room-number">{{ classroom }}</td>
+                    {% for date in dates %}
+                    {% for period_num in range(7) %}
+                    {% set period = ["1限", "2限", "3限", "4限", "5限", "6限", "夜間"][period_num] %}
+                    <td class="{% if {'classroom_id': classroom, 'formatted_date': date, 'period': period} in common_schedules %}common-schedule-cell{% endif %}"></td>
+                    {% endfor %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="back-link">
+        <a href="{{ url_for('views.index') }}">登録メニューに戻る</a>
+    </div>
+
+    <script type="text/javascript">
+        // 空き教室データを設定
+        emptyRooms = JSON.parse('{{ empty_rooms|tojson|safe }}');
+    </script>
+    <script type="text/javascript">
+        // 共通スケジュールデータを設定
+        commonSchedules = JSON.parse('{{ common_schedules|tojson|safe }}');
+    </script>
+    <script src="{{ url_for('static', filename='js/empty_classroom.js') }}"></script>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "common/auth/base.html" %}
+
+{% block title %}学生登録{% endblock %}
+
+{% block auth_title %}学生アカウント登録{% endblock %}
+{% block auth_description %}学生情報を入力して登録してください{% endblock %}
+
+{% block auth_content %}
+<form method="POST" action="{{ url_for('student.auth.register') }}" class="auth-form">
+    {{ form.csrf_token }}
+    <div class="form-group">
+        <label for="student_id">学籍番号</label>
+        {{ form.student_id(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <label for="name">氏名</label>
+        {{ form.name(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <label for="email">メールアドレス</label>
+        {{ form.email(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <label for="password">パスワード</label>
+        {{ form.password(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <label for="password_confirm">パスワード（確認）</label>
+        {{ form.password_confirm(class="form-control") }}
+    </div>
+    <button type="submit" class="auth-button">登録</button>
+</form>
+{% endblock %}
+
+{% block auth_additional_links %}
+<a href="{{ url_for('student.auth.login') }}" class="login-link">ログインページに戻る</a>
+{% endblock %} 

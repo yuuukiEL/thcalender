@@ -1,0 +1,94 @@
+/* 全体のレイアウト */
+.container-fluid {
+    padding: 20px;
+}
+
+.card {
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* フォーム要素のスタイル */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+/* 専攻ツリーのスタイル */
+.specialization-tree-container {
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 10px;
+    height: 300px;
+    overflow: hidden;
+}
+
+/* D3.jsツリー図のスタイル */
+.node-box {
+    fill: white;
+}
+
+.node-box.disabled {
+    fill: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.link {
+    stroke: #ccc;
+    stroke-width: 1px;
+}
+
+/* 確認モーダルのスタイル */
+.modal-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+}
+
+.confirmation-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    z-index: 1050;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.button-group {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.button-group button {
+    margin-left: 10px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .specialization-tree-container {
+        height: 250px;
+    }
+} 

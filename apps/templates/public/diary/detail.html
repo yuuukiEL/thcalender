@@ -1,0 +1,173 @@
+{% extends "components/base.html" %}
+
+{% block title %}{{ diary.title }}{% endblock %}
+
+{% block header_title %}
+    {% if student %}
+        ようこそ、{{ student.name }}さん
+    {% else %}
+        日記の詳細
+    {% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/diary_detail.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="diary-detail-container">
+    <div class="diary-header">
+        <div class="diary-title-section">
+            <h1>{{ diary.title }}</h1>
+            <span class="diary-date">{{ diary.created_at.strftime('%Y年%m月%d日') }}</span>
+        </div>
+        <div class="diary-actions">
+            <a href="{{ url_for('diary_detail.edit', diary_id=diary.diary_id) }}" class="edit-btn">
+                <img src="{{ url_for('static', filename='img/feather/edit.svg') }}" alt="編集">
+                編集
+            </a>
+            <button class="delete-btn" data-diary-id="{{ diary.diary_id }}">
+                <img src="{{ url_for('static', filename='img/feather/trash-2.svg') }}" alt="削除">
+                削除
+            </button>
+        </div>
+    </div>
+
+    {% if diary.hashtags %}
+    <div class="diary-tags">
+        {% for tag in diary.hashtags %}
+        <span class="tag">#{{ tag.name }}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="diary-content">
+        {{ diary.content|safe }}
+    </div>
+
+    {% if diary.images %}
+    <div class="diary-images">
+        {% for image in diary.images %}
+        <div class="image-container">
+            <img src="{{ url_for('diary.get_diary_image', image_id=image.image_id) }}" 
+                 alt="日記の画像" 
+                 onclick="openImageModal(this.src)">
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="diary-footer">
+        <a href="{{ url_for('list.diary_list') }}" class="back-btn">
+            <img src="{{ url_for('static', filename='img/feather/arrow-left.svg') }}" alt="戻る">
+            一覧に戻る
+        </a>
+    </div>
+</div>
+
+<!-- 画像モーダル -->
+<div id="imageModal" class="modal">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // CSRFトークンの取得
+    const csrfToken = "{{ csrf_token }}";
+
+    // 削除ボタンの処理
+    const deleteBtn = document.querySelector('.delete-btn');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', async function() {
+            if (confirm('この日記を削除してもよろしいですか？')) {
+                const diaryId = this.dataset.diaryId;
+                try {
+                    const response = await fetch(`/diary/${diaryId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRFToken': csrfToken
+                        },
+                        credentials: 'same-origin'
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        window.location.href = "{{ url_for('list.diary_list') }}";
+                    } else {
+                        throw new Error(data.error || '日記の削除に失敗しました。');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert(error.message);
+                }
+            }
+        });
+    }
+
+    // 画像モーダルの処理
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    const closeModal = document.querySelector('.close-modal');
+
+    window.openImageModal = function(src) {
+        modal.style.display = "block";
+        modalImg.src = src;
+    }
+
+    closeModal.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // 画像削除の処理
+    document.querySelectorAll('.delete-image').forEach(button => {
+        button.addEventListener('click', function() {
+            const imageId = this.dataset.imageId;
+            if (confirm('この画像を削除してもよろしいですか？')) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'delete_images';
+                input.value = imageId;
+                this.closest('form').appendChild(input);
+                this.closest('.image-item').remove();
+            }
+        });
+    });
+
+    // 画像プレビューの処理
+    document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+        const files = e.target.files;
+        const container = document.querySelector('.current-images');
+        
+        for (let file of files) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const div = document.createElement('div');
+                div.className = 'image-item';
+                div.innerHTML = `
+                    <img src="${e.target.result}" alt="プレビュー">
+                    <div class="image-actions">
+                        <button type="button" class="delete-image">
+                            <img src="/static/img/feather/x.svg" alt="削除">
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+});
+</script>
+{% endblock %} 

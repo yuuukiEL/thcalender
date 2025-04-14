@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}進級希望集計{% endblock %}
+
+{% block header %}進級希望集計{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="summary-table">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>現在のクラス</th>
+                    <th>希望クラス</th>
+                    <th>人数</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in summary_data %}
+                <tr>
+                    <td>{{ data.current_class }}</td>
+                    <td>{{ data.desired_class }}</td>
+                    <td>{{ data.count }}名</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="actions">
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">戻る</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.summary-table {
+    margin: 2rem 0;
+}
+.actions {
+    margin-top: 2rem;
+    text-align: center;
+}
+</style>
+{% endblock %} 

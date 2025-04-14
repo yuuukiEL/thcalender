@@ -1,0 +1,176 @@
+{% extends "student/components/base.html" %}
+
+{% block title %}サイトレビュー・不具合報告{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='student/css/review.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <!-- ヘッダー -->
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold mb-2">サイトレビュー・不具合報告</h1>
+            <p class="text-gray-600">学習管理システムの改善にご協力ください。不具合、ご意見、ご要望などのフィードバックをお寄せください。</p>
+        </div>
+
+        <!-- アラート -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="mb-4 p-4 rounded-md {{ 'bg-green-100 text-green-700' if category == 'success' else 'bg-red-100 text-red-700' }}">
+                        <p>{{ message }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- レビュー投稿フォーム -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">新しいレビューを投稿</h2>
+            <form action="{{ url_for('student_api_review.submit_review') }}" method="post" class="space-y-6">
+                <input type="hidden" name="review_id" value="{{ student_review.id if student_review else '' }}">
+                <div>
+                    <label class="block text-gray-700 mb-2">評価</label>
+                    <div class="flex space-x-2 text-2xl">
+                        <div class="rating">
+                            {% for i in range(1, 6) %}
+                                <input type="radio" name="rating" id="rating-{{ i }}" value="{{ i }}" 
+                                       class="star-input">
+                                <label for="rating-{{ i }}" class="star-label">
+                                    <i class="fas fa-star"></i>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="comment" class="block text-gray-700 mb-2">コメント</label>
+                    <textarea id="comment" name="comment" rows="4" 
+                              class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                              placeholder="システムの使いやすさ、機能、改善点などについてお聞かせください"></textarea>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded transition duration-200">
+                        レビューを投稿
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- すべてのレビュー一覧 -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-lg font-semibold mb-4">みんなのレビュー</h2>
+            
+            {% if all_reviews %}
+                <div class="space-y-6">
+                    {% for review in all_reviews %}
+                        <div class="border-b border-gray-200 pb-4 mb-4 {% if not loop.last %}border-b border-gray-200{% endif %}">
+                            <div class="flex items-center mb-2">
+                                <div class="flex text-yellow-400">
+                                    {% for i in range(5) %}
+                                        {% if i < review.rating %}
+                                            <i class="fas fa-star"></i>
+                                        {% else %}
+                                            <i class="far fa-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <span class="ml-2 text-gray-600">{{ review.rating }}/5</span>
+                                <span class="ml-auto text-gray-400 text-sm">{{ review.created_at.strftime('%Y年%m月%d日') }}</span>
+                            </div>
+                            <p class="text-gray-700">{{ review.comment }}</p>
+                            <p class="text-gray-500 text-sm mt-1">
+                                投稿者: 
+                                {% if review.student_id == current_user.student.student_id %}
+                                    <span class="text-blue-500">あなた</span>
+                                {% else %}
+                                    {{ review.student_name if review.student_name else '匿名' }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                {% if all_reviews|length >= 10 %}
+                    <div class="mt-4 text-center">
+                        <a href="{{ url_for('student_api_review.all_reviews') }}" class="text-blue-500 hover:text-blue-600">
+                            すべてのレビューを見る
+                        </a>
+                    </div>
+                {% endif %}
+            {% else %}
+                <p class="text-gray-500 italic">まだレビューがありません</p>
+            {% endif %}
+        </div>
+
+        <div class="mt-6 flex justify-between">
+            <a href="{{ url_for('student_api.profile') }}" class="text-blue-500 hover:text-blue-600 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>プロフィールに戻る
+            </a>
+            <a href="{{ url_for('student.home.index') }}" class="text-blue-500 hover:text-blue-600 flex items-center">
+                ホームに戻る<i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ratingLabels = document.querySelectorAll('.rating .star-label');
+        const ratingInputs = document.querySelectorAll('.rating .star-input');
+        
+        // 初期状態の設定
+        updateStars();
+        
+        // 各星にイベントリスナーを設定
+        ratingLabels.forEach(label => {
+            label.addEventListener('mouseover', function() {
+                const ratingValue = this.getAttribute('for').split('-')[1];
+                
+                ratingLabels.forEach(l => {
+                    const lValue = l.getAttribute('for').split('-')[1];
+                    if (lValue <= ratingValue) {
+                        l.style.color = '#f59e0b'; // text-yellow-400
+                    } else {
+                        l.style.color = '#d1d5db'; // text-gray-300
+                    }
+                });
+            });
+            
+            label.addEventListener('mouseout', function() {
+                updateStars();
+            });
+        });
+        
+        // 星の選択状態を更新する関数
+        function updateStars() {
+            const checkedInput = document.querySelector('.rating .star-input:checked');
+            if (checkedInput) {
+                const checkedValue = checkedInput.value;
+                
+                ratingLabels.forEach(l => {
+                    const lValue = l.getAttribute('for').split('-')[1];
+                    if (lValue <= checkedValue) {
+                        l.style.color = '#f59e0b'; // text-yellow-400
+                    } else {
+                        l.style.color = '#d1d5db'; // text-gray-300
+                    }
+                });
+            } else {
+                ratingLabels.forEach(l => {
+                    l.style.color = '#d1d5db'; // text-gray-300
+                });
+            }
+        }
+        
+        // 星がクリックされたときの処理
+        ratingInputs.forEach(input => {
+            input.addEventListener('change', updateStars);
+        });
+    });
+</script>
+{% endblock %}

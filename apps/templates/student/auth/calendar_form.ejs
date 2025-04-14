@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Googleカレンダーイベント登録</title>
+    <link rel="stylesheet" href="/css/calendar_form.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Googleカレンダーイベント登録</h1>
+        
+        <% if (messages && messages.length > 0) { %>
+        <div class="messages">
+            <% messages.forEach(function(message) { %>
+            <div class="message"><%= message %></div>
+            <% }); %>
+        </div>
+        <% } %>
+        
+        <div class="form-container">
+            <form action="/api/create_event" method="post">
+                <div class="form-group">
+                    <label for="summary">イベントタイトル:</label>
+                    <input type="text" id="summary" name="summary" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">場所:</label>
+                    <input type="text" id="location" name="location" onblur="geocodeAddress()">
+                    <input type="hidden" id="lat" name="lat">
+                    <input type="hidden" id="lng" name="lng">
+                </div>
+                
+                <div class="map-container">
+                    <div id="map"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">説明:</label>
+                    <textarea id="description" name="description" rows="4"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="start_date">開始日時:</label>
+                    <div class="datetime-group">
+                        <input type="date" id="start_date" name="start_date" required>
+                        <input type="time" id="start_time" name="start_time" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="end_date">終了日時:</label>
+                    <div class="datetime-group">
+                        <input type="date" id="end_date" name="end_date" required>
+                        <input type="time" id="end_time" name="end_time" required>
+                    </div>
+                </div>
+                
+                <button type="submit">イベントを作成</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function initMap() {}  // 仮のinitMap関数を定義
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%= google_maps_api_key %>&callback=initMap&libraries=maps,marker&v=beta"></script>
+    <script src="/js/calendar_form.js"></script>
+</body>
+</html>

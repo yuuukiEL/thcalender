@@ -1,0 +1,60 @@
+<header class="header-container">
+    <div class="header-title">
+        <!-- デバッグ情報 -->
+        <!-- 
+        endpoint: {{ request.endpoint }}
+        path: {{ request.path }}
+        -->
+        {% block header_title %}
+            {% if request.endpoint %}
+                {% if request.path == '/student/calendar' %}
+                    カレンダー
+                {% elif request.path == '/student/' %}
+                    ホーム
+                {% elif request.endpoint == 'student.classroom.empty_classroom' %}
+                    空き教室一覧
+                {% elif request.endpoint == 'student.classroom.view_empty_classroom' %}
+                    空き教室一覧
+                {% elif request.path == '/student/diary' %}
+                    新規日記作成
+                {% elif request.path == '/student/diary/list' or 'student.diary.index' in request.endpoint %}
+                    日記一覧
+                {% elif 'student.diary.edit' in request.endpoint %}
+                    日記編集
+                {% elif 'student.diary.detail' in request.endpoint %}
+                    日記詳細
+                {% elif request.path == '/student/report/' or 'student.report.index' in request.endpoint %}
+                    報告掲示板
+                {% else %}
+                    {% if student %}
+                        ようこそ、{{ student.name }}さん
+                    {% else %}
+                        ようこそ
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                {% if student %}
+                    ようこそ、{{ student.name }}さん
+                {% else %}
+                    ようこそ
+                {% endif %}
+            {% endif %}
+        {% endblock %}
+    </div>
+
+    <div class="flex items-center space-x-4">
+        <div class="search-container">
+            <input type="text" placeholder="Search" class="search-input">
+            <img src="{{ url_for('static', filename='common/img/feather/search.svg') }}" alt="Search" class="search-icon">
+        </div>
+        <div class="user-icon">
+            {% if student %}
+                {{ student.name[:2] }}
+            {% else %}
+                未
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+<script src="{{ url_for('static', filename='student/js/header.js') }}"></script>

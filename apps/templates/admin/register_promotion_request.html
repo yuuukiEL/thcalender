@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}進級希望登録{% endblock %}
+
+{% block header %}進級希望登録{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/sinkyukibou.css') }}">
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<div class="container-fluid">
+    <div class="alert alert-info">
+        <p>※この登録は仮の進級希望です。正式な進級手続きは別途必要となります。</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <form id="promotionForm" method="post" action="{{ url_for('promotion.register_promotion_request') }}">
+                        <div class="form-group mb-3">
+                            <label for="student_id">学生:</label>
+                            <select name="student_id" id="student_id" class="form-control">
+                                <option value="">学生を選択してください</option>
+                                {% for student in students %}
+                                <option value="{{ student.student_base_number }}" 
+                                        data-current-preference="{{ student.current_preference }}"
+                                        data-grade="{{ student.current_grade }}">
+                                    {{ student.student_base_number }} - {{ student.name }}
+                                    ({{ student.current_grade }}年 {{ student.course_name }} {{ student.specialization_name }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="desired_specialization_id">希望専攻:</label>
+                            <div id="specialization_container">
+                                <select class="form-control" id="specialization_id" name="specialization_id" required>
+                                    <option value="">学生を選択してください</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="button-group">
+                            <button type="button" class="btn btn-primary" onclick="showConfirmation()">登録</button>
+                            <a href="{{ url_for('views.index') }}" class="btn btn-secondary">戻る</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title text-center">進級先専攻ツリー</h4>
+                    <div id="specializationTreeContainer" class="specialization-tree-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop"></div>
+<div class="confirmation-modal" id="confirmationModal">
+    <h3>確認</h3>
+    <p>以下の内容で進級希望を登録します。よろしいですか？</p>
+    <div id="confirmationContent"></div>
+    <div class="button-group">
+        <button onclick="submitForm()" class="btn btn-primary">登録する</button>
+        <button onclick="hideConfirmation()" class="btn btn-secondary">キャンセル</button>
+    </div>
+</div>
+
+<div id="specializationData" style="display: none;" data-specializations='{{ specializations_by_course | tojson | safe }}'></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // データの初期化
+    const dataElement = document.getElementById('specializationData');
+    if (dataElement) {
+        window.specializationsByStudent = JSON.parse(dataElement.dataset.specializations);
+    }
+
+    // イベントリスナーの設定
+    const studentSelect = document.getElementById('student_id');
+    if (studentSelect) {
+        studentSelect.addEventListener('change', updateSpecializationsAndTree);
+    }
+});
+</script>
+<script src="{{ url_for('static', filename='js/sinkyukibou.js') }}"></script>
+{% endblock %} 

@@ -1,0 +1,31 @@
+@startuml sequence
+actor User
+participant "Webブラウザ" as Browser
+participant "Flaskアプリケーション" as App
+database "MySQL" as DB
+
+== 学生情報登録 ==
+User -> Browser: 学生情報入力
+Browser -> App: POST /register_student
+App -> DB: INSERT INTO students
+DB --> App: 登録完了
+App --> Browser: リダイレクト
+Browser --> User: 完了画面表示
+
+== 進級希望登録 ==
+User -> Browser: 進級希望入力
+Browser -> App: POST /register_promotion_request
+App -> DB: INSERT INTO advancement_preferences
+DB --> App: 登録完了
+App --> Browser: リダイレクト
+Browser --> User: 完了画面表示
+
+== スケジュール登録 ==
+User -> Browser: スケジュール入力
+Browser -> App: POST /register_teacher_schedule
+App -> DB: INSERT INTO teacher_weekly_schedule
+DB --> App: 登録完了
+App --> Browser: リダイレクト
+Browser --> User: 完了画面表示
+
+@enduml 

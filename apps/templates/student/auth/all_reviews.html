@@ -1,0 +1,53 @@
+{% extends "student/components/base.html" %}
+
+{% block title %}みんなのレビュー{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <!-- ヘッダー -->
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold mb-2">みんなのレビュー</h1>
+            <p class="text-gray-600">学習管理システムに寄せられたすべてのレビューを表示しています。</p>
+        </div>
+
+        <!-- レビュー一覧 -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            {% if all_reviews %}
+                <div class="space-y-6">
+                    {% for review in all_reviews %}
+                        <div class="border-b border-gray-200 pb-4 mb-4 {% if not loop.last %}border-b border-gray-200{% endif %}">
+                            <div class="flex items-center mb-2">
+                                <div class="flex text-yellow-400">
+                                    {% for i in range(5) %}
+                                        {% if i < review.rating %}
+                                            <i class="fas fa-star"></i>
+                                        {% else %}
+                                            <i class="far fa-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <span class="ml-2 text-gray-600">{{ review.rating }}/5</span>
+                                <span class="ml-auto text-gray-400 text-sm">{{ review.created_at.strftime('%Y年%m月%d日') }}</span>
+                            </div>
+                            <p class="text-gray-700">{{ review.comment }}</p>
+                            <p class="text-gray-500 text-sm mt-1">投稿者: {{ review.student_name if review.student_name else '匿名' }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-500 italic">まだレビューがありません</p>
+            {% endif %}
+        </div>
+
+        <div class="mt-6 flex justify-between">
+            <a href="{{ url_for('student_api_review.review') }}" class="text-blue-500 hover:text-blue-600 flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>レビューページに戻る
+            </a>
+            <a href="{{ url_for('student.home.index') }}" class="text-blue-500 hover:text-blue-600 flex items-center">
+                ホームに戻る<i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

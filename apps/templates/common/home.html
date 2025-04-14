@@ -1,0 +1,52 @@
+{% extends "common/base.html" %}
+
+{% block title %}HAL東京専用カレンダー{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='common/css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+<main role="main">
+    <section class="hero">
+        <div class="hero-content">
+            <div>
+                <h1>HAL東京専用カレンダー</h1>
+                <p>授業スケジュールと個人の予定を管理できます</p>
+                <div class="login-buttons">
+                    <a href="{{ url_for('student.auth.login') }}" class="btn btn-lg btn-success">
+                        学生ログイン
+                    </a>
+                    <a href="#" class="btn btn-lg btn-primary disabled">
+                        教員ログイン（準備中）
+                    </a>
+                    <a href="#" class="btn btn-lg btn-primary disabled">
+                        一般ユーザーログイン（準備中）
+                    </a>
+                </div>
+            </div>
+            <div class="hero-icon">
+                ✏️
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <div>📚</div>
+            <h2>授業スケジュール</h2>
+            <p>自動で同期される授業スケジュール</p>
+        </div>
+        <div class="feature-card">
+            <div>✏️</div>
+            <h2>個人の予定</h2>
+            <p>自由に予定を追加できます</p>
+        </div>
+        <div class="feature-card">
+            <div>📝</div>
+            <h2>日記機能</h2>
+            <p>その日の出来事を記録</p>
+        </div>
+    </section>
+</main>
+{% endblock %} 

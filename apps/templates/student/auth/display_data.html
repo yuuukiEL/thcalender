@@ -1,0 +1,43 @@
+{% extends "components/base.html" %}
+<head>
+    <meta charset="UTF-8">
+    <title>スケジュールデータ</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>スケジュールデータ</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>時間</th>
+                <th>クラスコード</th>
+                <th>教員名</th>
+                <th>教室</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in data %}
+            <tr>
+                <td>{{ entry[0] }}</td>
+                <td>{{ entry[1] }}</td>
+                <td>{{ entry[2] }}</td>
+                <td>{{ entry[3] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

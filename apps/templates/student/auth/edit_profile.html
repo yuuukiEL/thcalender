@@ -1,0 +1,224 @@
+{% extends "student/components/base.html" %}
+
+{% block title %}プロフィール編集{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style>
+  .form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .form-section:last-child {
+    border-bottom: none;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
+    <h1 class="text-2xl font-bold mb-6">プロフィール編集</h1>
+    
+    {% if error %}
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      {{ error }}
+    </div>
+    {% endif %}
+    
+    <form method="POST" action="{{ url_for('student_api.update_profile') }}" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      
+      <!-- 基本情報セクション -->
+      <div class="form-section">
+        <h2 class="text-xl font-semibold mb-4">基本情報</h2>
+        
+        <div class="mb-4">
+          <label for="name" class="block text-gray-700 font-medium mb-2">氏名</label>
+          <input type="text" id="name" name="name" value="{{ student.name }}" required
+                 class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700 font-medium mb-2">メールアドレス</label>
+          <input type="email" id="email" name="email" value="{{ student.email }}" required
+                 class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        
+        <div class="mb-4">
+          <label for="profile_image" class="block text-gray-700 font-medium mb-2">プロフィール画像</label>
+          <div class="flex items-center space-x-4">
+            {% if student.profile_image_path %}
+            <img src="{{ url_for('static', filename='uploads/' + student.profile_image_path) }}" 
+                 alt="{{ student.name }}" class="w-16 h-16 rounded-full object-cover">
+            {% else %}
+            <div class="w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center">
+              {{ student.name[:2] }}
+            </div>
+            {% endif %}
+            <input type="file" id="profile_image" name="profile_image" accept="image/*"
+                   class="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+      </div>
+      
+      <!-- 学籍情報セクション -->
+      <div class="form-section">
+        <h2 class="text-xl font-semibold mb-4">学籍情報</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label for="current_grade" class="block text-gray-700 font-medium mb-2">現在の学年</label>
+            <select id="current_grade" name="current_grade" 
+                    class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    onchange="updateSpecializationOptions()">
+              {% for grade in range(1, 5) %}
+              <option value="{{ grade }}" {% if student.current_grade == grade %}selected{% endif %}>{{ grade }}年</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div>
+            <label for="specialization_id" class="block text-gray-700 font-medium mb-2">専攻</label>
+            <select id="specialization_id" name="specialization_id" 
+                    class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="">専攻を選択</option>
+              {% for spec in specializations %}
+              <option value="{{ spec.specialization_id }}" 
+                      data-grade="{{ spec.grade }}"
+                      {% if student.specialization_id == spec.specialization_id %}selected{% endif %}>
+                {{ spec.specialization_name }}
+              </option>
+              {% endfor %}
+            </select>
+            <p class="text-gray-500 text-sm mt-1">※現在の学年の専攻のみ選択できます</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- パスワード変更セクション -->
+      <div class="form-section" id="password">
+        <h2 class="text-xl font-semibold mb-4">パスワード変更</h2>
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
+          <p class="text-blue-700">パスワードを変更する場合のみ、以下の項目を入力してください。変更しない場合は空欄のままで構いません。</p>
+        </div>
+        
+        <div class="mb-4">
+          <label for="current_password" class="block text-gray-700 font-medium mb-2">現在のパスワード（確認用）</label>
+          <input type="password" id="current_password" name="current_password"
+                 class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                 placeholder="現在のパスワードを入力">
+          <p class="text-gray-500 text-sm mt-1">※パスワードを変更するには、現在のパスワードを入力してください</p>
+        </div>
+        
+        <div class="mb-4">
+          <label for="new_password" class="block text-gray-700 font-medium mb-2">新しいパスワード</label>
+          <input type="password" id="new_password" name="new_password"
+                 class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                 placeholder="新しいパスワードを入力">
+        </div>
+        
+        <div class="mb-4">
+          <label for="confirm_password" class="block text-gray-700 font-medium mb-2">新しいパスワード（確認）</label>
+          <input type="password" id="confirm_password" name="confirm_password"
+                 class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                 placeholder="新しいパスワードを再入力">
+        </div>
+      </div>
+      
+      <div class="flex justify-between mt-6">
+        <a href="{{ url_for('student_api.profile') }}" class="text-blue-500 hover:text-blue-600">
+          キャンセル
+        </a>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+          保存する
+        </button>
+      </div>
+    </form>
+    
+    <!-- 連絡先情報へのリンク -->
+    <div class="mt-8 pt-4 border-t">
+      <h2 class="text-xl font-semibold mb-4">その他の設定</h2>
+      <div class="space-y-4">
+        <a href="{{ url_for('student_api.edit_contact_info') }}" class="block p-4 border rounded hover:bg-gray-50">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="font-medium">連絡先情報</h3>
+              <p class="text-gray-600">電話番号、住所、緊急連絡先などを設定</p>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </a>
+        
+        <a href="{{ url_for('student_api.security_settings') }}" class="block p-4 border rounded hover:bg-gray-50">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="font-medium">セキュリティ設定</h3>
+              <p class="text-gray-600">秘密の質問を設定</p>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 学年に応じて専攻のオプションをフィルタリングする関数
+  function updateSpecializationOptions() {
+    const gradeSelect = document.getElementById('current_grade');
+    const specializationSelect = document.getElementById('specialization_id');
+    const selectedGrade = parseInt(gradeSelect.value);
+    
+    // すべての専攻オプションを取得
+    const options = specializationSelect.querySelectorAll('option');
+    
+    // 「専攻を選択」オプション以外を一旦非表示
+    for (let i = 1; i < options.length; i++) {
+      const option = options[i];
+      const optionGrade = parseInt(option.getAttribute('data-grade') || '0');
+      
+      // 現在の学年と同じ専攻のみ表示
+      if (optionGrade === selectedGrade) {
+        option.style.display = '';
+      } else {
+        option.style.display = 'none';
+      }
+    }
+    
+    // 選択されている専攻が表示されていない場合、最初の選択肢に戻す
+    const selectedOption = specializationSelect.options[specializationSelect.selectedIndex];
+    if (selectedOption && selectedOption.style.display === 'none') {
+      specializationSelect.selectedIndex = 0;
+    }
+    
+    // デバッグ用：表示されている専攻の数を確認
+    let visibleCount = 0;
+    for (let i = 1; i < options.length; i++) {
+      if (options[i].style.display !== 'none') {
+        visibleCount++;
+      }
+    }
+    console.log(`現在の学年: ${selectedGrade}年, 表示されている専攻数: ${visibleCount}`);
+  }
+  
+  // ページ読み込み時に実行
+  document.addEventListener('DOMContentLoaded', function() {
+    updateSpecializationOptions();
+    
+    // デバッグ用：すべての専攻の学年情報を表示
+    const options = document.querySelectorAll('#specialization_id option');
+    for (let i = 1; i < options.length; i++) {
+      const option = options[i];
+      const grade = option.getAttribute('data-grade');
+      console.log(`専攻: ${option.textContent}, 学年: ${grade}`);
+    }
+  });
+</script>
+{% endblock %} 

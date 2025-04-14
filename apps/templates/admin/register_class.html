@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}クラス登録{% endblock %}
+
+{% block header %}クラス登録{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/classtouroku.css') }}">
+
+<div class="container">
+    <!-- フラッシュメッセージの表示 -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- クラス情報入力フォーム -->
+    <form method="POST" action="{{ url_for('classroom.register_class') }}">
+        <input type="hidden" name="class_id" value="{{ class.class_id if class else '' }}">
+        <input type="hidden" id="department_code" name="department_code">
+        <input type="hidden" id="specialization_id" name="specialization_id">
+        
+        <div class="department-select" id="departmentDisplay" data-bs-toggle="modal" data-bs-target="#selectionModal">
+            課程・学科を選択してください
+        </div>
+
+        <div class="form-group">
+            <label for="class_letter">クラス記号:</label>
+            <input type="text" id="class_letter" name="class_letter" required>
+        </div>
+        <div class="form-group">
+            <label for="homeroom_teacher_id">担任教員:</label>
+            <select id="homeroom_teacher_id" name="homeroom_teacher_id">
+                <option value="">担任を選択してください</option>
+                {% for teacher in teachers %}
+                <option value="{{ teacher.teacher_id }}">{{ teacher.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn-primary">登録</button>
+            <button type="button" class="btn-secondary" onclick="window.location.href='{{ url_for('views.index') }}'">戻る</button>
+        </div>
+    </form>
+
+    <!-- 選択モーダル -->
+    <div class="modal fade" id="selectionModal" tabindex="-1" role="dialog" 
+         aria-labelledby="selectionModalLabel" aria-modal="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="selectionModalLabel">
+                        <i class="bi bi-diagram-3"></i> <span id="modalTitle">課程・学科・専攻選択</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- ステップインジケーター -->
+                    <div class="steps mb-4">
+                        <div class="step-item active" id="stepCourse">
+                            <div class="step-circle">1</div>
+                            <div class="step-text">課程区分</div>
+                        </div>
+                        <div class="step-item" id="stepDepartment">
+                            <div class="step-circle">2</div>
+                            <div class="step-text">学科選択</div>
+                        </div>
+                        <div class="step-item" id="stepSpecialization">
+                            <div class="step-circle">3</div>
+                            <div class="step-text">専攻選択</div>
+                        </div>
+                    </div>
+
+                    <!-- 課程区分選択 -->
+                    <div id="courseTypeSection" class="selection-section">
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="list-group list-group-flush" id="courseTypeList" role="listbox" aria-labelledby="courseTypeLabel">
+                                    <!-- JavaScriptで動的に生成 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 学科選択 -->
+                    <div id="departmentSection" class="selection-section" style="display: none;">
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="list-group list-group-flush" id="departmentList" role="listbox" aria-labelledby="departmentLabel">
+                                    <!-- JavaScriptで動的に生成 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 専攻選択 -->
+                    <div id="specializationSection" class="selection-section" style="display: none;">
+                        <div class="alert alert-info mb-4" id="selectedDepartmentInfo" role="alert">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <!-- 選択された課程・学科の情報を表示 -->
+                        </div>
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="list-group list-group-flush" id="specializationList" role="listbox" aria-labelledby="specializationLabel">
+                                    <!-- JavaScriptで動的に生成 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="backButton" style="display: none;">
+                        <i class="bi bi-arrow-left-circle"></i> 戻る
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> キャンセル
+                    </button>
+                    <button type="button" class="btn btn-primary" id="nextButton">
+                        <i class="bi bi-arrow-right-circle"></i> 次へ
+                    </button>
+                    <button type="button" class="btn btn-primary" id="completeButton" style="display: none;">
+                        <i class="bi bi-check-circle"></i> 確定
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- クラス一覧表示 -->
+    <div class="data-table-container">
+        <h2>登録済みクラス一覧</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>学科</th>
+                    <th>専攻</th>
+                    <th>クラス記号</th>
+                    <th>担任教員</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for class in classes %}
+                <tr>
+                    <td>{{ class.department_name }}</td>
+                    <td>{{ class.specialization_name }}</td>
+                    <td>{{ class.class_letter }}</td>
+                    <td>{{ class.teacher_name if class.teacher_name else '未設定' }}</td>
+                    <td>
+                        <button class="btn-edit" onclick="editClass('{{ class.class_id }}')">編集</button>
+                        <button class="btn-delete" onclick="deleteClass('{{ class.class_id }}')">削除</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/class_assignment.js') }}"></script>
+
+{% endblock %}

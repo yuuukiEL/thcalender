@@ -1,0 +1,316 @@
+/* 共通のコンテナスタイル */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+/* フォーム要素の共通スタイル */
+.form-group {
+    margin-bottom: 12px;
+}
+
+label {
+    display: block;
+    margin-bottom: 4px;
+    color: #555;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+select, input, textarea {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.9rem;
+}
+
+/* アラートメッセージのスタイル */
+.alert {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+/* ボタングループのスタイル */
+.button-group {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    margin: 0 4px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+/* モーダル関連のスタイル */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1040;
+    display: none;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1050;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: none;
+}
+
+.modal.show {
+    display: block;
+}
+
+.modal-dialog {
+    position: relative;
+    width: auto;
+    max-width: 400px;
+    margin: 1.75rem auto;
+    pointer-events: none;
+    transform: translate(0, 0);
+    transition: transform 0.3s ease-out;
+}
+
+.modal.fade .modal-dialog {
+    transform: translate(0, -50px);
+}
+
+.modal.show .modal-dialog {
+    transform: translate(0, 0);
+}
+
+.modal-dialog-lg {
+    max-width: 600px;
+}
+
+.modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 0.3rem;
+    outline: 0;
+    box-shadow: 0 3px 9px rgba(0,0,0,0.5);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    padding: 1rem;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem;
+    border-top: 1px solid #dee2e6;
+    gap: 0.5rem;
+}
+
+/* データテーブルの共通スタイル */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.data-table th,
+.data-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.data-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+/* 学科選択エリアのスタイル */
+.department-select {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+}
+
+/* リストグループのスタイル */
+.list-group-item {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+    border-color: #007bff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.list-group-item.active {
+    background-color: #e8f5e9;
+    border-color: #4CAF50;
+    color: #2e7d32;
+}
+
+/* フォームアクションのスタイル */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .auth-container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+    
+    .modal-dialog {
+        margin: 1rem;
+        width: auto;
+    }
+}
+
+/* フォームスタイル */
+.auth-container {
+    max-width: 600px;
+    margin: 1.5rem auto;
+    padding: 1.5rem;
+}
+
+.auth-title {
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+}
+
+.form-control:focus {
+    border-color: #3b82f6;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+/* プロフィール画像プレビュー */
+#imagePreview {
+    margin-top: 1rem;
+}
+
+#imagePreview img {
+    max-width: 150px;
+}
+
+/* 確認モーダル */
+#confirmationModal .modal-body ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#confirmationModal .modal-body li {
+    padding: 8px;
+    font-size: 0.9rem;
+}
+
+#studentNumberDisplay {
+    font-size: 1.1rem;
+    padding: 8px;
+}
+
+/* アクセシビリティ */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* フォーカス管理 */
+:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* エラー状態 */
+.is-invalid {
+    border-color: #dc2626;
+}
+
+.invalid-feedback {
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* グリッドレイアウト */
+.row {
+    margin: -0.4rem;
+}
+
+.col-md-6 {
+    padding: 0.4rem;
+}

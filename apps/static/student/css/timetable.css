@@ -1,0 +1,1539 @@
+.timetable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0;
+    table-layout: fixed;
+}
+
+.timetable th,
+.timetable td {
+    border: 1px solid #ddd;
+    padding: 4px;
+    text-align: center;
+    width: 14.28%;
+    /* 7列に対応するように調整（100/7） */
+    max-width: 150px;
+}
+
+.timetable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.timetable thead th {
+    background-color: #fff7e6;
+    color: #333;
+    font-weight: bold;
+    height: 25px;
+    font-size: 0.9rem;
+}
+
+.timetable tbody th {
+    width: 40px !important;
+    min-width: 40px;
+    max-width: 40px;
+}
+
+.schedule-cell {
+    width: 85px;
+    height: 60px;
+    border: 1px solid #e2e8f0;
+    padding: 2px;
+    position: relative;
+}
+
+.schedule-cell:hover {
+    background-color: #f8f9fa;
+}
+
+.cell-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cell-content:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.subject-name {
+    font-weight: bold;
+    font-size: 0.8em;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.teacher-name,
+.classroom-number {
+    font-size: 0.7em;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.current-schedule {
+    flex: 0 0 800px;
+    /* 列が増えたので幅を広げる */
+    margin: 0;
+}
+
+.timetable {
+    width: 100%;
+    /* 親要素に対して100%の幅 */
+}
+
+.dashboard-container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.current-schedule {
+    flex: 0 0 700px;
+    /* 固定幅700px */
+    margin: 0;
+}
+
+.student-tasks {
+    flex: 1;
+    /* 残りのスペースを埋める */
+    min-width: 300px;
+    /* 最小幅を設定 */
+    background-color: #f8fafc;
+    /* 背景色を追加 */
+    padding: 16px;
+    /* パディングを追加 */
+    border-radius: 8px;
+    /* 角を丸く */
+}
+
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.task-item {
+    background-color: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.task-header {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 8px;
+}
+
+.task-checkbox {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 2px solid #cbd5e0;
+    cursor: pointer;
+}
+
+.task-content {
+    flex: 1;
+    border: none;
+    padding: 4px;
+    font-size: 0.95em;
+    color: #2d3748;
+    background: transparent;
+}
+
+.task-content:focus {
+    outline: none;
+    background-color: #f7fafc;
+}
+
+.task-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.task-delete-btn {
+    padding: 4px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.task-delete-btn:hover {
+    opacity: 1;
+}
+
+.task-delete-btn img {
+    width: 16px;
+    height: 16px;
+}
+
+.add-task-btn {
+    display: flex;
+    align-items: center;
+    padding: 6px;
+    border-radius: 6px;
+    background-color: transparent;
+    transition: background-color 0.2s;
+}
+
+.add-task-btn:hover {
+    background-color: #e2e8f0;
+}
+
+.add-task-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.task-title {
+    font-size: 0.95em;
+    color: #2d3748;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.task-status-checkbox {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 2px solid #cbd5e0;
+    cursor: pointer;
+}
+
+.task-status-checkbox:checked {
+    background-color: #4299e1;
+    border-color: #4299e1;
+}
+
+.task-status {
+    font-size: 0.8em;
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-top: 6px;
+}
+
+.task-status-incomplete {
+    background-color: #fed7d7;
+    color: #c53030;
+}
+
+.task-status-complete {
+    background-color: #c6f6d5;
+    color: #2f855a;
+}
+
+.task-status-progress {
+    background-color: #fefcbf;
+    color: #975a16;
+}
+
+.tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.create-task-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    background-color: #4299e1;
+    color: white;
+    border-radius: 6px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.create-task-btn:hover {
+    background-color: #3182ce;
+}
+
+/* モーダル関連のスタイル */
+.hidden {
+    display: none !important;
+}
+
+.comment-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.comment-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-container {
+    position: relative;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.modal-close {
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+}
+
+.teacher-profile {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #f8fafc;
+    border-radius: 0.5rem;
+}
+
+.teacher-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.teacher-details {
+    flex: 1;
+}
+
+.teacher-name {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.comments-section {
+    margin-top: 1.5rem;
+}
+
+.comments-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.comments-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+}
+
+.comment-item {
+    padding: 0.75rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.comment-form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.comment-input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.25rem;
+    resize: vertical;
+    min-height: 60px;
+}
+
+.comment-submit {
+    padding: 0.5rem 1rem;
+    background-color: #4299e1;
+    color: white;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.comment-submit:hover {
+    background-color: #3182ce;
+}
+
+.tasks-header .header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.task-checkbox:checked {
+    background-color: #4299e1;
+    border-color: #4299e1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23fff'%3E%3Cpath d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'/%3E%3C/svg%3E");
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* diary.cssからのスタイルを追加 */
+.task-mood-location-container {
+    flex: 1;
+    min-width: 300px;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 200px);
+    /* コンテナの高さを設定 */
+}
+
+.sticky-notes {
+    display: flex;
+    gap: 2px;
+    background-color: #e2e8f0;
+    padding: 2px;
+}
+
+.sticky-note {
+    flex: 1;
+    background-color: #f1f5f9;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px 4px 0 0;
+}
+
+.sticky-note.active {
+    background-color: #fff;
+}
+
+.sticky-note-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #475569;
+}
+
+.task-mood-content {
+    display: none;
+    background-color: #fff;
+    padding: 16px;
+}
+
+.task-mood-content.active {
+    display: block;
+}
+
+/* タスク関連のスタイルを更新 */
+.task-list-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sticky-content-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    background-color: #fff;
+    min-height: 0;
+    /* これが重要 */
+}
+
+/* スクロールバーのスタイル */
+.sticky-content-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sticky-content-wrapper::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.sticky-content-wrapper::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 4px;
+}
+
+.sticky-content-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}
+
+/* 場所情報のグリッドレイアウト */
+.location-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+    padding: 16px;
+}
+
+.location-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.location-header {
+    background: #f8fafc;
+    padding: 12px 16px;
+    font-weight: 600;
+    color: #2d3748;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.location-content {
+    padding: 16px;
+}
+
+.location-content p {
+    margin: 0;
+    padding: 4px 0;
+    color: #4a5568;
+    font-size: 0.95em;
+}
+
+.location-content p:not(:last-child) {
+    border-bottom: 1px dashed #e2e8f0;
+}
+
+/* スクロール可能なコンテンツエリア */
+.task-mood-content {
+    height: 100%;
+    overflow-y: auto;
+}
+
+/* アクティブなコンテンツの表示 */
+.task-mood-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.timetable-controls {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.mode-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mode-toggle-btn:hover {
+    background: #f5f5f5;
+}
+
+.mode-toggle-btn.active {
+    background: #e3f2fd;
+    border-color: #2196f3;
+    color: #1976d2;
+}
+
+.mode-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.schedule-edit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    position: relative;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    z-index: 1;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.save-btn,
+.delete-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.save-btn {
+    background: #2196f3;
+    color: white;
+    border: none;
+}
+
+.delete-btn {
+    background: #f44336;
+    color: white;
+    border: none;
+}
+
+.toggle {
+    position: relative;
+    width: 78px;
+    height: 48px;
+    margin: 40px 60px;
+    border-radius: 50px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.toggle input[type=checkbox] {
+    display: none;
+}
+
+.toggle:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #f45e55;
+    -webkit-transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.toggle:after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    width: 28px;
+    height: 28px;
+    display: block;
+    border-radius: 50px;
+    border: 6px solid #fff;
+    box-shadow: 0 9px 28px -6px rgba(0, 0, 0, 0.3);
+    -webkit-transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-sizing: border-box;
+}
+
+.toggle.checked:before {
+    background: #24e89c;
+}
+
+.toggle.checked:after {
+    left: 46px;
+    width: 0px;
+    background: #fff;
+    box-shadow: 0 9px 28px -6px rgba(0, 0, 0, 0.5);
+}
+
+/* 改善されたトグルスイッチ */
+.toggle-switch {
+    position: relative;
+    width: 140px;
+    height: 40px;
+    margin: 10px 0;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.toggle-switch-checkbox {
+    height: 0;
+    width: 0;
+    opacity: 0;
+    position: absolute;
+}
+
+.toggle-switch-label {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 20px;
+    height: 100%;
+    transition: all 0.3s ease;
+    border: 2px solid #f0f0f0;
+}
+
+.toggle-switch-inner {
+    display: block;
+    width: 200%;
+    margin-left: -100%;
+    transition: margin 0.3s ease-in-out;
+    height: 100%;
+}
+
+.toggle-switch-inner:before, .toggle-switch-inner:after {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    float: left;
+    width: 50%;
+    height: 100%;
+    font-size: 14px;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+
+.toggle-switch-inner:before {
+    content: attr(data-on);
+    background-color: #24e89c;
+    color: #fff;
+}
+
+.toggle-switch-inner:after {
+    content: attr(data-off);
+    background-color: #f8f9fa;
+    color: #495057;
+}
+
+.toggle-switch-switch {
+    display: block;
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    background: #fff;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 100px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.toggle-switch-checkbox:checked + .toggle-switch-label .toggle-switch-inner {
+    margin-left: 0;
+}
+
+.toggle-switch-checkbox:checked + .toggle-switch-label .toggle-switch-switch {
+    right: 5px;
+}
+
+.toggle-switch-checkbox:focus + .toggle-switch-label {
+    box-shadow: 0 0 0 3px rgba(36, 232, 156, 0.25);
+}
+
+/* 編集モード時のセルスタイル */
+.schedule-cell.editable {
+    cursor: pointer;
+    background-color: rgba(36, 232, 156, 0.1);
+}
+
+.schedule-cell.editable:hover {
+    background-color: rgba(36, 232, 156, 0.2);
+}
+
+/* 編集モード時のスタイル - ダークモード */
+body.edit-mode {
+    background-color: #121212;
+    color: #f0f0f0;
+}
+
+body.edit-mode .main-content {
+    background-color: #1e1e1e;
+    color: #f0f0f0;
+}
+
+body.edit-mode .header-container {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+body.edit-mode .content-wrapper {
+    background-color: #1e1e1e;
+    color: #f0f0f0;
+}
+
+/* 時間割の曜日・時限を目立つ色に変更 */
+body.edit-mode .timetable th {
+    background-color: #e79939;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+body.edit-mode .timetable thead th {
+    background-color: #e79939;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+body.edit-mode .schedule-cell {
+    background-color: #252525;
+    border: 1px solid #444;
+    color: #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+/* ホバー時のセルの色を指定の色に変更 */
+body.edit-mode .schedule-cell:hover {
+    background-color: rgb(36, 232, 156);
+    color: #000000;
+}
+
+body.edit-mode .schedule-cell:hover .cell-content,
+body.edit-mode .schedule-cell:hover .subject-name,
+body.edit-mode .schedule-cell:hover .teacher-name,
+body.edit-mode .schedule-cell:hover .classroom-number {
+    color: #000000;
+}
+
+body.edit-mode .cell-content {
+    color: #f0f0f0;
+}
+
+body.edit-mode .subject-name {
+    color: #ffffff;
+}
+
+body.edit-mode .teacher-name,
+body.edit-mode .classroom-number {
+    color: #cccccc;
+}
+
+/* 編集モード時のトグルスイッチ強調 */
+body.edit-mode .toggle-switch {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* 編集モード時のサイドバー */
+body.edit-mode .sidebar {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+body.edit-mode .sidebar-menu a {
+    color: #f0f0f0;
+}
+
+body.edit-mode .sidebar-menu a:hover {
+    background-color: #333333;
+}
+
+body.edit-mode .sidebar-menu a.active {
+    background-color: #444444;
+    color: #ffffff;
+}
+
+/* 編集モード時のヘッダー内の要素 */
+body.edit-mode .header-title,
+body.edit-mode .header-actions a,
+body.edit-mode .header-user-info {
+    color: #ffffff;
+}
+
+body.edit-mode .header-actions a:hover {
+    background-color: #333333;
+}
+
+/* コメント表示のスタイル改善 */
+.comment-card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.comment-body {
+    color: #212529;
+}
+
+.comment-text {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.no-comments {
+    color: #6c757d;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+/* スケジュール情報のスタイル */
+.schedule-info {
+    background-color: #e9ecef;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 16px;
+}
+
+.schedule-header {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #495057;
+}
+
+.schedule-day-period {
+    font-size: 1.1rem;
+}
+
+.schedule-details {
+    display: grid;
+    grid-gap: 4px;
+}
+
+.schedule-subject {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #212529;
+}
+
+.schedule-teacher, .schedule-classroom {
+    color: #495057;
+}
+
+/* 授業内容のスタイル */
+.schedule-content {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid #dee2e6;
+}
+
+.schedule-content h4 {
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #495057;
+}
+
+.schedule-content p {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: #212529;
+    white-space: pre-line; /* 改行を保持 */
+}
+
+/* 資料表示のスタイル */
+.schedule-file-container {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.schedule-info-summary {
+    margin-bottom: 16px;
+}
+
+.schedule-info-summary h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #212529;
+}
+
+.schedule-info-summary p {
+    margin: 4px 0;
+    color: #495057;
+}
+
+.file-link {
+    margin-top: 16px;
+}
+
+.file-link a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: #4299e1;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.file-link a:hover {
+    background-color: #3182ce;
+}
+
+.no-file-message {
+    padding: 12px;
+    background-color: #fff3cd;
+    border-radius: 4px;
+    color: #856404;
+}
+
+.error-container {
+    padding: 12px;
+    background-color: #f8d7da;
+    border-radius: 4px;
+    color: #721c24;
+}
+
+.loading-container {
+    padding: 16px;
+    text-align: center;
+    color: #6c757d;
+}
+
+/* ファイルプレビューのスタイル */
+.file-preview {
+    margin: 16px 0;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.pdf-iframe {
+    width: 100%;
+    height: 500px;
+    border: none;
+}
+
+.preview-image {
+    max-width: 100%;
+    max-height: 500px;
+    display: block;
+    margin: 0 auto;
+}
+
+.no-preview {
+    padding: 24px;
+    text-align: center;
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
+/* 編集モード時のPDFボタン */
+.pdf-button {
+    position: absolute;
+    left: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #4299e1;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: none;  /* デフォルトでは非表示 */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 編集モード時のみPDFボタンを表示 */
+.edit-mode .schedule-cell {
+    position: relative;  /* ボタンの位置決めのため */
+}
+
+.edit-mode .schedule-cell:hover .pdf-button {
+    display: flex;  /* ホバー時に表示 */
+}
+
+.pdf-button:hover {
+    background: #3182ce;
+}
+
+/* PDF読み込みボタンのスタイル */
+.pdf-load-button .btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.pdf-load-button .btn:hover {
+    background-color: #3182ce;
+}
+
+.pdf-load-button img {
+    filter: brightness(0) invert(1);  /* SVGアイコンを白色に */
+}
+
+/* PDF配置モーダルのレイアウト調整 */
+.pdf-placement-content {
+    max-width: 1400px !important;
+    width: 90vw;
+    height: 85vh;
+    padding: 0;  /* パディングを削除 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* モーダルヘッダー */
+.modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;  /* ヘッダーサイズを固定 */
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+}
+
+/* モーダルボディ */
+.modal-body {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    flex: 1;
+    min-height: 0;  /* スクロールを有効にする */
+    overflow: hidden;  /* 子要素のスクロールを有効にする */
+}
+
+/* アクションボタン */
+.modal-actions {
+    padding: 16px 20px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-shrink: 0;  /* フッターサイズを固定 */
+}
+
+/* 左側：PDF選択エリア - 50%に変更 */
+.pdf-selection-area {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-width: 0;
+    order: 1;
+    height: 100%;
+}
+
+.pdf-preview-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.pdf-wrapper {
+    flex-grow: 1;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    overflow: auto; /* スクロール可能に */
+    position: relative;
+    height: calc(100% - 50px); /* コントロール領域分を引く */
+    background-color: #f9f9f9;
+    padding: 0; /* パディングを削除 */
+}
+
+/* 選択オーバーレイのスタイル */
+.selection-overlay {
+    position: absolute;
+    border: 2px solid #4299e1;
+    background-color: rgba(66, 153, 225, 0.2);
+    pointer-events: none;
+    display: none;
+    z-index: 10;
+}
+
+/* 範囲選択ボタンのスタイル */
+#selectAreaBtn {
+    padding: 8px 16px;
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#selectAreaBtn.active {
+    background-color: #2c5282;
+}
+
+/* PDFキャンバスのスタイル調整 - 固定サイズに */
+#pdfCanvas {
+    display: block;
+    width: 100%; /* コンテナの幅に合わせる */
+    height: auto; /* 縦横比を維持 */
+    transform-origin: 0 0; /* 変形の基点 */
+}
+
+/* PDFコントロールエリア */
+.pdf-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    padding: 0 5px;
+}
+
+/* ズームコントロール */
+.zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.zoom-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.selection-info {
+    margin-left: auto;
+    font-size: 0.9em;
+    color: #718096;
+}
+
+.selected-cells-count {
+    background: #e2e8f0;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* 右側：時間割プレビュー - 50%に変更 */
+.preview-timetable-container {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 8px;
+    overflow: auto;
+    position: relative;
+    min-width: 0;
+    order: 2; /* 右側に配置 */
+}
+
+/* プレビュー時間割のスタイル調整 */
+.preview-timetable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.preview-timetable th,
+.preview-timetable td {
+    border: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.preview-timetable .preview-cell {
+    width: 70px;
+    height: 50px;
+    padding: 4px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+/* スクロールバーのスタイル */
+.pdf-wrapper::-webkit-scrollbar,
+.preview-timetable-container::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.pdf-wrapper::-webkit-scrollbar-track,
+.preview-timetable-container::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.pdf-wrapper::-webkit-scrollbar-thumb,
+.preview-timetable-container::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 4px;
+}
+
+/* 通常のモーダルスタイル */
+.modal-content {
+    position: relative;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    z-index: 1;
+}
+
+/* 通常のモーダルのボディ */
+.modal-content .modal-body {
+    display: block;  /* フレックスではなく通常のブロック表示 */
+    padding: 0;
+}
+
+/* PDF配置モーダル専用のスタイル */
+.pdf-modal-content {
+    position: relative;
+    background: white;
+    border-radius: 8px;
+    width: 90vw;
+    height: 85vh;
+    max-width: 1400px !important;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* PDFモーダルのボディ */
+.pdf-modal-content .modal-body {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    height: calc(85vh - 120px);
+    overflow: hidden;
+    align-items: stretch !important;
+}
+
+/* PDFモーダルのヘッダー */
+.pdf-modal-content .modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* PDFモーダルのフッター */
+.pdf-modal-content .modal-actions {
+    padding: 16px 20px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+/* 左右のコンテナの共通スタイル */
+.pdf-selection-area,
+.preview-timetable-container {
+    flex: 0 0 calc(50% - 10px) !important; /* 余白を考慮 */
+    height: 100% !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative;
+}
+
+/* 時間割プレビューラッパー */
+.timetable-wrapper {
+    flex-grow: 1;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    overflow: auto;
+    background-color: #f8fafc;
+    height: 100%;
+}
+
+/* プレビュー時間割のスタイル調整 */
+.preview-timetable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+/* PDF抽出関連のスタイル */
+.preview-cell.selected {
+    background-color: rgba(66, 153, 225, 0.3);
+    border: 2px solid #4299e1;
+}
+
+.selection-overlay {
+    position: absolute;
+    border: 2px dashed #ff0000;
+    background-color: rgba(255, 0, 0, 0.2);
+    pointer-events: none;
+    display: none;
+}
+
+.pdf-wrapper {
+    position: relative;
+    overflow: auto;
+    height: 100%;
+    border: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+}
+
+.pdf-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.zoom-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.selection-info {
+    margin-left: auto;
+    font-size: 0.9em;
+    color: #718096;
+}
+
+.selected-cells-count {
+    background: #e2e8f0;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* 編集モード中でもタスク・気分・場所コンテナのフォント色を維持 */
+.edit-mode .task-mood-location-container,
+.edit-mode .task-mood-location-container h3,
+.edit-mode .task-mood-location-container p,
+.edit-mode .task-mood-location-container span,
+.edit-mode .task-mood-location-container a,
+.edit-mode .task-mood-location-container div,
+.edit-mode .task-mood-location-container label,
+.edit-mode .task-mood-location-container input,
+.edit-mode .task-mood-location-container select,
+.edit-mode .task-mood-location-container button {
+    color: #333 !important; /* 標準的な黒色に設定 */
+}
+
+/* タスク、気分、場所の各アイテムの色を維持 */
+.edit-mode .task-mood-location-container .task-item,
+.edit-mode .task-mood-location-container .mood-item,
+.edit-mode .task-mood-location-container .location-item,
+.edit-mode .task-mood-location-container .task-content,
+.edit-mode .task-mood-location-container .mood-content,
+.edit-mode .task-mood-location-container .location-content {
+    color: #2d3748 !important; /* より濃い色に設定 */
+    background-color: #fff !important; /* 背景色を白に保つ */
+}
+
+/* タブとタブコンテンツの色を維持 */
+.edit-mode .task-mood-location-container .tab,
+.edit-mode .task-mood-location-container .tab-content {
+    color: inherit !important;
+    background-color: inherit !important;
+}
+
+/* アクティブなタブの色を維持 */
+.edit-mode .task-mood-location-container .tab.active {
+    color: #4a5568 !important;
+    background-color: #fff !important;
+}

@@ -1,0 +1,202 @@
+{% extends "student/components/base.html" %}
+
+{% block title %}報告掲示板{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-2xl font-bold">報告掲示板</h1>
+        <button onclick="openReportModal()" 
+                class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+            新規報告
+        </button>
+    </div>
+
+    <!-- 報告一覧 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for report in reports %}
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col h-full">
+            <div class="p-6 flex-grow">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        {% if report.student_id %}
+                        <span class="font-medium">{{ report.student.name }}</span>
+                        {% else %}
+                        <span class="text-gray-600">匿名</span>
+                        {% endif %}
+                        <time class="text-sm text-gray-600">{{ report.created_at.strftime('%Y-%m-%d %H:%M') }}</time>
+                    </div>
+                </div>
+
+                <p class="text-gray-600 mb-4">{{ report.content }}</p>
+
+                {% if report.image_paths_list or report.video_paths_list %}
+                <div class="media-slider relative mb-4">
+                    <div class="media-container h-48 overflow-hidden relative">
+                        <!-- 画像スライド -->
+                        {% for image in report.image_paths_list %}
+                        <div class="media-slide absolute inset-0 transition-opacity duration-300 {% if loop.index == 1 %}opacity-100{% else %}opacity-0{% endif %}">
+                            {% if '/' in image %}
+                            <img src="/{{ image }}" alt="報告画像" class="w-full h-full object-cover">
+                            {% else %}
+                            <img src="/uploads/report_board/{{ report.report_id }}/{{ image }}" alt="報告画像" class="w-full h-full object-cover">
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                        
+                        <!-- 動画スライド -->
+                        {% for video in report.video_paths_list %}
+                        <div class="media-slide absolute inset-0 transition-opacity duration-300 {% if not report.image_paths_list and loop.index == 1 %}opacity-100{% else %}opacity-0{% endif %}">
+                            <video controls class="w-full h-full object-cover">
+                                {% if '/' in video %}
+                                <source src="/{{ video }}" type="video/mp4">
+                                {% else %}
+                                <source src="/uploads/report_board/{{ report.report_id }}/{{ video }}" type="video/mp4">
+                                {% endif %}
+                                お使いのブラウザは動画の再生に対応していません。
+                            </video>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- 左右の矢印 -->
+                    {% if (report.image_paths_list|length + report.video_paths_list|length) > 1 %}
+                    <button class="slider-arrow prev absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full w-8 h-8 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <button class="slider-arrow next absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full w-8 h-8 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    
+                    <!-- インジケーター -->
+                    <div class="slider-indicators flex justify-center mt-2">
+                        {% for i in range(report.image_paths_list|length + report.video_paths_list|length) %}
+                        <div class="indicator-dot w-2 h-2 rounded-full bg-gray-300 mx-1 {% if loop.index == 1 %}bg-blue-500{% endif %}"></div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="px-6 py-3 bg-gray-50 border-t">
+                <button class="text-blue-500 text-sm hover:underline">詳細を見る</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- 新規報告モーダル -->
+<div id="reportModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-4xl">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">新規報告</h2>
+            <button type="button" onclick="closeReportModal()" class="text-gray-500 hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <form method="POST" action="{{ url_for('student.report.create') }}" enctype="multipart/form-data" id="reportForm">
+            {{ form.hidden_tag() }}
+
+            <div class="flex flex-col md:flex-row gap-6">
+                <div class="w-full md:w-1/2">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
+                            内容
+                        </label>
+                        {{ form.content(rows=8, class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500", required=true, placeholder="報告内容を入力してください") }}
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="flex items-center">
+                            {{ form.is_anonymous(class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 mr-2") }}
+                            <span class="text-sm text-gray-700">匿名で投稿する</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-1/2">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
+                            画像
+                        </label>
+                        <div class="flex items-center justify-center w-full">
+                            <label id="imageUploadLabel" class="flex flex-col w-full h-32 border-2 border-dashed border-gray-300 rounded-lg hover:bg-gray-50 hover:border-blue-500 transition-colors cursor-pointer">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 text-gray-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <p class="text-xs text-gray-500">画像をドラッグ＆ドロップまたはクリックして選択</p>
+                                </div>
+                                {{ form.images(class="hidden", accept="image/*", id="imageInput") }}
+                            </label>
+                        </div>
+                        <div id="imagePreview" class="mt-2 hidden">
+                            <div class="relative w-full h-32 bg-gray-100 rounded-lg overflow-hidden">
+                                <img src="" class="w-full h-full object-contain" alt="プレビュー">
+                                <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity duration-200">
+                                    <p class="text-white text-sm">ダブルクリックで解除</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
+                            動画
+                        </label>
+                        <div class="flex items-center justify-center w-full">
+                            <label id="videoUploadLabel" class="flex flex-col w-full h-32 border-2 border-dashed border-gray-300 rounded-lg hover:bg-gray-50 hover:border-blue-500 transition-colors cursor-pointer">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 text-gray-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <p class="text-xs text-gray-500">動画をドラッグ＆ドロップまたはクリックして選択</p>
+                                </div>
+                                {{ form.videos(class="hidden", accept="video/*", id="videoInput") }}
+                            </label>
+                        </div>
+                        <div id="videoPreview" class="mt-2 hidden">
+                            <div class="relative w-full h-32 bg-gray-100 rounded-lg overflow-hidden">
+                                <video controls class="w-full h-full">
+                                    <source src="" type="video/mp4">
+                                    お使いのブラウザは動画の再生に対応していません。
+                                </video>
+                                <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity duration-200">
+                                    <p class="text-white text-sm">ダブルクリックで解除</p>
+                                </div>
+                            </div>
+                            <p id="videoFileName" class="text-sm text-gray-600 mt-1 truncate"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-4 mt-4">
+                <button type="button" onclick="closeReportModal()"
+                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">
+                    キャンセル
+                </button>
+                <button type="submit"
+                        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" />
+                    </svg>
+                    報告する
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='student/js/report.js') }}"></script>
+{% endblock %} 

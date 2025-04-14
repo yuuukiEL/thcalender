@@ -1,0 +1,44 @@
+{% extends "common/base.html" %}
+
+{% block title %}学生ログイン{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('student.static', filename='css/user/auth.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <h2 class="auth-title">学生ログイン</h2>
+  
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  
+  <form method="POST" class="auth-form">
+    {{ form.hidden_tag() }}
+    
+    <div class="form-group">
+      {{ form.username.label }}
+      {{ form.username(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+      {{ form.password.label }}
+      {{ form.password(class="form-control") }}
+    </div>
+
+    <button type="submit" class="auth-button">ログイン</button>
+  </form>
+
+  <div class="auth-links">
+    <p>アカウントをお持ちでない方は<a href="{{ url_for('student.user.register') }}">こちら</a></p>
+    <p><a href="{{ url_for('home.index') }}">ホームに戻る</a></p>
+  </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,234 @@
+/* 全体のレイアウト */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+h1 {
+    display: none; /* ヘッダーで表示するため非表示に */
+}
+
+/* テーブルコンテナ */
+.table-container {
+    overflow: auto;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
+    max-height: calc(100vh - 150px);
+}
+
+/* ナビゲーション */
+.month-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
+    padding: 5px;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* テーブル基本設定 */
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    min-width: 800px;
+    background-color: white;
+}
+
+/* セル共通設定 */
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px 8px;
+    text-align: center;
+    min-width: 80px;
+    height: 40px;
+}
+
+/* ヘッダー設定 */
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: white;
+}
+
+/* 日付ヘッダー */
+.date-header th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f8f8;
+    padding: 12px 4px;
+    border-bottom: 2px solid #aaa;
+    white-space: nowrap;
+    z-index: 3;
+}
+
+/* 時限ヘッダー */
+.period-header th {
+    position: sticky;
+    top: 52px;
+    background-color: #f8f8f8;
+    padding: 8px 4px;
+    font-size: 0.9em;
+    border-bottom: 2px solid #aaa;
+    z-index: 3;
+}
+
+/* 教室番号列 */
+.room-number {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    position: sticky;
+    left: 0;
+    z-index: 3;
+    border-right: 2px solid #aaa;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+/* 日付区切り線 */
+td:nth-child(7n+1) {
+    border-right: 2px solid #aaa;
+}
+
+/* スケジュールセル */
+.schedule-cell {
+    position: relative;
+    padding: 4px;
+    transition: background-color 0.2s;
+}
+
+/* 共通スケジュール */
+.common-schedule-cell {
+    background-color: #e6e6e6;
+}
+
+/* 空き教室 */
+.empty-room {
+    background-color: #ffd280;
+}
+
+/* セル内テキスト */
+.schedule-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 座標表示 */
+.cell-coordinates {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    font-size: 0.7em;
+    color: #666;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 1px 3px;
+    border-radius: 2px;
+}
+
+.nav-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-btn {
+    padding: 8px 16px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.2s;
+}
+
+.nav-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.current-month {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 戻るリンク */
+.back-link {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.back-link a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: white;
+    color: #0066cc;
+    text-decoration: none;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.back-link a:hover {
+    text-decoration: underline;
+    background-color: #f8f8f8;
+}
+
+/* 選択防止 */
+.room-number,
+.date-header th,
+.period-header th,
+.month-navigation {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    cursor: default;
+}
+
+/* 左端の固定列とヘッダーが交差する部分の処理 */
+thead .room-number {
+    z-index: 4;
+    background-color: #f4f4f4;
+}
+
+/* 日付ヘッダーと教室番号が交差する部分 */
+.date-header .room-number {
+    top: 0;
+    z-index: 4;
+}
+
+/* 時限ヘッダーと教室番号が交差する部分 */
+.period-header .room-number {
+    top: 52px;
+    z-index: 4;
+}
+
+/* セルの選択状態 */
+.selected {
+    background-color: #ffa500;
+}
+
+/* ドラッグ選択中 */
+.selecting {
+    background-color: rgba(255, 165, 0, 0.5);
+}
+
+.period-cell::after {
+    content: "限";
+}
+
+.period-cell:last-child::after {
+    content: "";  /* 夜間の場合は「限」を付けない */
+}
+  

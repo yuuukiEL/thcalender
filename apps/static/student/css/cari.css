@@ -1,0 +1,258 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.table-container {
+    position: relative;
+    max-height: 80vh;
+    overflow: auto;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+}
+
+table {
+    border-collapse: collapse;
+    width: max-content;
+    background-color: white;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 4px;
+    font-size: 0.9em;
+}
+
+/* セルの基本サイズを調整 */
+td, th {
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 4px;
+    font-size: 0.9em;
+}
+
+/* 時間割セルの幅を調整 */
+td, th:not(.room-number) {
+    min-width: 40px;
+    height: 25px;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+.room-number {
+    position: sticky;
+    left: 0;
+    background-color: #f4f4f4;
+    z-index: 2;
+    min-width: 60px;
+    font-weight: bold;
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f4f4f4;
+    z-index: 1;
+}
+
+thead th.room-number {
+    z-index: 3;
+}
+
+.month-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.nav-group {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.nav-btn {
+    text-decoration: none;
+    color: #495057;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.nav-btn:hover {
+    background-color: #e9ecef;
+    color: #212529;
+}
+
+.current-month {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #343a40;
+    padding: 0 10px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.add-btn {
+    background-color: #40c057;
+    color: white;
+}
+
+.add-btn:hover {
+    background-color: #37b24d;
+    transform: translateY(-1px);
+}
+
+.remove-btn {
+    background-color: #fa5252;
+    color: white;
+}
+
+.remove-btn:hover {
+    background-color: #e03131;
+    transform: translateY(-1px);
+}
+
+.action-btn i {
+    font-size: 1.1em;
+}
+
+.action-btn:active {
+    transform: translateY(1px);
+}
+
+.back-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.back-link a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+/* セルの選択状態のスタイル */
+.selected {
+    background-color: #ffa500;
+}
+
+/* ドラッグ選択中のスタイル */
+.selecting {
+    background-color: rgba(255, 165, 0, 0.5);
+}
+
+/* 日付ヘッダーを固定 */
+.date-header {
+    position: sticky;
+    top: 0;
+    background-color: #f4f4f4;
+    z-index: 1;
+}
+
+/* 時間割ヘッダーを固定 */
+.period-header {
+    position: sticky;
+    top: 40px; /* 日付ヘッダーの高さ分下げる */
+    background-color: #f4f4f4;
+    z-index: 1;
+}
+
+/* 左上のセルを最前面に */
+thead th.room-number {
+    z-index: 3;
+    background-color: #f4f4f4;
+}
+
+/* 日付ヘッダーと教室番号が交差する部分 */
+thead .date-header th {
+    z-index: 2;
+}
+
+/* テーブルヘッダーの調整 */
+thead tr:first-child th {
+    background-color: #f4f4f4;
+}
+
+/* 日付ヘッダーのセルサイズ調整 */
+.date-header th:not(.room-number) {
+    padding: 4px 2px;
+    height: 30px;
+}
+
+/* ヘッダーセルのテキスト選択を無効化 */
+.room-number,
+.date-header th,
+.period-header th {
+    user-select: none;
+    -webkit-user-select: none;  /* Safari 用 */
+    -moz-user-select: none;     /* Firefox 用 */
+    -ms-user-select: none;      /* IE/Edge 用 */
+    cursor: default;            /* カーソルをデフォルトに */
+}
+
+/* 月ナビゲーションのテキストも選択不可に */
+.month-navigation {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* リンクのカーソルは保持 */
+.month-navigation a {
+    cursor: pointer;
+}
+
+.common-schedule-cell {
+    background-color: #f0f0f0;  /* 薄いグレー */
+    cursor: not-allowed;  /* 禁止カーソル */
+    position: relative;
+}
+
+.common-schedule-cell::after {
+    content: "共通";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.8em;
+    color: #666;
+}
+
+/* 共通スケジュールセルのホバー効果を無効化 */
+.common-schedule-cell:hover {
+    background-color: #f0f0f0 !important;
+}
+  

@@ -1,0 +1,24 @@
+<aside class="sidebar">
+    <a href="/" class="sidebar-icon {% if request.endpoint == 'index' %}active{% endif %}">
+        <img src="{{ url_for('static', filename='img/feather/home.svg') }}" alt="Home">
+    </a>
+    <a href="/diary/" class="sidebar-icon {% if 'diary.' in request.endpoint %}active{% endif %}">
+        <img src="{{ url_for('static', filename='img/feather/calendar.svg') }}" alt="Diary">
+    </a>
+    <a href="{{ url_for('calendar.home') }}" class="sidebar-icon {% if request.endpoint == 'calendar.home' %}active{% endif %}">
+        <img src="{{ url_for('static', filename='img/feather/bar-chart-2.svg') }}" alt="Calendar">
+    </a>
+    <a href="/diary/list" class="sidebar-icon {% if request.endpoint == 'diary.list' %}active{% endif %}">
+        <img src="{{ url_for('static', filename='img/feather/list.svg') }}" alt="List">
+    </a>
+    <a href="/classroom/empty-classroom" class="sidebar-icon {% if 'classroom.' in request.endpoint %}active{% endif %}">
+        <img src="{{ url_for('static', filename='img/feather/bell-off.svg') }}" alt="Empty Classroom">
+    </a>
+    <div class="sidebar-spacer"></div>
+    <a href="/profile" class="sidebar-icon {% if request.endpoint == 'auth.profile' %}active{% endif %}">
+        <img src="{{ url_for('static', filename='img/feather/user.svg') }}" alt="Profile">
+    </a>
+    <a href="/logout" class="sidebar-icon">
+        <img src="{{ url_for('static', filename='img/feather/log-out.svg') }}" alt="Logout">
+    </a>
+</aside>

@@ -1,0 +1,307 @@
+/* レスポンシブ対応のためのスタイル */
+@media (max-width: 768px) {
+    /* 時間割のスタイル調整 */
+    .timetable {
+        font-size: 0.6rem;
+    }
+    
+    .timetable th, .timetable td {
+        padding: 2px;
+    }
+    
+    .subject-name {
+        font-size: 0.55rem;
+    }
+    
+    .teacher-name, .classroom-number {
+        font-size: 0.5rem;
+    }
+    
+    /* レイアウト調整 */
+    .dashboard-container {
+        flex-direction: column;
+    }
+    
+    .current-schedule {
+        width: 100%;
+        max-width: 350px;
+        margin: 0 auto;
+    }
+    
+    /* タスクパネルをサイドメニュー化 - サイズ調整 */
+    .task-mood-location-container {
+        width: 90%; /* 幅を90%に設定 */
+        height: 90%;
+        position: fixed;
+        left: 50%; /* 左端を中央に */
+        transform: translateX(100%); /* 初期状態では右に隠す */
+        top: 100px; /* 上部から100pxの位置に固定 */
+        bottom: auto; /* bottomをリセット */
+        background: white;
+        z-index: 1000;
+        transition: transform 0.3s ease, height 0.3s ease;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        overflow-y: auto;
+        padding: 10px;
+        border-radius: 15px;
+    }
+    
+    .task-mood-location-container.open {
+        transform: translateX(-50%); /* 中央に表示 */
+        height: 70%;
+        top: 100px; /* 開いた状態でも上部から100pxの位置を維持 */
+    }
+    
+    /* タスクパネル内の要素も調整 */
+    .sticky-notes {
+        margin-top: 30px; /* 閉じるボタンのスペースを確保 */
+    }
+    
+    .sticky-note {
+        padding: 8px 12px; /* パディングを小さく */
+    }
+    
+    .sticky-note-title {
+        font-size: 0.9rem; /* フォントサイズを小さく */
+    }
+    
+    /* タスクトグルボタン */
+    .task-toggle-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: #4a6cf7;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        z-index: 999;
+        border: none;
+        transition: transform 0.3s ease;
+    }
+    
+    /* タスクパネルが開いているときのボタン位置 */
+    .task-toggle-btn.active {
+        transform: rotate(180deg); /* アイコンを回転 */
+    }
+    
+    .task-close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+    
+    /* モーダル調整 */
+    .comment-modal-container,
+    .write-modal-container,
+    .history-modal-container {
+        width: 90%;
+        max-width: none;
+    }
+    
+    /* コメントモーダルのレイアウト調整 */
+    #writeCommentModal {
+        flex-direction: column;
+    }
+    
+    .write-modal-container,
+    .history-modal-container {
+        width: 100%;
+        margin: 10px 0;
+    }
+    
+    /* フロアマップのレスポンシブ対応 */
+    .floor-map-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+    
+    .floor-map-image {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .floor-map-error {
+        color: #ff3333;
+        text-align: center;
+        padding: 20px;
+        background-color: #ffeeee;
+        border: 1px solid #ffcccc;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+    
+    .building-section {
+        position: relative;
+    }
+    
+    /* タブコンテナのスタイル修正 */
+    .tab-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 0;
+        padding: 0;
+        position: static; /* 絶対配置の基準点にならないように */
+        width: 100%;
+    }
+    
+    /* 矢印ボタンをコンテンツの左右に配置 */
+    .tab-arrows {
+        position: absolute;
+        width: calc(100% + 60px); /* コンテンツより広く取る */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); /* 中央配置 */
+        display: flex;
+        justify-content: space-between;
+        z-index: 5;
+        pointer-events: none; /* 矢印以外のクリックを通過させる */
+        max-width: 560px; /* タブコンテンツの最大幅 + 余白 */
+    }
+    
+    .tab-arrow {
+        background: rgba(74, 108, 247, 0.8);
+        color: white;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        pointer-events: auto; /* 矢印自体はクリック可能に */
+    }
+    
+    .tab-arrow-left {
+        margin-left: -18px; /* 半分左にはみ出す */
+    }
+    
+    .tab-arrow-right {
+        margin-right: -18px; /* 半分右にはみ出す */
+    }
+    
+    /* インジケーターをコンテンツの下に移動 */
+    .tab-indicators {
+        display: flex;
+        gap: 8px;
+        z-index: 1;
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .tab-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #ddd;
+        transition: background-color 0.3s ease;
+    }
+    
+    .tab-indicator.active {
+        background-color: #4a6cf7;
+    }
+    
+    /* タブコンテンツのスタイル */
+    .tab-content {
+        display: none;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+        position: relative; /* 位置の基準点 */
+    }
+    
+    .tab-content.active {
+        display: block;
+    }
+    
+    /* エレベーターカードのスタイル調整 */
+    .elevator-card {
+        margin-bottom: 0;
+        border-radius: 10px;
+        width: 100%;
+    }
+    
+    .elevator-card .card-header {
+        padding: 10px 15px;
+    }
+    
+    /* タブコンテナ全体のレイアウト */
+    .building-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        position: relative; /* 位置の基準点 */
+        padding: 0;
+    }
+}
+
+/* 小さい画面サイズ向けの追加調整 */
+@media (max-width: 480px) {
+    .timetable {
+        font-size: 0.5rem;
+    }
+    
+    .timetable th, .timetable td {
+        padding: 1px;
+    }
+    
+    .subject-name {
+        font-size: 0.45rem;
+    }
+    
+    .teacher-name, .classroom-number {
+        font-size: 0.4rem;
+    }
+}
+
+/* PDFアクションボタンのスタイル */
+.pdf-action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.pdf-view-btn, .pdf-download-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.pdf-view-btn {
+    background-color: #4a6cf7;
+    color: white;
+    border: none;
+}
+
+.pdf-download-btn {
+    background-color: #f0f0f0;
+    color: #333;
+    text-decoration: none;
+    border: 1px solid #ddd;
+}
+
+/* タブコンテンツの表示・非表示 */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+} 

@@ -1,0 +1,74 @@
+/* レスポンシブ対応用CSS */
+@media screen and (max-width: 768px) {
+  /* 全体レイアウト */
+  .dashboard-container {
+    flex-direction: column;
+  }
+  
+  /* 時間割 */
+  .timetable {
+    font-size: 0.8rem;
+  }
+  
+  .timetable th, .timetable td {
+    padding: 5px;
+  }
+  
+  .cell-content {
+    min-height: 40px;
+  }
+  
+  .subject-name {
+    font-size: 0.7rem;
+  }
+  
+  .teacher-name, .classroom-number {
+    font-size: 0.6rem;
+  }
+  
+  /* 付箋コンテンツ */
+  .task-mood-location-container {
+    width: 100%;
+  }
+  
+  .sticky-notes {
+    flex-direction: row;
+    overflow-x: auto;
+    width: 100%;
+  }
+  
+  .sticky-note {
+    min-width: 120px;
+  }
+  
+  /* モーダル */
+  .write-modal-container, .history-modal-container {
+    width: 90%;
+    max-width: none;
+  }
+  
+  .comment-modal {
+    flex-direction: column;
+  }
+  
+  /* エレベーター情報 */
+  .building-section {
+    flex-direction: column;
+  }
+  
+  .elevator-card {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  /* 時間割をスクロール可能に */
+  .current-schedule {
+    overflow-x: auto;
+  }
+  
+  .timetable {
+    min-width: 480px;
+  }
+} 

@@ -1,0 +1,321 @@
+/* ベースレイアウト */
+body {
+    background-color: #f9fafb;
+    min-height: 50vh;
+}
+
+/* サイドバー */
+.sidebar {
+    width: 4rem;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    background-color: #1a202c;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar-icon {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e5e7eb;
+    transition: all 0.2s;
+    position: relative;
+    z-index: 15;
+}
+
+.sidebar-icon img {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.sidebar-icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-icon.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-spacer {
+    flex-grow: 1;
+}
+
+/* ヘッダー */
+.header-container {
+    height: 4rem;
+    background-color: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 4rem;
+    z-index: 20;
+}
+
+/* メインコンテンツ */
+.main-content {
+    margin-top: 4rem;
+    margin-left: 4rem;
+    min-height: calc(100vh - 4rem);
+    background-color: #f9fafb;
+    padding: 1.5rem;
+    position: relative;
+    z-index: 30;
+}
+
+.content-wrapper {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* ヘッダー要素 */
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    width: 240px;
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+    padding-left: 2.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 9999px;
+    background-color: #f9fafb;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.user-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 0.875rem;
+    border-radius: 9999px;
+    background-color: #4299e1;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 25;
+}
+
+/* ユーティリティクラス */
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 3.5rem;
+    }
+    
+    .header-container {
+        left: 3.5rem;
+    }
+    
+    .main-content {
+        margin-left: 3.5rem;
+    }
+    
+    .search-input {
+        width: 180px;
+    }
+}
+
+@media (max-width: 640px) {
+    .sidebar {
+        width: 3rem;
+    }
+    
+    .header-container {
+        left: 3rem;
+    }
+    
+    .main-content {
+        margin-left: 3rem;
+        padding: 1rem;
+    }
+    
+    .search-input {
+        width: 140px;
+    }
+}
+
+/* メインコンテンツエリアの余白を調整 */
+main {
+    padding: 0.25rem;
+    padding-bottom: 0.25rem;
+    height: calc(100vh - 2.5rem); /* ヘッダーの高さを考慮 */
+    overflow-y: auto;
+}
+
+/* カードのサイズと余白を調整 */
+.card {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+/* メインスタイル */
+body {
+    font-size: 0.8rem;
+}
+
+.feather {
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+}
+
+/* ユーザーアイコン */
+.user-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 0.875rem;
+    border-radius: 9999px;
+    background-color: #4299e1;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 25;
+}
+
+/* ユーティリティクラス */
+.items-center {
+    align-items: center;
+}
+
+.space-x-4 > * + * {
+    margin-left: 1rem;
+}
+
+/* 全体のコンテナサイズを調整 */
+.container {
+    max-width: 95%;
+    margin: 0 auto;
+    padding: 0.25rem;
+}
+
+/* ヘッダー */
+.header-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+/* ユーティリティクラス */
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flex-start {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.flex-end {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .content-wrapper {
+        padding: 0.75rem;
+    }
+    
+    .search-input {
+        width: 160px;
+    }
+}
+
+@media (max-width: 640px) {
+    .sidebar {
+        width: 2.5rem;
+    }
+    
+    .header-container {
+        left: 2.5rem;
+    }
+    
+    .main-content {
+        margin-left: 2.5rem;
+    }
+    
+    .content-wrapper {
+        padding: 0.5rem;
+    }
+}
+
+/* グリッドの余白調整 */
+.grid {
+    gap: 0.75rem;
+}
+
+/* テーブルのセル余白調整 */
+td, th {
+    padding: 0.35rem 0.5rem;
+}
+
+/* フォームの余白を調整 */
+.form-group {
+    margin-bottom: 0.75rem;
+}
+
+/* ボタンのサイズ調整 */
+.btn {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+/* 認証関連ページのスタイル */
+.auth-container {
+    position: relative;
+    z-index: 50;  /* サイドバーより上に表示 */
+}
+
+/* プロフィールページのスタイル */
+.profile-container {
+    position: relative;
+    z-index: 50;  /* サイドバーより上に表示 */
+}

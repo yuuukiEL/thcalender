@@ -1,0 +1,33 @@
+{% extends "common/auth/base.html" %}
+
+{% block title %}一般ユーザー登録{% endblock %}
+
+{% block auth_title %}一般ユーザー登録{% endblock %}
+{% block auth_description %}一般の方の新規登録ページです{% endblock %}
+
+{% block auth_content %}
+<form method="POST" action="{{ url_for('public.auth.register') }}" class="auth-form">
+    {{ form.csrf_token }}
+    <div class="form-group">
+        <label for="username">ユーザー名</label>
+        {{ form.username(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <label for="email">メールアドレス</label>
+        {{ form.email(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <label for="password">パスワード</label>
+        {{ form.password(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <label for="password_confirm">パスワード（確認）</label>
+        {{ form.password_confirm(class="form-control") }}
+    </div>
+    <button type="submit" class="auth-button">登録</button>
+</form>
+{% endblock %}
+
+{% block auth_additional_links %}
+<a href="{{ url_for('public.auth.login') }}" class="login-link">ログインページに戻る</a>
+{% endblock %} 

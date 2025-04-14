@@ -1,0 +1,213 @@
+.diary-edit-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-group textarea {
+    min-height: 300px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.hashtag-container {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    min-height: 2.5rem;
+}
+
+.tag {
+    display: inline-block;
+    background: #f0f0f0;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    margin: 0.25rem;
+    color: #0C07FF;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.save-btn, .cancel-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.save-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+}
+
+.cancel-btn {
+    background-color: #f44336;
+    color: white;
+    text-decoration: none;
+}
+
+.save-btn:hover, .cancel-btn:hover {
+    opacity: 0.9;
+}
+
+.save-btn img, .cancel-btn img {
+    width: 1.25rem;
+    height: 1.25rem;
+    filter: brightness(0) invert(1);
+}
+
+/* エディタ関連のスタイル */
+.editor-container {
+    width: 100%;
+    min-height: 300px;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #1e1e1e;  /* VSCodeライクな背景色 */
+    color: #d4d4d4;  /* VSCodeライクなテキスト色 */
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+    line-height: 1.6;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}
+
+.editor-container:focus {
+    outline: none;
+    border-color: #0C07FF;
+}
+
+/* シンタックスハイライト用のスタイル */
+.editor-container .keyword { color: #569cd6; }
+.editor-container .string { color: #ce9178; }
+.editor-container .comment { color: #6a9955; }
+.editor-container .number { color: #b5cea8; }
+
+.content-textarea {
+    width: 100%;
+    min-height: 300px;
+    padding: 1rem;
+    border: none;
+    resize: vertical;
+    font-size: 1rem;
+    line-height: 1.6;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+}
+
+.edit-title {
+    font-size: 1.5rem;
+    padding: 0.75rem;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.hashtag-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* カラムレイアウト */
+.left-column,
+.right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* 画像関連のスタイル */
+.image-section {
+    margin-top: 1.5rem;
+}
+
+.current-images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.image-item {
+    position: relative;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0.5rem;
+}
+
+.image-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.image-actions {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.delete-image {
+    background: rgba(244, 67, 54, 0.9);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-upload {
+    border: 2px dashed #ddd;
+    border-radius: 4px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.image-upload:hover {
+    background-color: #f5f5f5;
+}
+
+.image-upload input[type="file"] {
+    display: none;
+} 

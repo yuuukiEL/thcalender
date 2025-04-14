@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}教科情報登録{% endblock %}
+
+{% block header %}教科情報登録{% endblock %}
+
+{% block content %}
+<style>
+    .form-group {
+        margin-bottom: 15px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+    }
+    input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    button {
+        background-color: #0066cc;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+    }
+    button:hover {
+        background-color: #0052a3;
+    }
+    .subject-list {
+        margin-top: 30px;
+    }
+    .subject-list table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .subject-list th, .subject-list td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+    .subject-list th {
+        background-color: #f5f5f5;
+    }
+</style>
+
+<form method="post">
+    <div class="form-group">
+        <label for="subject_name">教科名（例：JV32）:</label>
+        <input type="text" id="subject_name" name="subject_name" required pattern="[A-Z]{2}[0-9]{2}" maxlength="4" placeholder="例：JV32">
+        <small style="color: #666; display: block; margin-top: 5px;">
+            ※ 大文字アルファベット2文字 + 数字2文字で入力してください
+        </small>
+    </div>
+
+    <button type="submit">登録</button>
+</form>
+
+<div class="subject-list">
+    <h2>登録済み教科一覧</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>教科ID</th>
+                <th>教科名</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject in subjects %}
+            <tr>
+                <td>{{ subject.subject_id }}</td>
+                <td>{{ subject.subject_name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="back-link">
+    <a href="{{ url_for('views.index') }}" class="btn btn-secondary">登録メニューに戻る</a>
+</div>
+{% endblock %} 

@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}クラス分け管理{% endblock %}
+
+{% block header %}クラス分け管理{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/classtouroku.css') }}">
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="selection-container">
+                <!-- ステップインジケーター -->
+                <div class="steps mb-4">
+                    <div class="step-item active" id="stepCourse" data-step="1">
+                        <div class="step-circle">1</div>
+                        <div class="step-text">課程区分</div>
+                    </div>
+                    <div class="step-item" id="stepDepartment" data-step="2">
+                        <div class="step-circle">2</div>
+                        <div class="step-text">学科選択</div>
+                    </div>
+                    <div class="step-item" id="stepSpecialization" data-step="3">
+                        <div class="step-circle">3</div>
+                        <div class="step-text">専攻選択</div>
+                    </div>
+                </div>
+
+                <!-- 選択セクションの上部に追加 -->
+                <div class="alert alert-danger" id="errorMessage" role="alert" style="display: none;">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <span id="errorText"></span>
+                </div>
+
+                <!-- 選択セクション -->
+                <div class="selection-wrapper">
+                    <!-- 課程区分選択 -->
+                    <div id="courseTypeSection" class="selection-section">
+                        <h5 class="section-title">課程区分を選択してください</h5>
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="list-group list-group-flush" id="courseTypeList" role="listbox" aria-labelledby="courseTypeLabel">
+                                    <!-- JavaScriptで動的に生成 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 学科選択 -->
+                    <div id="departmentSection" class="selection-section" style="display: none;">
+                        <h5 class="section-title">学科を選択してください</h5>
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div class="list-group list-group-flush" id="departmentList" role="listbox" aria-labelledby="departmentLabel">
+                                    <!-- JavaScriptで動的に生成 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 専攻選択 -->
+                    <div id="specializationSection" class="selection-section" style="display: none;">
+                        <div class="alert alert-info mb-4" id="selectedDepartmentInfo" role="alert">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <!-- 選択された課程・学科の情報を表示 -->
+                        </div>
+                        <h5 class="section-title">専攻を選択してください</h5>
+                        <div class="card mb-4">
+                            <div class="card-body p-0">
+                                <div class="list-group list-group-flush" id="specializationList" role="listbox" aria-labelledby="specializationLabel">
+                                    <!-- JavaScriptで動的に生成 -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 担任選択フォーム -->
+                        <div id="teacherFormContainer" style="display: none;">
+                            <div class="mb-3">
+                                <label for="teacher" class="form-label">担任</label>
+                                <select class="form-select" id="teacher" name="teacher_id" required>
+                                    <option value="">教員を選択してください</option>
+                                    {% for teacher in teachers %}
+                                        <option value="{{ teacher.teacher_id }}">{{ teacher.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+            
+                        <!-- クラス情報入力フォームの表示領域 -->
+                        <div id="classFormContainer" class="mt-4"></div>
+                    </div>
+
+                    <!-- ナビゲーションボタン -->
+                    <div class="navigation-buttons">
+                        <button type="button" class="btn btn-secondary" id="backButton" disabled>
+                            <i class="bi bi-arrow-left-circle"></i> 戻る
+                        </button>
+                        <button type="button" class="btn btn-primary" id="nextButton" disabled>
+                            <i class="bi bi-arrow-right-circle"></i> 次へ
+                        </button>
+                        <button type="button" class="btn btn-success" id="completeButton" disabled>
+                            <i class="bi bi-check-circle"></i> 確定
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 戻るボタン -->
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-4">
+        <a href="{{ url_for('views.index') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> 戻る
+        </a>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="{{ url_for('static', filename='js/class_assignment.js') }}" defer></script>
+
+{% endblock %}
+
+{% block extra_css %}
+{% endblock %} 

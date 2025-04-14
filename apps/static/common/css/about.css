@@ -1,0 +1,208 @@
+/* HAL東京カレンダー - aboutページ用スタイル */
+
+/* aboutページ専用のコンテナ */
+.about-wrapper {
+    width: 100%;
+    min-height: calc(100vh - 4rem);
+    background-color: #f3f4f6;
+    padding: 2rem 1rem;
+}
+
+.about-container {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* ヘッダー部分 */
+.about-hero {
+    background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%);
+    padding: 2rem 1rem;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.about-hero h1 {
+    color: white;
+    font-size: 1.75rem;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.about-hero p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* 記事メタ情報 */
+.about-meta {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+}
+
+/* 記事本文エリア */
+.about-content {
+    padding: 1.5rem;
+    color: #374151;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
+    background-image: 
+        radial-gradient(#ddd 1px, transparent 0.5px);
+    background-size: 8px 8px;
+    background-position: -2px -2px;
+}
+
+/* カード */
+.about-card {
+    background: #f9fafb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 1rem;
+}
+
+/* フッター部分 */
+.about-footer {
+    padding: 1.5rem;
+    background-color: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* タグ */
+.about-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 0 1.5rem;
+}
+
+.about-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: #e0f2fe;
+    color: #0369a1;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 640px) {
+    .about-wrapper {
+        padding: 1rem 0.5rem;
+    }
+
+    .about-container {
+        border-radius: 0;
+    }
+
+    .about-content {
+        padding: 1rem;
+    }
+
+    .about-meta,
+    .about-footer {
+        padding: 1rem;
+    }
+
+    .about-hero h1 {
+        font-size: 1.5rem;
+    }
+
+    .about-hero p {
+        font-size: 0.875rem;
+    }
+}
+
+/* タイムラインテーブル */
+.timeline-table {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+}
+
+.timeline-table table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+.timeline-table th,
+.timeline-table td {
+    border: 1px solid #e5e7eb;
+    padding: 0.75rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.timeline-table th {
+    background-color: #f3f4f6;
+    font-weight: 600;
+}
+
+/* 小説リンク */
+.novel-link {
+    color: #3b82f6;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.novel-link:hover {
+    color: #2563eb;
+}
+
+/* 画像プレースホルダー */
+.image-placeholder {
+    width: 100%;
+    height: 200px;
+    background-color: #f3f4f6;
+    border: 1px dashed #e5e7eb;
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.about-section {
+    margin-bottom: 2rem;
+}
+
+.about-section h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #1f2937;
+}
+
+.about-section p {
+    margin-bottom: 1rem;
+}
+
+.about-section ol {
+    padding-left: 1.5rem;
+    list-style-type: decimal;
+}
+
+.about-section li {
+    margin-bottom: 0.5rem;
+}
+

@@ -1,0 +1,48 @@
+{% extends "common/base.html" %}
+
+{% block title %}お問い合わせ - HAL東京カレンダー{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8">
+        <h1 class="text-3xl font-bold mb-8 text-center text-gray-900">お問い合わせ</h1>
+        
+        <form class="space-y-6" method="POST">
+            <div class="form-group">
+                <label for="name" class="form-label">お名前 <span class="text-red-500">*</span></label>
+                <input type="text" id="name" name="name" required 
+                       class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">メールアドレス <span class="text-red-500">*</span></label>
+                <input type="email" id="email" name="email" required 
+                       class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label for="subject" class="form-label">件名 <span class="text-red-500">*</span></label>
+                <input type="text" id="subject" name="subject" required 
+                       class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label for="message" class="form-label">お問い合わせ内容 <span class="text-red-500">*</span></label>
+                <textarea id="message" name="message" rows="6" required 
+                          class="form-textarea"></textarea>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="submit-button">
+                    送信する
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-8 text-center text-gray-600">
+            <p>お問い合わせの前に<a href="#" class="text-blue-600 hover:underline">よくある質問</a>もご確認ください。</p>
+            <p class="mt-2">通常2-3営業日以内に返信いたします。</p>
+        </div>
+    </div>
+</div>
+{% endblock %} 

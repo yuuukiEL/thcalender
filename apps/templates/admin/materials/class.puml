@@ -1,0 +1,56 @@
+@startuml class
+class Student {
+  +student_base_number: string
+  +name: string
+  +enrollment_year: int
+  +current_course_code: string
+  +current_specialization_id: int
+  +current_grade: string
+  +status: enum
+}
+
+class Teacher {
+  +teacher_id: int
+  +name: string
+  +email: string
+  +comment: string
+}
+
+class Course {
+  +course_code: string
+  +course_name: string
+  +course_type: string
+  +part_time_type: string
+}
+
+class Specialization {
+  +id: int
+  +course_code: string
+  +specialization_code: string
+  +specialization_name: string
+  +grade: int
+}
+
+class AdvancementPreference {
+  +id: int
+  +student_base_number: string
+  +current_specialization_id: int
+  +desired_specialization_id: int
+  +academic_year: int
+}
+
+class TeacherSchedule {
+  +schedule_id: int
+  +teacher_id: int
+  +day: enum
+  +period: enum
+  +classroom_id: string
+  +subject_id: int
+}
+
+Student "1" -- "0..*" AdvancementPreference
+Teacher "1" -- "0..*" TeacherSchedule
+Course "1" -- "0..*" Specialization
+Specialization "1" -- "0..*" Student
+
+@enduml 

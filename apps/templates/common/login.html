@@ -1,0 +1,66 @@
+{% extends "common/base.html" %}
+
+{% block title %}
+{% if user_type == 'student' %}
+学生ログイン
+{% elif user_type == 'teacher' %}
+教職員ログイン
+{% else %}
+一般ログイン
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        {% if user_type == 'student' %}
+                        学生ログイン
+                        {% elif user_type == 'teacher' %}
+                        教職員ログイン
+                        {% else %}
+                        一般ログイン
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {{ form.csrf_token }}
+                        <div class="mb-3">
+                            <label for="username" class="form-label">
+                                {% if user_type == 'student' %}
+                                学籍番号
+                                {% elif user_type == 'teacher' %}
+                                メールアドレス
+                                {% else %}
+                                ユーザー名
+                                {% endif %}
+                            </label>
+                            {{ form.username(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">パスワード</label>
+                            {{ form.password(class="form-control") }}
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">ログイン</button>
+                        </div>
+                    </form>
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} mt-3">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

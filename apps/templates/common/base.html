@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} - HAL東京専用カレンダー</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='common/css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='common/css/notice.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='common/css/contact.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- ヘッダー -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="{{ url_for('common.home') }}" class="logo-section">
+                    <span class="logo-icon">📅</span>
+                    <div class="logo-text">
+                        <h1>HAL東京カレンダー</h1>
+                        <p>学生生活をより便利に</p>
+                    </div>
+                </a>
+                <nav>
+                    <a href="{{ url_for('common.about') }}">
+                        <span>ℹ️</span>概要
+                    </a>
+                    <a href="{{ url_for('common.notice') }}">
+                        <span>📢</span>お知らせ
+                    </a>
+                    <a href="{{ url_for('common.contact') }}">
+                        <span>✉️</span>お問い合わせ
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- フッター -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <span>📅</span>
+                        <h2>HAL東京カレンダー</h2>
+                    </div>
+                    <p class="footer-description">
+                        授業スケジュールと個人の予定を一元管理。
+                        HAL東京の学生生活をより便利に、より充実したものにします。
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Twitter">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>リンク</h3>
+                    <ul>
+                        <li><a href="{{ url_for('common.about') }}">概要</a></li>
+                        <li><a href="{{ url_for('common.notice') }}">お知らせ</a></li>
+                        <li><a href="{{ url_for('common.contact') }}">お問い合わせ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-login">
+                    <h3>ログイン</h3>
+                    <ul>
+                        <li>
+                            <a href="{{ url_for('student.auth.login') }}">
+                                <span>👨‍🎓</span>学生ログイン
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="disabled">
+                                <span>👨‍🏫</span>管理者ログイン（準備中）
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="disabled">
+                                <span>��</span>一般ログイン（準備中）
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 HAL東京カレンダー All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

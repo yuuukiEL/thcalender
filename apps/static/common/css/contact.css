@@ -1,0 +1,48 @@
+/* お問い合わせフォームのスタイル */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    background-color: white;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    ring: 2px;
+    ring-color: #93c5fd;
+}
+
+.submit-button {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #4f46e5 100%);
+    color: white;
+    font-weight: 600;
+    border-radius: 0.375rem;
+    transition: transform 0.2s;
+}
+
+.submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+} 

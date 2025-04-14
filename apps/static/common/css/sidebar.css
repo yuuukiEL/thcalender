@@ -1,0 +1,117 @@
+/* サイドバーのスタイル */
+.sidebar-container {
+    position: relative;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 50px;
+    background-color: #090023;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.sidebar-icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-icon.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-icon img {
+    width: 20px;
+    height: 20px;
+    filter: invert(1);
+}
+
+.sidebar-spacer {
+    flex-grow: 1;
+}
+
+/* モバイル対応 */
+.sidebar-toggle {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1049;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 4px;
+    background-color: #090023;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-toggle img {
+    filter: invert(1);
+    width: 20px;
+    height: 20px;
+}
+
+.sidebar-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: none;
+    cursor: pointer;
+}
+
+.sidebar-close img {
+    filter: invert(1);
+    width: 18px;
+    height: 18px;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        width: 200px;
+        padding-top: 40px;
+        z-index: 1050;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .sidebar-icon {
+        width: 100%;
+        padding: 8px 16px;
+        justify-content: flex-start;
+        margin-bottom: 4px;
+    }
+    
+    .sidebar-icon img {
+        margin-right: 12px;
+    }
+    
+    .sidebar-close {
+        display: block;
+    }
+    
+    .main-content {
+        margin-left: 0 !important;
+    }
+}

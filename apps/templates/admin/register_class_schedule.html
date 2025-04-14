@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+
+{% block title %}クラス共通スケジュール登録{% endblock %}
+
+{% block header %}クラス共通スケジュール登録{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/class_schedule.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<div class="container">
+    <!-- フラッシュメッセージの表示 -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- クラス選択フォーム -->
+    <form id="scheduleForm" method="POST">
+        <div class="class-selection">
+            <div class="form-row">
+                <div class="form-group class-select">
+                    <label for="class_select">クラス選択:</label>
+                    <select id="class_select" name="class_select" required>
+                        <option value="">クラスを選択してください</option>
+                        {% for class in classes %}
+                        <option value="{{ class.class_id }}" data-teacher-name="{{ class.teacher_name or '' }}">
+                            {{ class.display_class_name }}
+                            [{{ class.specialization_name }}]
+                            {% if class.teacher_name %}[担任: {{ class.teacher_name }}]{% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group date-input">
+                    <label for="start_date">開始日:</label>
+                    <input type="date" id="start_date" name="start_date" required>
+                </div>
+                <div class="form-group date-input">
+                    <label for="end_date">終了日:</label>
+                    <input type="date" id="end_date" name="end_date" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2カラムレイアウト -->
+        <div class="schedule-layout">
+            <!-- サイドパネル -->
+            <div id="sidePanel" class="side-panel">
+                <!-- クラス情報パネル -->
+                <div class="class-info-panel">
+                    <h3>クラス情報</h3>
+                    <div class="info-content">
+                        <div class="info-item">
+                            <span class="info-label">クラス:</span>
+                            <span class="info-value" id="displayClassName">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">担任:</span>
+                            <span class="info-value" id="displayTeacherName">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">期間:</span>
+                            <span class="info-value" id="displayPeriod">-</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button type="button" class="btn-pdf" onclick="generatePDF()">
+                            <i class="fas fa-file-pdf"></i>
+                            PDF出力
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 現在の時間割 -->
+                <div class="current-schedule">
+                    <table class="timetable current-timetable">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>月</th>
+                                <th>火</th>
+                                <th>水</th>
+                                <th>木</th>
+                                <th>金</th>
+                                <th>土</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in range(1, 8) %}
+                            <tr>
+                                <th>{{ i if i < 7 else '夜間' }}限</th>
+                                        {% for _ in range(6) %}
+                                <td class="schedule-cell">
+                                    <div class="cell-content">
+                                        <div class="subject-name"></div>
+                                        <div class="teacher-name"></div>
+                                        <div class="classroom-number"></div>
+                                    </div>
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- サイドパネルトグルボタン -->
+            <button type="button" class="side-panel-toggle" onclick="toggleSidePanel()">
+                <span class="toggle-arrow">›</span>
+            </button>
+
+            <!-- 右側：編集用時間割 -->
+            <div class="edit-schedule">
+                <h3>時間割編集</h3>
+                <div class="timetable-container">
+                    <table class="timetable edit-timetable">
+                        <thead>
+                            <tr>
+                                <th>時限</th>
+                                <th>月</th>
+                                <th>火</th>
+                                <th>水</th>
+                                <th>木</th>
+                                <th>金</th>
+                                <th>土</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in range(1, 8) %}
+                            <tr>
+                                <th>{{ i if i < 7 else '夜間' }}限</th>
+                                        {% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
+                                        'Saturday'] %}
+                                <td class="schedule-cell" data-period="{{ i }}" data-day="{{ day }}">
+                                    <div class="cell-content">
+                                        <!-- 科目選択（修正） -->
+                                        <select name="schedule[{{ i }}][{{ day }}][subject]" class="subject-select">
+                                            <option value="">科目を選択</option>
+                                            {% for subject in subjects %}
+                                            <option value="{{ subject.subject_id }}">{{ subject.subject_name }}</option>
+                                            {% endfor %}
+                                        </select>
+
+                                        <!-- 教員選択 -->
+                                        <select name="schedule[{{ i }}][{{ day }}][teacher_id]" class="teacher-select">
+                                            <option value="">教員を選択</option>
+                                            {% for teacher in teachers %}
+                                            <option value="{{ teacher.teacher_id }}">{{ teacher.name }}</option>
+                                            {% endfor %}
+                                        </select>
+
+                                        <!-- 教室選択 -->
+                                        <div class="classroom-selector">
+                                            <input type="hidden" name="schedule[{{ i }}][{{ day }}][classroom_id]"
+                                                class="classroom-id-input">
+                                            <input type="text" class="classroom-display" readonly placeholder="教室を選択"
+                                                onclick="openClassroomSelector(this)">
+                                        </div>
+                                    </div>
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 科目説明テーブルを追加 -->
+                <div class="subject-info-container">
+                    <h4>科目説明</h4>
+                    <table class="subject-info-table">
+                        <thead>
+                            <tr>
+                                <th>科目名</th>
+                                <th>担当教員</th>
+                                <th>説明</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subjectInfoBody">
+                            <!-- 科目説明がJavaScriptで動的に追加される -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-apply" id="actionButton">登録</button>
+                    <button type="button" class="btn-preview" onclick="previewSchedule()">プレビュー</button>
+                    <a href="{{ url_for('views.index') }}" class="btn-secondary">戻る</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- 教室選択モーダル -->
+<div id="classroomModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>教室選択</h4>
+            <span class="close-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="classroom-grid">
+                {% for floor in range(1, 40) %}
+                {% if floor not in [15, 25, 30, 35] %}
+                <div class="floor-section">
+                    <h5>{{ floor }}階</h5>
+                    <div class="classroom-buttons">
+                        {% for classroom in classrooms|sort(attribute='classroom_id') %}
+                        {% if classroom.floor == floor %}
+                        {% set room_number = '{:03d}'.format(classroom.classroom_id|int) %}
+                        <button type="button" class="classroom-btn" data-classroom-id="{{ classroom.classroom_id }}"
+                            data-room-number="{{ room_number }}">
+                            {{ room_number }}
+                        </button>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PDF用のテンプレート（非表示） -->
+<div id="pdfTemplate" style="display: none;">
+    <div class="pdf-container">
+        <h2 class="pdf-title">時間割表</h2>
+        <div class="pdf-class-info">
+            <div class="pdf-info-item">
+                <span class="pdf-info-label">クラス:</span>
+                <span class="pdf-info-value" id="pdfClassName"></span>
+            </div>
+            <div class="pdf-info-item">
+                <span class="pdf-info-label">担任:</span>
+                <span class="pdf-info-value" id="pdfTeacherName"></span>
+            </div>
+            <div class="pdf-info-item">
+                <span class="pdf-info-label">期間:</span>
+                <span class="pdf-info-value" id="pdfPeriod"></span>
+            </div>
+        </div>
+        <table class="pdf-timetable">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>月</th>
+                    <th>火</th>
+                    <th>水</th>
+                    <th>木</th>
+                    <th>金</th>
+                    <th>土</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(1, 8) %}
+                <tr>
+                    <th>{{ i if i < 7 else '夜間' }}限</th>
+                            {% for _ in range(6) %}
+                    <td class="pdf-schedule-cell">
+                        <div class="pdf-cell-content">
+                            <div class="pdf-subject-name"></div>
+                            <div class="pdf-teacher-name"></div>
+                            <div class="pdf-classroom-number"></div>
+                        </div>
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/class_schedule.js') }}"></script>
+<script src="{{ url_for('static', filename='js/classroom_selector.js') }}"></script>
+{% endblock %}

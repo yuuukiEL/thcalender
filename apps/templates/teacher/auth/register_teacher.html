@@ -1,0 +1,55 @@
+{% extends "common/base.html" %}
+
+{% block title %}教員登録{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">教員アカウント登録</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('teacher.auth.register') }}">
+                        {{ form.csrf_token }}
+                        <div class="mb-3">
+                            {{ form.teacher_id.label(class="form-label") }}
+                            {{ form.teacher_id(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.username.label(class="form-label") }}
+                            {{ form.username(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.department.label(class="form-label") }}
+                            {{ form.department(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.password.label(class="form-label") }}
+                            {{ form.password(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.confirm_password.label(class="form-label") }}
+                            {{ form.confirm_password(class="form-control") }}
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">登録</button>
+                            <a href="{{ url_for('teacher.auth.login') }}" class="btn btn-outline-secondary">ログインに戻る</a>
+                        </div>
+                    </form>
+                    {% if error %}
+                    <div class="alert alert-danger mt-3">
+                        {{ error }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

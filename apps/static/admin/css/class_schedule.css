@@ -1,0 +1,1123 @@
+.subject-info-table td {
+    /* 説明文の幅を広くする */
+    max-width: 400px; /* 必要に応じて調整 */
+    word-wrap: break-word;
+    white-space: pre-wrap; /* 改行を保持 */
+    padding: 10px;
+    vertical-align: top;
+}
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+
+/* 2カラムレイアウト */
+.schedule-layout {
+    display: flex;
+    position: relative;
+    gap: 0;
+}
+
+.side-panel {
+    position: fixed;
+    left: -500px;
+    width: 500px;
+    height: 100%;
+    top: 0;
+    background-color: white;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    transition: left 0.3s ease;
+    z-index: 100;
+    display: none;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.side-panel.expanded {
+    left: 0;
+    display: block;
+}
+
+.side-panel-toggle {
+    position: fixed;
+    left: 250px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-left: none;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    z-index: 101;
+    border-radius: 50%;
+    transition: left 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.side-panel-toggle::after {
+    content: "›";
+    font-size: 24px;
+    color: #666;
+    transition: transform 0.3s ease;
+}
+
+.side-panel-toggle.expanded {
+    left: 550px;
+}
+
+.toggle-line {
+    color: #666;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.toggle-arrow {
+    color: #666;
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+.side-panel-toggle.expanded .toggle-arrow {
+    transform: rotate(180deg);
+}
+
+.edit-schedule {
+    margin-left: 50px;
+    max-width: 900px;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: margin-left 0.3s ease;
+}
+
+/* ボタングループの配置 */
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+/* 時間割テーブルの調整 */
+.timetable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.timetable th,
+.timetable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.timetable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.timetable thead th {
+    background-color: #fff7e6;  /* 薄い黄色 */
+    color: #333;
+    font-weight: bold;
+    height: 30px;
+}
+
+.timetable tbody th {
+    background-color: #fff7e6;  /* 薄い黄色 */
+    color: #333;
+    font-weight: bold;
+    width: 80px;
+    padding: 5px 10px;
+}
+
+.schedule-cell {
+    height: 80px;
+    background-color: #fff;
+    transition: background-color 0.3s;
+    position: relative;
+}
+
+.schedule-cell:hover {
+    background-color: #f8f9fa;
+}
+
+.cell-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    height: 100%;
+    padding: 5px;
+}
+
+.subject-name {
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.teacher-name {
+    font-size: 0.8em;
+    color: #666;
+}
+
+.classroom-number {
+    font-size: 0.8em;
+    color: #666;
+}
+
+/* 編集用時間割のスタイル */
+.edit-timetable .schedule-cell {
+    padding: 5px;
+}
+
+.edit-timetable .cell-content {
+    gap: 5px;
+}
+
+.edit-timetable .subject-input {
+    width: 100%;
+    padding: 3px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+.edit-timetable .teacher-select {
+    width: 100%;
+    padding: 3px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 0.8em;
+}
+
+.edit-timetable .classroom-selector {
+    width: 100%;
+}
+
+.edit-timetable .classroom-display {
+    width: 100%;
+    padding: 3px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 0.8em;
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+/* 現在の時間割のスタイル */
+.current-timetable {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.current-timetable th,
+.current-timetable td {
+    min-width: 65px;
+    padding: 4px;
+    font-size: 11px;
+}
+
+.current-timetable thead th {
+    background-color: #fff7e6;
+    color: #333;
+    font-weight: bold;
+    height: 30px;
+    width: 65px;
+}
+
+.current-timetable tbody th {
+    width: 40px;
+    min-width: 40px;
+    padding: 5px;
+    text-align: center;
+    background-color: #fff7e6;
+    font-weight: bold;
+    color: #333;
+}
+
+.current-timetable .schedule-cell {
+    height: 60px;
+}
+
+.current-timetable .cell-content {
+    padding: 2px;
+    gap: 2px;
+}
+
+.current-timetable .subject-name {
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.current-timetable .teacher-name,
+.current-timetable .classroom-number {
+    font-size: 10px;
+}
+
+/* サイドパネルのスクロール設定 */
+.current-schedule {
+    overflow-x: auto;
+    padding: 15px;
+    background-color: white;
+}
+
+.current-schedule table {
+    margin: 0;
+    border-collapse: collapse;
+    width: auto;
+}
+
+/* クラス情報パネルのスタイル */
+.class-info-panel {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.class-info-panel h3 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    color: #333;
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 8px;
+}
+
+.info-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.info-label {
+    color: #666;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.info-value {
+    color: #333;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.action-buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* PDF出力ボタンのスタイル */
+.btn-pdf {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    width: 100%;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.btn-pdf:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-pdf i {
+    font-size: 14px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 1200px) {
+    .schedule-layout {
+        flex-direction: column;
+    }
+    
+    .current-schedule,
+    .edit-schedule {
+        width: 100%;
+    }
+}
+
+/* フォームレイアウト */
+.form-row {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: nowrap;
+}
+
+.form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+    min-width: 0; /* flexboxでの収縮を防止 */
+}
+
+.form-row .form-group.class-select {
+    flex: 2;
+}
+
+.form-row .form-group.date-input {
+    flex: 1;
+}
+
+/* フォームグループのスタイル */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* 日付入力フィールドのスタイル */
+.form-group input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* クラス選択のスタイル */
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+}
+
+/* クラス情報表示 */
+.class-info-display {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.info-row {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-label {
+    color: #666;
+    font-weight: 500;
+}
+
+.info-value {
+    color: #333;
+    font-weight: 600;
+}
+
+/* データテーブル */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: white;
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.data-table th {
+    background-color: #f8f9fa;
+    font-weight: 500;
+    color: #444;
+}
+
+.data-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* ボタン */
+.btn-primary,
+.btn-secondary,
+.btn-edit,
+.btn-delete {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    margin-left: 10px;
+}
+
+.btn-edit {
+    background-color: #28a745;
+    color: white;
+    margin-right: 5px;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+}
+
+.btn-edit:hover {
+    background-color: #218838;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+/* アラートメッセージ */
+.alert {
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .form-row .form-group {
+        width: 100%;
+    }
+
+    .info-row {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    .timetable th,
+    .timetable td {
+        padding: 5px;
+        font-size: 12px;
+    }
+
+    .schedule-cell {
+        height: 70px;
+    }
+
+    .cell-content input[type="text"],
+    .cell-content select {
+        font-size: 12px;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-edit,
+    .btn-delete {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+}
+
+/* パネルヘッダーのスタイル */
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px 4px 0 0;
+}
+
+.panel-header h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+/* 展開/折りたたみボタン */
+.toggle-button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px 10px;
+    color: #666;
+    transition: transform 0.3s ease;
+}
+
+.toggle-button.expanded {
+    transform: rotate(90deg);
+}
+
+.toggle-button:hover {
+    color: #333;
+}
+
+/* 時間割テーブルのトランジション */
+.timetable-container {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+/* 時間割テーブルのスタイル調整 */
+.current-schedule {
+    padding: 15px;
+    background-color: white;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.current-schedule h3 {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+/* クラス選択フォームの調整 */
+.class-selection {
+    max-width: 800px;
+    margin: 0 auto 20px;
+}
+
+/* コンテナの調整 */
+.container {
+    padding: 0px;
+    max-width: 1000px;
+    margin: 0 auto;
+    transition: margin-left 0.3s ease;
+}
+
+.container.panel-expanded {
+    margin-left: 500px;
+}
+
+/* 編集エリアの位置調整 */
+.edit-schedule {
+    margin-left: 50px;
+    max-width: 900px;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: margin-left 0.3s ease;
+}
+
+/* サイドパネル展開時の編集エリアの位置 */
+.panel-expanded .edit-schedule {
+    margin-left: 50px;
+}
+
+/* プレビューボタンのスタイル */
+.btn-preview {
+    background-color: #17a2b8;
+    color: white;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-preview:hover {
+    background-color: #138496;
+}
+
+/* 教室選択のスタイル */
+.classroom-select {
+    width: 100%;
+    padding: 2px 4px;
+    font-size: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.classroom-select:required:invalid {
+    color: #999;
+}
+
+.classroom-select option[value=""] {
+    color: #999;
+}
+
+.classroom-select option {
+    color: #333;
+    padding: 4px;
+}
+
+.classroom-select optgroup {
+    font-weight: bold;
+    color: #495057;
+    background-color: #f8f9fa;
+}
+
+/* 必須入力のスタイル */
+.subject-input:required,
+.teacher-select:required,
+.classroom-select:required {
+    border-color: #ddd;
+}
+
+.subject-input:required:invalid:not(:placeholder-shown),
+.teacher-select:required:invalid:not(:focus),
+.classroom-select:required:invalid:not(:focus) {
+    border-color: #ddd;
+}
+
+.subject-input:required:valid,
+.teacher-select:required:valid,
+.classroom-select:required:valid {
+    border-color: #ddd;
+}
+
+/* プレースホルダーのスタイル */
+.subject-input::placeholder {
+    color: #999;
+    font-size: 9px;
+}
+
+/* 教員選択のスタイル */
+.teacher-select {
+    width: 100%;
+    padding: 2px 4px;
+    font-size: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.teacher-select option {
+    padding: 4px;
+}
+
+/* セル内の入力要素の配置調整 */
+.cell-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    height: 100%;
+    padding: 5px;
+}
+
+.subject-select,
+.teacher-select,
+.classroom-display {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.subject-select:hover,
+.teacher-select:hover,
+.classroom-display:hover {
+    border-color: #80bdff;
+}
+
+.subject-select:focus,
+.teacher-select:focus,
+.classroom-display:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.15);
+}
+
+.subject-select:disabled,
+.teacher-select:disabled,
+.classroom-display:disabled {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+/* 科目説明テーブルのスタイル */
+.subject-info-container {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.subject-info-container h4 {
+    margin-bottom: 15px;
+    color: #495057;
+    font-size: 1.1em;
+}
+
+.subject-info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.subject-info-table td {
+    padding: 10px;
+    vertical-align: top;
+    border: 1px solid #ddd;
+}
+
+.subject-info-table th {
+    background-color: #e9ecef;
+    color: #495057;
+    font-weight: bold;
+    text-align: left;
+}
+
+.subject-info-table td {
+    font-size: 0.9em;
+    color: #212529;
+}
+
+/* 説明文の幅を広くする */
+.subject-info-table td:last-child {
+    width: 50%;
+}
+
+/* ホバー効果 */
+.subject-info-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* ボタングループのスタイル */
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.btn-preview {
+    background-color: #17a2b8;
+    color: white;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn-preview:hover {
+    background-color: #138496;
+}
+
+.btn-apply,
+.btn-preview,
+.btn-save,
+.btn-secondary {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.btn-apply {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-apply:hover {
+    background-color: #218838;
+}
+
+.btn-preview {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.btn-preview:hover {
+    background-color: #138496;
+}
+
+.btn-save {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: #0056b3;
+}
+
+.btn-save.active {
+    background-color: #dc3545;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* ボタングループのレイアウト */
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+/* モーダルのスタイル */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    overflow-y: auto;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 800px;
+    border-radius: 8px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close-modal {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: #000;
+}
+
+/* 教室選択グリッドのスタイル */
+.classroom-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.floor-section {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.floor-section h5 {
+    margin: 0 0 10px 0;
+    color: #495057;
+}
+
+.classroom-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 8px;
+}
+
+.classroom-btn {
+    padding: 8px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.classroom-btn:hover {
+    background-color: #e9ecef;
+}
+
+.classroom-btn.selected {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+.subject-info-table td[contenteditable="true"] {
+    position: relative;
+    min-height: 32px;
+    padding: 8px;
+    padding-bottom: 30px;
+}
+
+.btn-add-teacher {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    color: #666;
+    background: white;
+    border: 1px solid #ced4da;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.teacher-popup-list {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    max-height: 400px;
+    background: white;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1100;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.subject-description {
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 4px;
+    padding: 4px;
+    background-color: #f5f5f5;
+    border-radius: 3px;
+    display: none;  /* 初期状態は非表示 */
+}
+
+.schedule-cell:hover .subject-description {
+    display: block;  /* ホバー時に表示 */
+}
+
+.description-editor {
+    width: 100%;
+    min-height: 60px;
+    padding: 5px;
+    resize: vertical;
+}
+
+.btn-save-description {
+    padding: 4px 8px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 60px;
+}
+
+.btn-save-description:hover {
+    background-color: #45a049;
+}

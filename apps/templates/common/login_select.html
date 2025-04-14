@@ -1,0 +1,33 @@
+{% extends "common/base.html" %}
+
+{% block title %}ログイン{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">ログイン</h4>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-3">
+                        <a href="{{ url_for('public.auth.login') }}" class="btn btn-lg btn-outline-primary">
+                            一般ユーザーログイン
+                        </a>
+                        <a href="{{ url_for('student.auth.login') }}" class="btn btn-lg btn-outline-success">
+                            学生ログイン
+                        </a>
+                        <a href="{{ url_for('teacher.auth.login') }}" class="btn btn-lg btn-outline-info">
+                            教員ログイン
+                        </a>
+                        <a href="{{ url_for('admin.auth.login') }}" class="btn btn-lg btn-outline-dark">
+                            管理者ログイン
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

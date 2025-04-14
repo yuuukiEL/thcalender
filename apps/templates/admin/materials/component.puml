@@ -1,0 +1,36 @@
+@startuml component
+package "Webアプリケーション" {
+  [Webブラウザ] as Browser
+  
+  package "Flaskアプリケーション" {
+    [学生管理] as StudentManagement
+    [教員管理] as TeacherManagement
+    [スケジュール管理] as ScheduleManagement
+    [進級管理] as PromotionManagement
+    [認証・認可] as Auth
+  }
+  
+  database "MySQL" {
+    [学生情報] as StudentDB
+    [教員情報] as TeacherDB
+    [スケジュール] as ScheduleDB
+    [進級情報] as PromotionDB
+  }
+}
+
+Browser --> StudentManagement
+Browser --> TeacherManagement
+Browser --> ScheduleManagement
+Browser --> PromotionManagement
+
+StudentManagement --> Auth
+TeacherManagement --> Auth
+ScheduleManagement --> Auth
+PromotionManagement --> Auth
+
+StudentManagement --> StudentDB
+TeacherManagement --> TeacherDB
+ScheduleManagement --> ScheduleDB
+PromotionManagement --> PromotionDB
+
+@enduml 

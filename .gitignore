@@ -1,0 +1,211 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Application specific
+uploads/*
+!uploads/.gitkeep
+!uploads/students/
+!uploads/common/
+!uploads/materials/
+!uploads/templates/
+!uploads/profiles/
+uploads/profiles/*
+!uploads/profiles/students/
+!uploads/profiles/teachers/
+uploads/profiles/students/*
+!uploads/profiles/students/.gitkeep
+uploads/profiles/teachers/*
+!uploads/profiles/teachers/.gitkeep
+logs/*
+!logs/.gitkeep
+*.log
+
+# Temporary files
+scripts/
+ih/
+txt/
+
+# 依存関係
+node_modules/
+vendor/
+bower_components/
+jspm_packages/
+package-lock.json
+yarn.lock
+composer.lock
+
+# ビルド関連
+dist/
+build/
+out/
+.next/
+.nuxt/
+.cache/
+
+# ログ
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 環境変数
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# テスト関連
+coverage/
+.nyc_output/
+
+# その他
+.tmp/
+temp/
+tmp/
+
+# OpenCV関連
+*.avi
+*.mp4
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.tif
+*.tiff
+saved_images/
+opencv_*
+build-opencv/
+opencv-*/
+
+# C/C++関連
+*.o
+*.obj
+*.so
+*.a
+*.lib
+*.dll
+*.exe
+*.out
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# docs内の特定パターンのフォルダを除外
+docs/**/student_*/
+docs/**/user_*/
+docs/**/id_*/
+docs/**/*_id/
+docs/**/*_user/
+
+# 特定のIDパターンを含むファイル
+**/[0-9][0-9][0-9][0-9][0-9][0-9]*/
+**/[0-9][0-9][0-9][0-9][0-9][0-9][0-9]*/
+**/*_[0-9][0-9][0-9][0-9][0-9][0-9]*/
+**/*_[0-9][0-9][0-9][0-9][0-9][0-9][0-9]*/
+
+# docs ディレクトリを除外
+docs/
+
+# OpenCV関連（追加）
+opencv/
+opencv2/
+cv2/
+*.xml
+*.yml
+*.yaml
+haarcascades/
+*.caffemodel
+*.prototxt
+*.pb
+*.pbtxt
+*.weights
+
+# フォントとアイコン関連（権利的に配布できないもの）
+fonts/
+*.ttf
+*.otf
+*.woff
+*.woff2
+*.eot
+feather/
+feather-icons/
+**/feather/*
+**/icons/*
+
+# FullCalendar関連
+fullcalendar/
+fullcalendar-*
+**/fullcalendar/*
+**/fullcalendar-*/*
+
+# 特定のユーザー関連ファイルを除外（順序を修正）
+# まずフォルダ自体を保持するルール
+!**/students/
+!**/teachers/
+!**/students/.gitkeep
+!**/teachers/.gitkeep
+
+# その後で特定のファイルを除外
+**/students/@*
+**/teachers/@*
+**/@*
+**/*@*.*
+**/user_*.*
+**/student_*.*
+**/teacher_*.*
+
+# report_board フォルダの設定
+!uploads/report_board/
+uploads/report_board/*
+!uploads/report_board/.gitkeep
+# 数字のみのフォルダを除外
+uploads/report_board/[0-9]*/
+uploads/report_board/[0-9][0-9]*/
+uploads/report_board/[0-9][0-9][0-9]*/
+
+# schedules フォルダの設定
+!uploads/schedules/
+uploads/schedules/*
+!uploads/schedules/.gitkeep
+
+# bulletin_board フォルダの設定
+!uploads/bulletin_board/
+uploads/bulletin_board/*
+!uploads/bulletin_board/.gitkeep
+# 数字のみのフォルダを除外（report_boardと同様）
+uploads/bulletin_board/[0-9]*/
+uploads/bulletin_board/[0-9][0-9]*/
+uploads/bulletin_board/[0-9][0-9][0-9]*/
+
+# bulletin フォルダの除外解除
+!uploads/bulletin/
+uploads/bulletin/*
+!uploads/bulletin/.gitkeep
+
+# データベース関連
+!*.sql
+*.sqlite
+*.sqlite3
+*.db
+dump.rdb
+
+# SQLファイルを除外解除
+!*.sql 

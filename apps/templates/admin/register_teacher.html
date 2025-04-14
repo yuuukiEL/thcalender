@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}教員情報登録{% endblock %}
+
+{% block header %}教員情報登録{% endblock %}
+
+{% block content %}
+<style>
+    .form-group {
+        margin-bottom: 15px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+    }
+    input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    button {
+        background-color: #0066cc;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+    }
+    button:hover {
+        background-color: #0052a3;
+    }
+    .preview-image {
+        max-width: 200px;
+        margin-top: 10px;
+        display: none;
+    }
+    select[multiple] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    option {
+        padding: 4px;
+    }
+    
+    option:checked {
+        background-color: #0066cc;
+        color: white;
+    }
+    
+    .skill-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        align-items: center;
+    }
+    
+    .skill-select, .level-select {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    .skill-select {
+        flex: 2;
+    }
+    
+    .level-select {
+        flex: 1;
+    }
+    
+    .add-skill-btn {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        border-radius: 50%;
+        background-color: #28a745;
+    }
+    
+    .remove-skill-btn {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        border-radius: 50%;
+        background-color: #dc3545;
+    }
+</style>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="alert-container">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="name">氏名:</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+
+    <div class="form-group">
+        <label for="email">メールアドレス:</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+
+    <div class="form-group">
+        <label for="comment">コメント:</label>
+        <textarea id="comment" name="comment" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>スキルとレベル:</label>
+        <div id="skills-container">
+            <div class="skill-row">
+                <select name="skill_ids[]" class="skill-select">
+                    <option value="">スキルを選択</option>
+                    {% for skill in skills %}
+                        <option value="{{ skill.skill_id }}">{{ skill.skill_name }}</option>
+                    {% endfor %}
+                </select>
+                <select name="skill_levels[]" class="level-select">
+                    <option value="Beginner">初級</option>
+                    <option value="Intermediate" selected>中級</option>
+                    <option value="Advanced">上級</option>
+                </select>
+                <button type="button" class="add-skill-btn">+</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="profile_image">プロフィール画像:</label>
+        <input type="file" id="profile_image" name="profile_image" accept="image/*" onchange="previewImage(this)">
+        <img id="preview" class="preview-image">
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-success">登録</button>
+        <a href="{{ url_for('views.index') }}" class="btn btn-secondary">登録メニューに戻る</a>
+    </div>
+</form>
+
+<script>
+    function previewImage(input) {
+        const preview = document.getElementById('preview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('skills-container');
+        
+        // スキル行を追加する関数
+        function addSkillRow() {
+            const newRow = document.createElement('div');
+            newRow.className = 'skill-row';
+            newRow.innerHTML = `
+                <select name="skill_ids[]" class="skill-select">
+                    <option value="">スキルを選択</option>
+                    {% for skill in skills %}
+                        <option value="{{ skill.skill_id }}">{{ skill.skill_name }}</option>
+                    {% endfor %}
+                </select>
+                <select name="skill_levels[]" class="level-select">
+                    <option value="Beginner">初級</option>
+                    <option value="Intermediate" selected>中級</option>
+                    <option value="Advanced">上級</option>
+                </select>
+                <button type="button" class="remove-skill-btn">-</button>
+            `;
+            container.appendChild(newRow);
+        }
+        
+        // イベントリスナーの設定
+        container.addEventListener('click', function(e) {
+            if (e.target.classList.contains('add-skill-btn')) {
+                addSkillRow();
+            } else if (e.target.classList.contains('remove-skill-btn')) {
+                e.target.closest('.skill-row').remove();
+            }
+        });
+    });
+</script>
+{% endblock %}

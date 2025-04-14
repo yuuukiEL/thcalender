@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}登録メニュー{% endblock %}
+
+{% block header %}登録メニュー{% endblock %}
+
+{% block content %}
+<div class="menu-grid">
+    <!-- 基本情報登録セクション -->
+    <div class="menu-section">
+        <h2>基本情報登録</h2>
+        <ul class="menu-list">
+            <li>
+                <a href="{{ url_for('student_registration.register_student') }}" class="menu-link">
+                    学生情報登録
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('teacher.register_teacher') }}" class="menu-link">
+                    教員情報登録
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('classroom.register_classroom') }}" class="menu-link">
+                    教室情報登録
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('teacher.register_subject') }}" class="menu-link">
+                    教科情報登録
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('promotion.register_promotion_request') }}" class="menu-link">
+                    進級希望登録
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 進級管理セクション -->
+    <div class="menu-section">
+        <h2>進級管理</h2>
+        <ul class="menu-list">
+            <li>
+                <a href="{{ url_for('student_management.list_students') }}" class="menu-link">
+                    学生一覧表示
+                </a>
+            </li>
+            <li>
+                <a href="#" class="menu-link not-implemented">
+                    進級情報更新（β版）
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('class_assignment_page.show_assignment_page') }}" class="menu-link">
+                    クラス分け管理
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('class_creation.index') }}" class="menu-link">
+                    クラス生成
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- スケジュール管理セクション -->
+    <div class="menu-section">
+        <h2>スケジュール管理</h2>
+        <ul class="menu-list">
+            <li>
+                <a href="{{ url_for('schedule.register_teacher_schedule') }}" class="menu-link">
+                    教員スケジュール登録
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('classroom.register_empty_classroom') }}" class="menu-link">
+                    空き教室登録
+                </a>
+            </li>
+            <li>
+                <a href="#" class="menu-link not-implemented">
+                    学校全体スケジュール登録（準備中）
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('schedule.register_class_schedule') }}" class="menu-link">
+                    クラス共通スケジュール登録
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('schedule_pdf.index') }}" class="menu-link">
+                    時間割PDF生成
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %} 

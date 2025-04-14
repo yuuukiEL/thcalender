@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ログイン</title>
+</head>
+<body>
+    <h1>ログイン</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <form method="post">
+        <label for="student_number">学籍番号:</label>
+        <input type="text" id="student_number" name="student_number" required>
+        <br>
+        <label for="password">パスワード:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <button type="submit">ログイン</button>
+    </form>
+    <p>新規登録は<a href="{{ url_for('register') }}">こちら</a></p>
+</body>
+</html>

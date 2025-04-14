@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>教室情報登録</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/classroom.css') }}">
+</head>
+
+<body>
+    <h1>教室情報登録</h1>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="error-message">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- 教室ウィジェットを建築図面スタイルに変更 -->
+    <div class="classroom-widget">
+        <h4>登録済み教室</h4>
+        <select id="floorSelect" onchange="updateClassroomList()">
+            {% for floor in range(7, 40) %}
+            {% if floor not in [15, 25, 30, 35] %}
+            <option value="{{ floor }}">{{ floor }}階</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+        <div class="floor-plan">
+            <svg viewBox="0 0 400 400">
+                <g transform="translate(200, 200) rotate(90)">
+                    <!-- ルーローの三角形の外周 -->
+                    <path d="M0 -150 
+                             A150 150 0 0 1 129.9 75
+                             A150 150 0 0 1 -129.9 75
+                             A150 150 0 0 1 0 -150" fill="none" stroke="#333" stroke-width="1" />
+
+
+
+
+                    <!-- 教室表示エリア -->
+                    <g id="classroomDisplay">
+                        <!-- JavaScriptで動的に教室を表示 -->
+                    </g>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- 教室番号選択モーダル -->
+    <div id="classroomModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>教室番号を選択してください</h2>
+            <select id="classroomSelect">
+                <option value="071">071 - データベースの部屋</option>
+                <option value="072">072 - PCが置いてある部屋</option>
+                <option value="073">073 - 看護が勉強できる部屋</option>
+                <!-- 他の教室番号と種類を追加 -->
+            </select>
+            <button id="selectClassroomButton">選択</button>
+        </div>
+    </div>
+
+    <form method="post">
+        <div class="form-group">
+            <label for="classroom_number">教室番号:</label>
+            <input type="text" id="classroom_number" name="classroom_number" readonly required>
+            <button type="button" onclick="openModal()">教室番号を選択</button>
+        </div>
+
+        <div class="form-group">
+            <label for="floor">階数:</label>
+            <select id="floor" name="floor" required>
+                <option value="">階数を選択してください</option>
+                {% for floor in range(7, 40) %}
+                {% if floor not in [15, 25, 30, 35] %}
+                <option value="{{ floor }}">{{ floor }}階</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="seating_capacity">座席数:</label>
+            <input type="number" id="seating_capacity" name="seating_capacity" required min="1" placeholder="例：42">
+        </div>
+
+        <div class="form-group">
+            <label for="classroom_type">教室の種類:</label>
+            <select id="classroom_type" name="classroom_type" required>
+                <option value="game_studio_nintendo">ゲームスタジオ（Nintendo Switch）</option>
+                <option value="game_studio_others">ゲームスタジオ（Xbox、PlayStation）</option>
+                <option value="digital_animation">デジタルアニメーションスタジオ</option>
+                <option value="motion_capture">モーションキャプチャースタジオ</option>
+                <option value="visual_design">ビジュアルデザインスタジオ</option>
+                <option value="recording">レコーディングスタジオ</option>
+                <option value="digital_music">デジタルミュージックスタジオ</option>
+                <option value="server_room">サーバルーム</option>
+                <option value="drawing">デッサンスタジオ</option>
+                <option value="lecture">講義教室</option>
+                <option value="car_design">カーデザインスタジオ</option>
+                <option value="3d_printer">3Dプリンター</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-success">登録</button>
+            <a href="{{ url_for('views.index') }}" class="btn btn-secondary">登録メニューに戻る</a>
+        </div>
+    </form>
+
+    <script src="{{ url_for('static', filename='js/classroom.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setClassrooms(JSON.parse('{{ classrooms|tojson|safe }}'));
+        });
+    </script>
+</body>
+
+</html>

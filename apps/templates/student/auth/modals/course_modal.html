@@ -1,0 +1,31 @@
+<div class="modal fade" id="courseModal" tabindex="-1" role="dialog" 
+     aria-labelledby="courseModalLabel" aria-modal="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="courseModalLabel">課程・学科選択</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <h6 class="mb-3" id="courseTypeLabel">課程区分</h6>
+            <div class="list-group" id="courseTypeList" role="listbox" aria-labelledby="courseTypeLabel">
+              <!-- JavaScriptで動的に生成 -->
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h6 class="mb-3" id="departmentLabel">学科選択</h6>
+            <div class="list-group" id="departmentList" role="listbox" aria-labelledby="departmentLabel">
+              <!-- JavaScriptで動的に生成 -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+        <button type="button" class="btn btn-primary" id="selectDepartment">次へ</button>
+      </div>
+    </div>
+  </div>
+</div> 

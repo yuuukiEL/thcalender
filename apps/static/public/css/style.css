@@ -1,0 +1,33 @@
+.calendar-day {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.calendar-day:hover {
+    background-color: #e5e7eb;
+}
+
+.calendar-day.active {
+    background-color: #3b82f6;
+    color: white;
+    border-radius: 50%;
+}
+
+.feather {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+.sidebar-icon {
+    width: 24px;
+    height: 24px;
+    filter: invert(1);
+}

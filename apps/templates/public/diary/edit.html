@@ -1,0 +1,102 @@
+{% extends "components/base.html" %}
+
+{% block title %}日記を編集{% endblock %}
+
+{% block header_title %}
+    {% if student %}
+        ようこそ、{{ student.name }}さん
+    {% else %}
+        日記を編集
+    {% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/diary_edit.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="diary-edit-container">
+    <div class="left-column">
+        <form method="POST" action="{{ url_for('diary_detail.update', diary_id=diary.diary_id) }}" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            
+            <div class="form-group">
+                <label for="title">タイトル</label>
+                <input type="text" id="title" name="title" value="{{ diary.title }}" class="edit-title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="content">内容</label>
+                <div class="editor-container" contenteditable="true" id="editor">
+                    {{ diary.content|safe }}
+                </div>
+                <textarea id="content" name="content" style="display: none;">{{ diary.content }}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="hashtags">ハッシュタグ</label>
+                <div class="hashtag-container">
+                    {% for tag in diary.hashtags %}
+                    <span class="tag">#{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+                <input type="text" id="hashtags" name="hashtags" class="hashtag-input" placeholder="#タグを追加">
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="save-btn">
+                    <img src="{{ url_for('static', filename='img/feather/save.svg') }}" alt="保存">
+                    保存
+                </button>
+                <a href="{{ url_for('diary_detail.view', diary_id=diary.diary_id) }}" class="cancel-btn">
+                    <img src="{{ url_for('static', filename='img/feather/x.svg') }}" alt="キャンセル">
+                    キャンセル
+                </a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="right-column">
+        <div class="form-group image-section">
+            <label>画像</label>
+            <div class="current-images">
+                {% for image in diary.images %}
+                <div class="image-item">
+                    <img src="{{ url_for('diary.get_diary_image', image_id=image.image_id) }}" alt="日記の画像">
+                    <div class="image-actions">
+                        <button type="button" class="delete-image" data-image-id="{{ image.image_id }}">
+                            <img src="{{ url_for('static', filename='img/feather/x.svg') }}" alt="削除">
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <label class="image-upload">
+                <input type="file" name="images" multiple accept="image/*">
+                <img src="{{ url_for('static', filename='img/feather/image.svg') }}" alt="画像をアップロード">
+                <p>クリックして画像を追加</p>
+            </label>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editor = document.getElementById('editor');
+    const textarea = document.getElementById('content');
+    
+    // エディタの内容をテキストエリアに同期
+    editor.addEventListener('input', function() {
+        textarea.value = this.innerHTML;
+    });
+    
+    // フォーム送信時にエディタの内容を確実に同期
+    document.querySelector('form').addEventListener('submit', function() {
+        textarea.value = editor.innerHTML;
+    });
+});
+</script>
+{% endblock %} 

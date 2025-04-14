@@ -1,0 +1,534 @@
+.timetable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0;
+    table-layout: fixed;
+}
+
+.timetable th,
+.timetable td {
+    border: 1px solid #ddd;
+    padding: 4px;
+    text-align: center;
+    width: 14.28%;  /* 7列に対応するように調整（100/7） */
+    max-width: 150px;
+}
+
+.timetable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.timetable thead th {
+    background-color: #fff7e6;
+    color: #333;
+    font-weight: bold;
+    height: 25px;
+    font-size: 0.9rem;
+}
+
+.timetable tbody th {
+    width: 40px !important;
+    min-width: 40px;
+    max-width: 40px;
+}
+
+.schedule-cell {
+    width: 85px;
+    height: 60px;
+    border: 1px solid #e2e8f0;
+    padding: 2px;
+    position: relative;
+}
+
+.schedule-cell:hover {
+    background-color: #f8f9fa;
+}
+
+.cell-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cell-content:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.subject-name {
+    font-weight: bold;
+    font-size: 0.8em;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.teacher-name,
+.classroom-number {
+    font-size: 0.7em;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.current-schedule {
+    flex: 0 0 800px;  /* 列が増えたので幅を広げる */
+    margin: 0;
+}
+
+.timetable {
+    width: 100%;      /* 親要素に対して100%の幅 */
+}
+
+.dashboard-container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.current-schedule {
+    flex: 0 0 700px;  /* 固定幅700px */
+    margin: 0;
+}
+
+.student-tasks {
+    flex: 1;          /* 残りのスペースを埋める */
+    min-width: 300px; /* 最小幅を設定 */
+    background-color: #f8fafc;  /* 背景色を追加 */
+    padding: 16px;    /* パディングを追加 */
+    border-radius: 8px;  /* 角を丸く */
+}
+
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.task-item {
+    background-color: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.task-header {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 8px;
+}
+
+.task-checkbox {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 2px solid #cbd5e0;
+    cursor: pointer;
+}
+
+.task-content {
+    flex: 1;
+    border: none;
+    padding: 4px;
+    font-size: 0.95em;
+    color: #2d3748;
+    background: transparent;
+}
+
+.task-content:focus {
+    outline: none;
+    background-color: #f7fafc;
+}
+
+.task-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.task-delete-btn {
+    padding: 4px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.task-delete-btn:hover {
+    opacity: 1;
+}
+
+.task-delete-btn img {
+    width: 16px;
+    height: 16px;
+}
+
+.add-task-btn {
+    display: flex;
+    align-items: center;
+    padding: 6px;
+    border-radius: 6px;
+    background-color: transparent;
+    transition: background-color 0.2s;
+}
+
+.add-task-btn:hover {
+    background-color: #e2e8f0;
+}
+
+.add-task-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.task-title {
+    font-size: 0.95em;
+    color: #2d3748;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.task-status-checkbox {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 2px solid #cbd5e0;
+    cursor: pointer;
+}
+
+.task-status-checkbox:checked {
+    background-color: #4299e1;
+    border-color: #4299e1;
+}
+
+.task-status {
+    font-size: 0.8em;
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-top: 6px;
+}
+
+.task-status-incomplete {
+    background-color: #fed7d7;
+    color: #c53030;
+}
+
+.task-status-complete {
+    background-color: #c6f6d5;
+    color: #2f855a;
+}
+
+.task-status-progress {
+    background-color: #fefcbf;
+    color: #975a16;
+}
+
+.tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.create-task-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    background-color: #4299e1;
+    color: white;
+    border-radius: 6px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.create-task-btn:hover {
+    background-color: #3182ce;
+}
+
+/* モーダル関連のスタイル */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-container {
+    position: relative;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.modal-close {
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+}
+
+.teacher-profile {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #f8fafc;
+    border-radius: 0.5rem;
+}
+
+.teacher-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.teacher-details {
+    flex: 1;
+}
+
+.teacher-name {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.comments-section {
+    margin-top: 1.5rem;
+}
+
+.comments-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.comments-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+}
+
+.comment-item {
+    padding: 0.75rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.comment-form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.comment-input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.25rem;
+    resize: vertical;
+    min-height: 60px;
+}
+
+.comment-submit {
+    padding: 0.5rem 1rem;
+    background-color: #4299e1;
+    color: white;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.comment-submit:hover {
+    background-color: #3182ce;
+}
+
+.tasks-header .header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.task-checkbox:checked {
+    background-color: #4299e1;
+    border-color: #4299e1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23fff'%3E%3Cpath d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'/%3E%3C/svg%3E");
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* diary.cssからのスタイルを追加 */
+.task-mood-location-container {
+    flex: 1;
+    min-width: 300px;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 200px); /* コンテナの高さを設定 */
+}
+
+.sticky-notes {
+    display: flex;
+    gap: 2px;
+    background-color: #e2e8f0;
+    padding: 2px;
+}
+
+.sticky-note {
+    flex: 1;
+    background-color: #f1f5f9;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px 4px 0 0;
+}
+
+.sticky-note.active {
+    background-color: #fff;
+}
+
+.sticky-note-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #475569;
+}
+
+.task-mood-content {
+    display: none;
+    background-color: #fff;
+    padding: 16px;
+}
+
+.task-mood-content.active {
+    display: block;
+}
+
+/* タスク関連のスタイルを更新 */
+.task-list-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sticky-content-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    background-color: #fff;
+    min-height: 0; /* これが重要 */
+}
+
+/* スクロールバーのスタイル */
+.sticky-content-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sticky-content-wrapper::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.sticky-content-wrapper::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 4px;
+}
+
+.sticky-content-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}
+
+/* 場所情報のグリッドレイアウト */
+.location-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+    padding: 16px;
+}
+
+.location-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.location-header {
+    background: #f8fafc;
+    padding: 12px 16px;
+    font-weight: 600;
+    color: #2d3748;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.location-content {
+    padding: 16px;
+}
+
+.location-content p {
+    margin: 0;
+    padding: 4px 0;
+    color: #4a5568;
+    font-size: 0.95em;
+}
+
+.location-content p:not(:last-child) {
+    border-bottom: 1px dashed #e2e8f0;
+}
+
+/* スクロール可能なコンテンツエリア */
+.task-mood-content {
+    height: 100%;
+    overflow-y: auto;
+}
+
+/* アクティブなコンテンツの表示 */
+.task-mood-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+} 

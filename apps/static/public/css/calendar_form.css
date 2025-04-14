@@ -1,0 +1,496 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 30px;
+    box-sizing: border-box;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+.form-container {
+    width: 100%;
+    margin-bottom: 25px;
+}
+.map-container {
+    width: 100%;
+    height: 400px;
+    margin: 15px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+}
+#map {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+button:hover {
+    background-color: #45a049;
+}
+.messages {
+    margin: 20px 0;
+}
+.message {
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    background-color: #f0f0f0;
+    font-size: 16px;
+    border-left: 4px solid #4CAF50;
+}
+h1 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #333;
+    text-align: center;
+    font-weight: bold;
+}
+.datetime-group {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+.datetime-group .form-group {
+    flex: 1;
+}
+.datetime-group input[type="date"] {
+    width: 100%;
+    min-width: 150px;
+}
+.datetime-group input[type="time"] {
+    width: 100%;
+    min-width: 120px;
+}
+.location-input {
+    display: flex;
+    gap: 10px;
+}
+.location-input input {
+    flex: 1;
+}
+
+/* ハイコントラストモード対応を追加 */
+@media (forced-colors: active) {
+    button {
+        border: 2px solid ButtonText;
+        forced-color-adjust: none;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        border: 2px solid ButtonText;
+        forced-color-adjust: none;
+    }
+    
+    .map-container {
+        border: 2px solid ButtonText;
+    }
+}
+
+/* モーダルの基本スタイル */
+.event-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.event-modal.show {
+    display: block;
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* フォーム要素のスタイル */
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+}
+
+/* ボタンスタイル */
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.modal-buttons .cancel {
+    background-color: #f0f0f0;
+    color: #666;
+}
+
+.modal-buttons .cancel:hover {
+    background-color: #e0e0e0;
+}
+
+.modal-buttons .submit {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.modal-buttons .submit:hover {
+    background-color: #45a049;
+}
+
+/* モーダルヘッダーのスタイル修正 */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    z-index: 1;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 600px) {
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .datetime-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-buttons {
+        flex-direction: column-reverse;
+    }
+
+    .modal-buttons button {
+        width: 100%;
+    }
+}
+
+/* 入力検証スタイル */
+.form-group input:invalid,
+.form-group textarea:invalid {
+    border-color: #ff4444;
+}
+
+.form-group input:invalid:focus,
+.form-group textarea:invalid:focus {
+    box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.1);
+}
+
+/* ツールチップスタイル */
+.form-group label[title] {
+    cursor: help;
+}
+
+/* アニメーション */
+.event-modal {
+    transition: opacity 0.3s ease-in-out;
+}
+
+.modal-content {
+    transition: transform 0.3s ease-in-out;
+}
+
+.event-modal.show .modal-content {
+    animation: modalIn 0.3s ease-out;
+}
+
+@keyframes modalIn {
+    from {
+        transform: translate(-50%, -60%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+/* 通知のアニメーション */
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.notification {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* 時間軸のスタイル */
+.fc-timegrid-slot {
+    height: 25px !important;
+}
+
+/* 1時間ごとの境界線 */
+.fc-timegrid-slot.fc-slot-major {
+    border-bottom: 1px solid #ddd !important;
+    background-color: rgba(250, 250, 250, 0.8);
+}
+
+/* 15分刻みの境界線 */
+.fc-timegrid-slot.fc-slot-minor {
+    border-bottom: 1px dotted #f0f0f0 !important;
+}
+
+/* 時間ラベル（1時間ごと） */
+.fc-hour-label {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #333;
+    padding-right: 8px;
+    min-width: 50px;  /* 幅を固定して揃える */
+    text-align: right;
+}
+
+/* 時限ラベル */
+.fc-period-label {
+    font-size: 0.85em;
+    color: #1a73e8;
+    font-weight: bold;
+    background-color: #e8f0fe;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-right: 4px;
+}
+
+/* 15分刻みのラベル */
+.fc-minor-label {
+    font-size: 0.8em;
+    color: #888;
+    padding-right: 8px;
+}
+
+/* 時間軸の区切り線 */
+.fc-timegrid-slot-lane {
+    border-color: #f0f0f0;
+}
+
+/* 現在時刻のインジケーター */
+.fc-timegrid-now-indicator-line {
+    border-color: #ff4444;
+    border-width: 1px;
+}
+
+.fc-timegrid-now-indicator-arrow {
+    border-color: #ff4444;
+    background-color: #ff4444;
+    transform: scale(0.8);
+}
+
+/* 深夜時間帯の背景色 */
+.fc-timegrid-slot.fc-slot-major[data-time^="00:"],
+.fc-timegrid-slot.fc-slot-major[data-time^="01:"],
+.fc-timegrid-slot.fc-slot-major[data-time^="02:"],
+.fc-timegrid-slot.fc-slot-major[data-time^="03:"],
+.fc-timegrid-slot.fc-slot-major[data-time^="04:"],
+.fc-timegrid-slot.fc-slot-major[data-time^="05:"] {
+    background-color: rgba(240, 240, 240, 0.4);
+}
+
+/* 削除ボタンのスタイル */
+.delete-event {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.3s;
+}
+
+.delete-event:hover {
+    background-color: #c82333;
+}
+
+/* アイコンのスタイル */
+.delete-event i {
+    font-size: 0.9em;
+}
+
+/* モーダルアクションを右側に配置 */
+.modal-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* アクションボタンのスタイル調整 */
+.modal-actions button {
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 繰り返しボタンのスタイル */
+.repeat-event {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+/* 繰り返し設定のスタイル */
+.repeat-settings {
+    margin-top: 25px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.repeat-settings .form-group {
+    margin-bottom: 15px;
+}
+
+.repeat-settings select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 14px;
+}
+
+.repeat-end-group {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e9ecef;
+}
+
+/* スクロールバーのスタイル */
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

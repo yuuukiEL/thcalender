@@ -1,0 +1,408 @@
+{% extends "base.html" %}
+
+{% block title %}日記{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/diary.css') }}" rel="stylesheet">
+<style>
+.diary-button {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+}
+
+.diary-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.diary-button:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
+.diary-panel {
+    position: fixed;
+    right: -400px;
+    top: 0;
+    width: 400px;
+    height: 100vh;
+    background: white;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    transition: right 0.3s ease;
+    z-index: 999;
+    padding: 20px;
+}
+
+.diary-panel.open {
+    right: 0;
+}
+
+.diary-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.diary-form input,
+.diary-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.diary-form textarea {
+    height: 200px;
+    resize: vertical;
+}
+
+.diary-form button {
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.diary-form button:hover {
+    background: #0056b3;
+}
+
+.close-panel {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.floor-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin: 10px 0;
+}
+
+.floor-image-container {
+    flex: 1;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    background: #fff;
+}
+
+.floor-map-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.elevator-info {
+    width: 100px;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.elevator-stop {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.elevator-label {
+    font-size: 14px;
+}
+
+.elevator-circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.elevator-circle.red {
+    background-color: #ff4444;
+}
+
+.elevator-circle.blue {
+    background-color: #4444ff;
+}
+
+.elevator-circle.green {
+    background-color: #44ff44;
+}
+
+.elevator-table {
+    width: 150px;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.elevator-table th,
+.elevator-table td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.elevator-table th {
+    background: #f5f5f5;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.elevator-circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.elevator-circle.red {
+    background-color: #ff4444;
+}
+
+.elevator-circle.blue {
+    background-color: #4444ff;
+}
+
+.elevator-circle.green {
+    background-color: #44ff44;
+}
+
+.building-section {
+    display: flex;
+    gap: 1rem;
+}
+
+.elevator-card,
+.floor-map-card {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    width: 24rem;
+}
+
+.card-header {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.card-title {
+    font-size: 1.125rem;
+    font-weight: bold;
+}
+
+.card-content {
+    padding: 1rem;
+}
+
+.elevator-table-container {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.elevator-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.elevator-table th,
+.elevator-table td {
+    padding: 0.5rem;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.elevator-table th {
+    position: sticky;
+    top: 0;
+    background: #f5f5f5;
+    font-weight: bold;
+}
+
+.elevator-circle {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.floor-select {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+}
+
+.floor-map-container {
+    border: 2px solid #ddd;
+    border-radius: 0.5rem;
+    aspect-ratio: 1;
+    height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.floor-map-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.elevator-card {
+    width: 380px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    background: white;
+}
+
+.card-header {
+    padding: 10px;
+    background-color: #f8f8f8;
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+.card-content {
+    padding: 10px;
+}
+
+.elevator-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.elevator-table th,
+.elevator-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.elevator-table th {
+    background-color: #f4f4f4;
+    position: sticky;
+    top: 0;
+}
+
+.indicator {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.indicator.red { background-color: red; }
+.indicator.blue { background-color: blue; }
+.indicator.green { background-color: green; }
+
+.elevator-table-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.floor-select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.floor-map {
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 320px;
+    height: 320px;
+}
+
+.building-section {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>日記一覧</h1>
+    <div class="diary-list">
+        {% for diary in diaries %}
+        <div class="diary-card">
+            <h3>{{ diary.title }}</h3>
+            <p>{{ diary.content }}</p>
+            <small>{{ diary.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<button class="diary-button" id="openDiaryPanel">
+    <img src="{{ url_for('static', filename='img/icon/set6.png') }}" alt="日記を書く">
+</button>
+
+<div class="diary-panel" id="diaryPanel">
+    <button class="close-panel" id="closeDiaryPanel">&times;</button>
+    <h2>新しい日記を書く</h2>
+    <form class="diary-form" action="{{ url_for('diary.create') }}" method="POST">
+        <input type="text" name="title" placeholder="タイトル" required>
+        <textarea name="content" placeholder="今日はどんな1日でしたか？" required></textarea>
+        <button type="submit">保存</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const openButton = document.getElementById('openDiaryPanel');
+    const closeButton = document.getElementById('closeDiaryPanel');
+    const panel = document.getElementById('diaryPanel');
+
+    openButton.addEventListener('click', function() {
+        panel.classList.add('open');
+    });
+
+    closeButton.addEventListener('click', function() {
+        panel.classList.remove('open');
+    });
+
+    const floorSelector = document.getElementById('floorSelector');
+    const floorMap = document.getElementById('floorMap');
+    
+    floorSelector.value = '36';
+    floorSelector.addEventListener('change', function(e) {
+        floorMap.src = `/static/img/floor_classroom/floor_${e.target.value}.png`;
+    });
+});
+</script>
+{% endblock %} 

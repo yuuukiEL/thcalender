@@ -1,0 +1,46 @@
+{% extends "common/auth/base.html" %}
+
+{% block title %}登録完了{% endblock %}
+
+{% block auth_title %}登録完了{% endblock %}
+
+{% block auth_description %}
+学生登録が完了しました。
+{% endblock %}
+
+{% block auth_content %}
+<div class="text-center mb-4">
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">登録が完了しました！</h4>
+        <p>ご登録ありがとうございます。</p>
+        <p>以下のボタンからログインページへ進んでください。</p>
+    </div>
+    
+    <div class="registration-details mt-4">
+        <p><strong>学籍番号:</strong> {{ student_id }}</p>
+        <p><strong>氏名:</strong> {{ name }}</p>
+        <p><strong>学科・専攻:</strong> {{ department }}</p>
+    </div>
+
+    <div class="d-grid gap-2 col-6 mx-auto mt-4">
+        <a href="{{ url_for('student.auth.login') }}" class="btn btn-primary">
+            ログインページへ
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .registration-details {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 5px;
+        margin: 20px 0;
+    }
+    
+    .registration-details p {
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %} 

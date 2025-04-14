@@ -1,0 +1,40 @@
+<div class="sidebar-container">
+    <!-- ハンバーガーメニューボタン（モバイル用） -->
+    <button id="sidebar-toggle" class="sidebar-toggle d-md-none">
+        <img src="{{ url_for('static', filename='common/img/feather/menu.svg') }}" alt="Menu">
+    </button>
+
+    <aside class="sidebar">
+        <div class="sidebar-close d-md-none">
+            <img src="{{ url_for('static', filename='common/img/feather/x.svg') }}" alt="Close">
+        </div>
+        <a href="{{ url_for('student.home.index') }}" class="sidebar-icon {% if request.endpoint == 'student.home.index' %}active{% endif %}">
+            <img src="{{ url_for('static', filename='common/img/feather/home.svg') }}" alt="Home">
+        </a>
+        <a href="{{ url_for('schedule.schedule_view') }}" class="sidebar-icon {% if request.endpoint.startswith('schedule') %}active{% endif %}">
+            <img src="{{ url_for('static', filename='common/img/feather/calendar.svg') }}" alt="Calendar">
+        </a>
+        <a href="{{ url_for('student.diary.create') }}" class="sidebar-icon {% if request.endpoint == 'student.diary.create' %}active{% endif %}">
+            <img src="{{ url_for('static', filename='common/img/feather/book.svg') }}" alt="Diary">
+        </a>
+        <a href="{{ url_for('student.diary.index') }}" class="sidebar-icon {% if request.endpoint == 'student.diary.index' %}active{% endif %}">
+            <img src="{{ url_for('static', filename='common/img/feather/list.svg') }}" alt="Diary">
+        </a>
+        <a href="{{ url_for('student.bulletin.index') }}" class="sidebar-icon {% if request.endpoint.startswith('student.bulletin') %}active{% endif %}">
+            <img src="{{ url_for('static', filename='common/img/feather/message-square.svg') }}" alt="Bulletin">
+        </a>
+        <a href="{{ url_for('student.report.index') }}" class="sidebar-icon {% if request.endpoint.startswith('student.report') %}active{% endif %}">
+            <img src="{{ url_for('static', filename='common/img/feather/alert-circle.svg') }}" alt="Report">
+        </a>
+        <a href="{{ url_for('student.classroom.view_empty_classroom') }}" class="sidebar-icon {% if request.endpoint.startswith('student.classroom') %}active{% endif %}">
+            <img src="{{ url_for('static', filename='common/img/feather/map.svg') }}" alt="Empty Classroom">
+        </a>
+        <div class="sidebar-spacer"></div>
+        <a href="{{ url_for('student_api.profile') }}" class="sidebar-icon {% if request.endpoint == 'student_api.profile' %}active{% endif %}">
+            <img src="{{ url_for('static', filename='common/img/feather/user.svg') }}" alt="Profile">
+        </a>
+        <a href="{{ url_for('student.auth.logout') }}" class="sidebar-icon">
+            <img src="{{ url_for('static', filename='common/img/feather/log-out.svg') }}" alt="Logout">
+        </a>
+    </aside>
+</div>

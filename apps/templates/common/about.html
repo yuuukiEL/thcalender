@@ -1,0 +1,69 @@
+{% extends "common/base.html" %}
+
+{% block title %}HAL東京カレンダー開発記{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='common/css/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='common/css/about.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="about-wrapper">
+  <div class="about-container">
+    
+    <div class="about-meta">
+      <h1 class="about-title"style=po>MyNokki</h1>
+      <br>
+
+    </div>
+    
+    <div class="about-content">
+      <section class="about-section">
+        <h2>開発の経緯</h2>
+        <p>最初は日記作成サイトを作っていました。自分自身がずぼらで三日坊主なところがあって，やっぱり簡単に日記作れたら楽かなぁっていう安易な考えから作り始めました。</p>
+        <p>そのあと，いろいろやっているうちに別にスマホで日記をつけられるし，このサイト使う必要なくない？ってなりまして，10月にインターンシップがあった際に学校で不便なことを上げていく課題を出された際に，今の作品とこの課題を組み合わせれば，いいんじゃないってなりまして，作品を変えていきました。</p>
+        
+        <div class="timeline-table">
+          <table>
+            <tr>
+              <th>月</th>
+              <th>6月</th><th>7月</th><th>8月</th><th>9月</th><th>10月</th>
+              <th>11月</th><th>12月</th><th>1月</th><th>2月</th>
+            </tr>
+            <tr>
+              <td>やったこと</td>
+              <td>要件定義</td><td>要件定義</td><td>コード書き始めた</td>
+              <td>何か気に入らない</td><td>インターシップ</td><td>要件定義やり直し</td>
+              <td>db構築</td><td>GUIを作る</td><td>エラー修正</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <section class="about-section">
+        <h2>頑張ったこと</h2>
+        <p>話が少しずれるんですけど，この作品制作中に森博嗣さんの<a href="{{ url_for('static', filename='common/img/F.txt') }}" class="novel-link">"すべてがFになる"</a>という作品を見ていまして，そこで出てくる登場人物の女性にすごい心を惹かれたんですよね。</p>
+        <p>だから，この作品の中である条件下でその女性を表示するというギミック(意味のないボタン)を作ってたんですけど，いくらやっても，そのギミックが作動しなくて，</p>
+        <p>2週間ほど時間をかけました。まぁ意味ないんですけどね。</p>
+      </section>
+
+      <section class="about-section">
+        <h2>今後の課題</h2>
+        <ol>
+          <li>一般ユーザーと教員ユーザーページがまだ製作途中でして，今後作っていきたいです</li>
+          <li>google認証なども，まだできておらず，現在デモンストレーションで表示をしている形となっている状況です。</li>
+          <li>他の学校(HAL名古屋，HAL大阪)との交流ができるサイトにしたいです。</li>
+        </ol>
+      </section>
+    </div>
+    
+    <div class="about-footer">
+      <p>お問い合わせ: <a href="mailto:contact@example.com">ths20024@ths.hal.ac.jp</a></p>
+      <p class="copyright">© 2024 MyNokki</p>
+      <p class="about-date">最終更新: 2025年3月3日</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
