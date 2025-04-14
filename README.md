@@ -143,3 +143,4 @@ hal-student-management/
 3. ログインボタンをクリック
 
 
+thanks your_secret_key!
