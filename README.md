@@ -27,7 +27,7 @@
 ### インストール手順
 1. リポジトリをクローン
    ```
-   git clone https://github.com/arkeuce/hal-student-management.git
+   git clone https://github.com/yuuukiEL/thcalender.git
    cd hal-student-management
    ```
 
